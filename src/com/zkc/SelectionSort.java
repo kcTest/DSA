@@ -9,14 +9,16 @@ public class SelectionSort {
 	
 	public static void main(String[] args) {
 		int[] arr = DataSource.getArray(10, 20);
-		for (int i = 0; i < arr.length; i++) {
-			System.out.printf("%d ", arr[i]);
-		}
+		printArr(arr);
 		System.out.println();
 		System.out.println("===================");
-		SelectionSort(arr);
-		for (int i = 0; i < arr.length; i++) {
-			System.out.printf("%d ", arr[i]);
+		selectionSort(arr);
+		printArr(arr);
+	}
+	
+	private static void printArr(int[] arr) {
+		for (int j : arr) {
+			System.out.printf("%d ", j);
 		}
 	}
 	
@@ -37,7 +39,7 @@ public class SelectionSort {
 	 * 那么，在一趟选择，如果一个元素比当前元素小，而该小的元素又出现在一个和当前元素相等的元素后面，那么交换后稳定性就被破坏了。
 	 * 举个例子，序列5 8 5 2 9，我们知道第一遍选择第1个元素5会和2交换，那么原序列中两个5的相对前后顺序就被破坏了，所以选择排序是一个不稳定的排序算法。
 	 */
-	private static void SelectionSort(int[] arr) {
+	private static void selectionSort(int[] arr) {
 		
 		//执行n-1趟选择 给n-1个位置选择最小元素
 		for (int i = 0; i < arr.length - 1; i++) {
@@ -45,7 +47,7 @@ public class SelectionSort {
 			int minIndex = i;
 			//待确定位置从i开始,左边待比较及交换的元素为arr[i],右边待比较及交换的元素为arr[i+1]
 			for (int j = i + 1; j < arr.length; j++) {
-				//从小到大
+				//升序
 				if (arr[j] < arr[minIndex]) {
 					minIndex = j;
 				}
