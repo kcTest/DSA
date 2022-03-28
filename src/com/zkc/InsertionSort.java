@@ -1,9 +1,11 @@
 package com.zkc;
 
+import com.zkc.utils.ArrayUtils;
+
 public class InsertionSort {
 	
 	public static void main(String[] args) {
-		int[] arr = new int[]{5, 8, 4, 7, 23, 1, 2, 43};
+		int[] arr = ArrayUtils.getArray(10, 20);
 		printArr(arr);
 		System.out.println();
 		System.out.println("===================");
