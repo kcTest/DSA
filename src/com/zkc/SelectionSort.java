@@ -1,14 +1,12 @@
 package com.zkc;
 
-import com.zkc.utils.DataSource;
-
 /**
  * @author pczkc
  */
 public class SelectionSort {
 	
 	public static void main(String[] args) {
-		int[] arr = DataSource.getArray(10, 20);
+		int[] arr = new int[]{5, 3, 4, 74, 23, 22, 2, 43};
 		printArr(arr);
 		System.out.println();
 		System.out.println("===================");

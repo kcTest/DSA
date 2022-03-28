@@ -1,11 +1,9 @@
 package com.zkc;
 
-import com.zkc.utils.DataSource;
-
 public class BubbleSort {
 	
 	public static void main(String[] args) {
-		int[] arr = DataSource.getArray(5, 20);
+		int[] arr = new int[]{5,3,4,74,23,22,2,43};
 		printArr(arr);
 		System.out.println();
 		System.out.println("===================");
@@ -54,9 +52,18 @@ public class BubbleSort {
 		}
 	}
 	
+	/**
+	 * a^a=0;
+	 * <br>
+	 * a^0=a;
+	 * <br>
+	 * a^b=b^a;
+	 * <br>
+	 * a^b^c=a^(b^c);
+	 */
 	private static void swap(int[] arr, int i, int j) {
-		int temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
+		arr[i] = arr[i] ^ arr[j];
+		arr[j] = arr[i] ^ arr[j];
+		arr[i] = arr[i] ^ arr[j];
 	}
 }
