@@ -8,18 +8,15 @@ import com.zkc.utils.ArrayUtils;
 public class SelectionSort {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(10, 20);
+		int[] arr = ArrayUtils.getArray(10, 100);
 		printArr(arr);
 		System.out.println();
 		System.out.println("===================");
-		selectionSort(arr);
+		System.out.println(System.currentTimeMillis());
+		//selectionSort(arr);
+		selectionSortRecursion(arr);
+		System.out.println(System.currentTimeMillis());
 		printArr(arr);
-	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
 	}
 	
 	/**
@@ -56,9 +53,37 @@ public class SelectionSort {
 		}
 	}
 	
+	
+	/**
+	 * 递归
+	 */
+	private static void selectionSortRecursion(int[] arr) {
+		for (int i = 0; i < arr.length - 1; i++) {
+			swap(arr, i, postfixMin(arr, i));
+		}
+	}
+	
+	private static int postfixMin(int[] arr, int start) {
+		if (start == arr.length - 1) {
+			return start;
+		}
+		int min = postfixMin(arr, start + 1);
+		if (arr[start] > arr[min]) {
+			return min;
+		}
+		return start;
+	}
+	
 	private static void swap(int[] arr, int i, int j) {
 		int temp = arr[i];
 		arr[i] = arr[j];
 		arr[j] = temp;
 	}
+	
+	private static void printArr(int[] arr) {
+		for (int j : arr) {
+			System.out.printf("%d ", j);
+		}
+	}
+	
 }
