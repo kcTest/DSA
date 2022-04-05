@@ -1,0 +1,81 @@
+
+package com.zkc;
+
+import com.zkc.utils.ArrayUtils;
+
+import java.util.Random;
+
+/**
+ * 荷兰国旗问题
+ */
+public class NetherlandsFlag {
+	
+	public static void main(String[] args) {
+		int[] arr = ArrayUtils.getArray(8, 20);
+		printArr(arr);
+		System.out.println("===================");
+		int num = new Random().nextInt(22);
+		System.out.println(num);
+		System.out.println("===================");
+		//sortA(arr, num);
+		//printArr(arr);
+		sortB(arr, num);
+		printArr(arr);
+	}
+	
+	/**
+	 * 指定一个数，调整数组使数组分为两部分，左侧部分的数均小于等于选定数 右侧数均比选定数大
+	 */
+	private static void sortA(int[] arr, int num) {
+		//小于等于num的左边界   
+		int lowerBoundary = -1;
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i] <= num) {
+				//与边界右侧第一个数交换
+				int temp = arr[lowerBoundary + 1];
+				arr[lowerBoundary + 1] = arr[i];
+				arr[i] = temp;
+				lowerBoundary++;
+			}
+		}
+	}
+	
+	/**
+	 * 指定一个数，调整数组使数组分为两部分，左侧部分的数均小于等于选定数 右侧数均比选定数大 相等的在中间
+	 */
+	private static void sortB(int[] arr, int num) {
+		int lowerBoundary = -1;
+		int higherBoundary = arr.length;
+		for (int i = 0; i < arr.length; i++) {
+			if (i == higherBoundary) {
+				break;
+			}
+			//交换会将当前数调整到左边界的右侧第一个位置或右边界的左侧第一个位置，然后曾加左边界或减小右边界
+			if (arr[i] < num) {
+				int temp = arr[lowerBoundary + 1];
+				arr[lowerBoundary + 1] = arr[i];
+				arr[i] = temp;
+				lowerBoundary++;
+			} else if (arr[i] > num) {
+				int temp = arr[higherBoundary - 1];
+				arr[higherBoundary - 1] = arr[i];
+				arr[i] = temp;
+				higherBoundary--;
+				//交换后继续判断当前位置
+				i--;
+			}
+		}
+	}
+	
+	private static void printArr(int[] arr) {
+		StringBuilder sb = new StringBuilder();
+		for (int j : arr) {
+			sb.append(j).append(",");
+		}
+		System.out.println(sb.substring(0, sb.length() - 1));
+	}
+	
+}
+	
+		
+		
