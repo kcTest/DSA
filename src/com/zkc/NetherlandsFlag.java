@@ -6,28 +6,27 @@ import com.zkc.utils.ArrayUtils;
 import java.util.Random;
 
 /**
- * 荷兰国旗问题
+ * 荷兰国旗问题O(N)
  */
 public class NetherlandsFlag {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(8, 20);
+		int[] arr = ArrayUtils.getArray(7, 20);
 		printArr(arr);
 		System.out.println("===================");
-		int num = new Random().nextInt(22);
+		int num = new Random().nextInt(25);
 		System.out.println(num);
 		System.out.println("===================");
-		//sortA(arr, num);
-		//printArr(arr);
-		sortB(arr, num);
+		//partition1(arr, num);
+		partition2(arr, num);
 		printArr(arr);
 	}
 	
 	/**
 	 * 指定一个数，调整数组使数组分为两部分，左侧部分的数均小于等于选定数 右侧数均比选定数大
 	 */
-	private static void sortA(int[] arr, int num) {
-		//小于等于num的左边界   
+	private static void partition1(int[] arr, int num) {
+		//小于等于num的左边界   左侧数均保持小于等于num
 		int lowerBoundary = -1;
 		for (int i = 0; i < arr.length; i++) {
 			if (arr[i] <= num) {
@@ -43,14 +42,16 @@ public class NetherlandsFlag {
 	/**
 	 * 指定一个数，调整数组使数组分为两部分，左侧部分的数均小于等于选定数 右侧数均比选定数大 相等的在中间
 	 */
-	private static void sortB(int[] arr, int num) {
+	private static void partition2(int[] arr, int num) {
+		//小于num的左边界   左侧数均保持小于num
 		int lowerBoundary = -1;
+		//大于num的右边界   右侧数均保持大于num 左右边界之间如果有值则是等于num的数
 		int higherBoundary = arr.length;
 		for (int i = 0; i < arr.length; i++) {
 			if (i == higherBoundary) {
 				break;
 			}
-			//交换会将当前数调整到左边界的右侧第一个位置或右边界的左侧第一个位置，然后曾加左边界或减小右边界
+			//交换会将当前数调整到左边界的右侧第一个位置或右边界的左侧第一个位置，然后增加左边界或减小右边界
 			if (arr[i] < num) {
 				int temp = arr[lowerBoundary + 1];
 				arr[lowerBoundary + 1] = arr[i];
