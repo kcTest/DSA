@@ -1,6 +1,6 @@
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 /**
  * @author pczkc
@@ -8,15 +8,15 @@ import com.zkc.utils.ArrayUtils;
 public class SelectionSort {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(10, 100);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(10, 100);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		System.out.println(System.currentTimeMillis());
 		//selectionSort(arr);
 		selectionSortRecursion(arr);
 		System.out.println(System.currentTimeMillis());
-		printArr(arr);
+		MyUtils.printArr(arr);
 	}
 	
 	/**
@@ -79,11 +79,4 @@ public class SelectionSort {
 		arr[i] = arr[j];
 		arr[j] = temp;
 	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
-	}
-	
 }

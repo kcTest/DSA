@@ -1,23 +1,17 @@
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 public class MergeSort {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(9, 50);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(9, 50);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		int[] tempArr = new int[arr.length];
 		mergeSort(arr, 0, arr.length - 1, tempArr);
-		printArr(arr);
-	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
+		MyUtils.printArr(arr);
 	}
 	
 	/**

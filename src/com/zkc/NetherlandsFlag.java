@@ -1,7 +1,7 @@
 
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 import java.util.Random;
 
@@ -11,15 +11,15 @@ import java.util.Random;
 public class NetherlandsFlag {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(7, 20);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(7, 20);
+		MyUtils.printArr(arr);
 		System.out.println("===================");
 		int num = new Random().nextInt(25);
 		System.out.println(num);
 		System.out.println("===================");
 		//partition1(arr, num);
 		partition2(arr, num);
-		printArr(arr);
+		MyUtils.printArr(arr);
 	}
 	
 	/**
@@ -67,15 +67,6 @@ public class NetherlandsFlag {
 			}
 		}
 	}
-	
-	private static void printArr(int[] arr) {
-		StringBuilder sb = new StringBuilder();
-		for (int j : arr) {
-			sb.append(j).append(",");
-		}
-		System.out.println(sb.substring(0, sb.length() - 1));
-	}
-	
 }
 	
 		

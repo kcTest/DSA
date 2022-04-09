@@ -1,6 +1,6 @@
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 /**
  * 快速排序
@@ -8,13 +8,13 @@ import com.zkc.utils.ArrayUtils;
 public class QuickSort {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(7, 30);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(7, 30);
+		MyUtils.printArr(arr);
 		System.out.println("===================");
 		//quickSort1(arr, 0, arr.length - 1);
 		//quickSort2(arr, 0, arr.length - 1);
 		quickSort3(arr, 0, arr.length - 1);
-		printArr(arr);
+		MyUtils.printArr(arr);
 	}
 	
 	/**
@@ -80,8 +80,8 @@ public class QuickSort {
 	/**
 	 * 随机选定数组中一个数num 与最后一个数交换num，将num之前的数分为左中右三部分，左边小于num 中间等于num,右边大于num，最后将num与右边第一个数交换，此时num在数组中的位置已确定。
 	 * 再将num左右两侧按同样步骤递归处理。
-	 * 时间复杂度与选定数的位置有关，如果选定的数经排序之后正好处在中间位置，此时左右边界会在中间相遇 后续正好从中间分成左右两半开始递归 左右两侧待排序数量一样 时间复杂度最好情况O(n*logn)，
-	 * 如果选定的数经排序之后正好处在两端位置 后续递归只会处理左侧或右侧数据 左右两侧待排序数量为n-i，与quickSort2情况相同 最差时间复杂度最好情况O(n^2)。
+	 * 时间复杂度与选定数的位置有关，如果选定的数经排序之后正好处在中间位置，此时左右边界会在中间相遇 后续正好从中间分成左右两半开始递归 左右两侧待排序数量一样 时间复杂度最好情况O(n*logn) 空间复杂度O(logn)，
+	 * 如果选定的数经排序之后正好处在两端位置 后续递归只会处理左侧或右侧数据 左右两侧待排序数量为n-i，与quickSort2情况相同 最差时间复杂度最好情况O(n^2),空间复杂度O(n)。
 	 * 根据选定数所在位置的概率和时间复杂度可以得到，时间复杂度数学期望为O(n*logn)
 	 */
 	private static void quickSort3(int[] arr, int start, int end) {
@@ -120,13 +120,5 @@ public class QuickSort {
 		int temp = arr[i];
 		arr[i] = arr[j];
 		arr[j] = temp;
-	}
-	
-	private static void printArr(int[] arr) {
-		StringBuilder sb = new StringBuilder();
-		for (int j : arr) {
-			sb.append(j).append(",");
-		}
-		System.out.println(sb.substring(0, sb.length() - 1));
 	}
 }

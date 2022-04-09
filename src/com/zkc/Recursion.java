@@ -1,21 +1,15 @@
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 public class Recursion {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(10, 50);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(10, 50);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		System.out.println(getMax(arr, 0, arr.length - 1));
-	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
 	}
 	
 	/**

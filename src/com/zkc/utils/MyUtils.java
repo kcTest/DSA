@@ -2,7 +2,7 @@ package com.zkc.utils;
 
 import java.util.Random;
 
-public class ArrayUtils {
+public class MyUtils {
 	
 	public static int[] getArray(int length, int bound) {
 		if (length < 2) {
@@ -14,5 +14,13 @@ public class ArrayUtils {
 			ret[i] = random.nextInt(bound);
 		}
 		return ret;
+	}
+	
+	public static void printArr(int[] arr) {
+		StringBuilder sb = new StringBuilder();
+		for (int j : arr) {
+			sb.append(j).append(",");
+		}
+		System.out.println(sb.substring(0, sb.length() - 1));
 	}
 }

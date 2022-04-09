@@ -1,22 +1,16 @@
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 public class InsertionSort {
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(10, 20);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(10, 20);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		insertionSort(arr);
-		printArr(arr);
-	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
+		MyUtils.printArr(arr);
 	}
 	
 	/**

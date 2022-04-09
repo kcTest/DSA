@@ -1,5 +1,7 @@
 package com.zkc;
 
+import com.zkc.utils.MyUtils;
+
 public class EvenTimesOddTimes {
 	
 	public static void main(String[] args) {
@@ -11,7 +13,7 @@ public class EvenTimesOddTimes {
 	 */
 	private static void printOddTimesNum1() {
 		int[] arr = new int[]{5, 5, 4, 4, 4, 7, 7, 3, 3};
-		printArr(arr);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		int ret = 0;
@@ -28,7 +30,7 @@ public class EvenTimesOddTimes {
 	 */
 	private static void printOddTimesNum2() {
 		int[] arr = new int[]{5, 5, 4, 4, 7, 7, 3, 3, 12, 12, 12, 9, 9, 5};
-		printArr(arr);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		int aEorb = 0;
@@ -58,11 +60,5 @@ public class EvenTimesOddTimes {
 		System.out.println(aOrb);
 		//得到另一个
 		System.out.println(aOrb ^ aEorb);
-	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
 	}
 }

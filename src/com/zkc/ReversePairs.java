@@ -1,6 +1,6 @@
 package com.zkc;
 
-import com.zkc.utils.ArrayUtils;
+import com.zkc.utils.MyUtils;
 
 /**
  * 对数组中每一个数如果右边存在比自己小的数，这对数为逆序数。
@@ -10,18 +10,12 @@ public class ReversePairs {
 	
 	
 	public static void main(String[] args) {
-		int[] arr = ArrayUtils.getArray(7, 20);
-		printArr(arr);
+		int[] arr = MyUtils.getArray(7, 20);
+		MyUtils.printArr(arr);
 		System.out.println();
 		System.out.println("===================");
 		int[] tempArr = new int[arr.length];
 		mergeSort(arr, 0, arr.length - 1, tempArr);
-	}
-	
-	private static void printArr(int[] arr) {
-		for (int j : arr) {
-			System.out.printf("%d ", j);
-		}
 	}
 	
 	private static void mergeSort(int[] arr, int left, int right, int[] tempArr) {
