@@ -2,9 +2,6 @@ package com.zkc;
 
 import com.zkc.utils.MyUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.PriorityQueue;
 
 /**
@@ -18,12 +15,12 @@ public class SortArrayDistanceLessK {
 	
 	public static void main(String[] args) {
 		//int[] arr = MyUtils.getArray(9, 30);
-		int[] arr = new int[]{18, 22, 16, 2, 4, 26, 29, 28, 27};
+		int[] arr = new int[]{22, 17, 27, 9, 22, 29, 21, 29, 26};
 		MyUtils.printArr(arr);
 		System.out.println("===================");
-		int k = 3;
-		//heapSortK(arr, k);
+		int k = 4;
 		sortArrayDistanceLessK(arr, k);
+		heapSortK(arr, k);
 		MyUtils.printArr(arr);
 	}
 	
@@ -32,19 +29,19 @@ public class SortArrayDistanceLessK {
 		for (int i = 0; i <= (k > arr.length ? arr.length - 1 : k); i++) {
 			heap.add(arr[i]);
 		}
-		arr[0] = heap.poll();
 		int l = k + 1;
+		//前k+1个元素已确定  停在到第k+2个元素，从第k+2个元素开始继续添加,并将小根堆的最小值依次赋给数组。当所有元素添加完 数组剩余k个位置待确定  
 		while (l < arr.length) {
 			heap.add(arr[l]);
-			arr[l++ - k] = heap.poll();
+			arr[l++ - (k + 1)] = heap.poll();
 		}
 		while (!heap.isEmpty()) {
-			arr[l++ - k] = heap.poll();
+			arr[l++ - (k + 1)] = heap.poll();
 		}
 	}
 	
 	/**
-	 * 空间复杂度O() 时间杂度O()
+	 * 时间杂度O(nlogn)
 	 */
 	private static void heapSortK(int[] arr, int k) {
 		if (arr == null || arr.length == 0) {
@@ -59,23 +56,21 @@ public class SortArrayDistanceLessK {
 		}
 		//在前K+1个是小根堆的基础上
 		//第k+1个元素与已位于已确定元素的下一个元素交换后 在执行从上往下的堆化过程 生成小根堆
-		arr[0] = arrTemp[0];
-		int l = 1;
-		while (l < arr.length - k) {
+		int l = k + 1;
+		while (l < arr.length) {
+			//顶部最小元素放入原数组  从头开始
+			arr[l - (k + 1)] = arrTemp[0];
 			//顶部元素更换
-			arrTemp[0] = arr[l + k];
+			arrTemp[0] = arr[l++];
 			heapify(arrTemp, 0, k + 1);
-			//顶部最小元素放入原数组
-			arr[l++] = arrTemp[0];
 		}
 		int heapSize = arrTemp.length;
 		for (int i = arrTemp.length - 1; i >= 0; i--) {
 			swap(arrTemp, 0, i);
 			heapify(arrTemp, 0, --heapSize);
-			arr[l++ - 1] = arrTemp[i];
+			arr[l++ - (k + 1)] = arrTemp[i];
 		}
 	}
-	
 	
 	/**
 	 * 生成小根堆
