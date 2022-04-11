@@ -1,7 +1,5 @@
 package com.zkc.utils;
 
-import java.util.Random;
-
 public class MyUtils {
 	
 	public static int[] getArray(int length, int bound) {

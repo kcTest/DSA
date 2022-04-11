@@ -1,5 +1,5 @@
 
-package com.zkc;
+package com.zkc.comparisonSorts;
 
 import com.zkc.utils.MyUtils;
 
