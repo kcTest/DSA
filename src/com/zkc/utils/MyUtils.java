@@ -19,5 +19,6 @@ public class MyUtils {
 			sb.append(j).append(",");
 		}
 		System.out.println(sb.substring(0, sb.length() - 1));
+		System.out.println("------------------------------");
 	}
 }

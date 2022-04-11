@@ -13,10 +13,8 @@ public class NetherlandsFlag {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(7, 20);
 		MyUtils.printArr(arr);
-		System.out.println("===================");
 		int num = new Random().nextInt(25);
 		System.out.println(num);
-		System.out.println("===================");
 		//partition1(arr, num);
 		partition2(arr, num);
 		MyUtils.printArr(arr);

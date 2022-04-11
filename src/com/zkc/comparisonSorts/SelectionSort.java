@@ -10,8 +10,6 @@ public class SelectionSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(10, 100);
 		MyUtils.printArr(arr);
-		System.out.println();
-		System.out.println("===================");
 		System.out.println(System.currentTimeMillis());
 		//selectionSort(arr);
 		selectionSortRecursion(arr);

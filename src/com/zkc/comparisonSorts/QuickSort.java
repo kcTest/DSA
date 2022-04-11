@@ -10,7 +10,6 @@ public class QuickSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(7, 30);
 		MyUtils.printArr(arr);
-		System.out.println("===================");
 		//quickSort1(arr, 0, arr.length - 1);
 		//quickSort2(arr, 0, arr.length - 1);
 		quickSort3(arr, 0, arr.length - 1);

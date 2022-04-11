@@ -7,8 +7,6 @@ public class Recursion {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(10, 50);
 		MyUtils.printArr(arr);
-		System.out.println();
-		System.out.println("===================");
 		System.out.println(getMax(arr, 0, arr.length - 1));
 	}
 	

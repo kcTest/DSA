@@ -7,8 +7,6 @@ public class MergeSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(9, 50);
 		MyUtils.printArr(arr);
-		System.out.println();
-		System.out.println("===================");
 		int[] tempArr = new int[arr.length];
 		mergeSort(arr, 0, arr.length - 1, tempArr);
 		MyUtils.printArr(arr);

@@ -17,7 +17,6 @@ public class SortArrayDistanceLessK {
 		//int[] arr = MyUtils.getArray(9, 30);
 		int[] arr = new int[]{22, 17, 27, 9, 22, 29, 21, 29, 26};
 		MyUtils.printArr(arr);
-		System.out.println("===================");
 		int k = 4;
 		sortArrayDistanceLessK(arr, k);
 		heapSortK(arr, k);

@@ -7,8 +7,6 @@ public class InsertionSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(10, 20);
 		MyUtils.printArr(arr);
-		System.out.println();
-		System.out.println("===================");
 		insertionSort(arr);
 		MyUtils.printArr(arr);
 	}

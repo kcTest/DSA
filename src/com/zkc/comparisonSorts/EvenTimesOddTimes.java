@@ -14,8 +14,6 @@ public class EvenTimesOddTimes {
 	private static void printOddTimesNum1() {
 		int[] arr = new int[]{5, 5, 4, 4, 4, 7, 7, 3, 3};
 		MyUtils.printArr(arr);
-		System.out.println();
-		System.out.println("===================");
 		int ret = 0;
 		for (int j : arr) {
 			ret = ret ^ j;

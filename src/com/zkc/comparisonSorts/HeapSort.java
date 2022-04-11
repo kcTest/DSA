@@ -22,7 +22,6 @@ public class HeapSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(9, 30);
 		MyUtils.printArr(arr);
-		System.out.println("===================");
 		heapSort(arr);
 		MyUtils.printArr(arr);
 	}

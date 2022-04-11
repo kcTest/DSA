@@ -7,8 +7,6 @@ public class BubbleSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(10, 20);
 		MyUtils.printArr(arr);
-		System.out.println();
-		System.out.println("===================");
 		bubbleSort(arr);
 		MyUtils.printArr(arr);
 	}
