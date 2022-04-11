@@ -9,9 +9,8 @@ public class MyUtils {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		int[] ret = new int[length];
-		Random random = new Random();
 		for (int i = 0; i < length; i++) {
-			ret[i] = random.nextInt(bound);
+			ret[i] = (int) (Math.random() * bound);
 		}
 		return ret;
 	}
