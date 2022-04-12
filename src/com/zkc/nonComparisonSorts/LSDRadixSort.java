@@ -2,6 +2,9 @@ package com.zkc.nonComparisonSorts;
 
 import com.zkc.utils.MyUtils;
 
+/**
+ * 基数排序 最低位优先
+ */
 public class LSDRadixSort {
 	
 	public static void main(String[] args) {
