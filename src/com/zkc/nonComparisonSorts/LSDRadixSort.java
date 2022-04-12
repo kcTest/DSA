@@ -3,7 +3,7 @@ package com.zkc.nonComparisonSorts;
 import com.zkc.utils.MyUtils;
 
 /**
- * 基数排序 最低位优先
+ * 基数排序 最低位优先 稳定
  */
 public class LSDRadixSort {
 	

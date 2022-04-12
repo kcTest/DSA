@@ -5,7 +5,7 @@ import com.zkc.utils.MyUtils;
 public class BubbleSort {
 	
 	public static void main(String[] args) {
-		int[] arr = MyUtils.getArray(10, 20);
+		int[] arr = MyUtils.getArray(9, 20);
 		MyUtils.printArr(arr);
 		bubbleSort(arr);
 		MyUtils.printArr(arr);
@@ -27,6 +27,7 @@ public class BubbleSort {
 	 * 冒泡排序的最坏时间复杂度为 O(n^2)。
 	 * 综上，因此冒泡排序总的平均时间复杂度为 O(n^2)。
 	 * <p>
+	 * 空间复杂度O（1）
 	 * <br>
 	 * 算法稳定性：
 	 * 冒泡排序就是把小的元素往前调或者把大的元素往后调。比较是相邻的两个元素比较，交换也发生在这两个元素之间。

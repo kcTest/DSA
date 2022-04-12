@@ -3,7 +3,7 @@ package com.zkc.nonComparisonSorts;
 import com.zkc.utils.MyUtils;
 
 /**
- * 计数排序O(n)
+ * 计数排序O(n) 稳定
  */
 public class CountingSort {
 	

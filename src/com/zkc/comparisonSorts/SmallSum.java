@@ -21,7 +21,9 @@ public class SmallSum {
 			return 0;
 		}
 		int mid = left + ((right - left) >> 1);
-		return mergeSort(arr, left, mid, tempArr) + mergeSort(arr, mid + 1, right, tempArr) + merge(arr, left, mid, right, tempArr);
+		return mergeSort(arr, left, mid, tempArr) +
+				mergeSort(arr, mid + 1, right, tempArr) +
+				merge(arr, left, mid, right, tempArr);
 	}
 	
 	private static int merge(int[] arr, int left, int mid, int right, int[] temp) {
@@ -31,9 +33,9 @@ public class SmallSum {
 		int sum = 0;
 		
 		while (l <= mid && r <= right) {
-			//右侧比左侧大的情况下求和 ，否则不求和 ，因为相等的情况下无法确定在右侧有几个比左侧当前数大的数
+			//右侧比左侧大的情况下求和  要算右侧比左侧大的数所以相等的情况下让右侧下标移动 如果此时左侧跳过可能会丢符合统计条件的数
 			if (arr[r] > arr[l]) {
-				//如果左侧比右侧小 右侧当前索引及之后的数都比左侧大。右侧比左侧当前数大的数的个数乘以左侧当前数
+				//如果右侧比左侧大 右侧当前索引及之后的数都比左侧大。右侧比左侧当前数大的数的个数乘以左侧当前数
 				int current = arr[l++];
 				temp[t++] = current;
 				sum += (right - r + 1) * current;

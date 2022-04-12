@@ -10,15 +10,13 @@ public class SelectionSort {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(10, 100);
 		MyUtils.printArr(arr);
-		System.out.println(System.currentTimeMillis());
 		//selectionSort(arr);
 		selectionSortRecursion(arr);
-		System.out.println(System.currentTimeMillis());
 		MyUtils.printArr(arr);
 	}
 	
 	/**
-	 * 时间复杂度：
+	 * 时间复杂度：O（n^2）
 	 * 选择排序的交换操作介于 0 和 (n - 1)次之间。
 	 * 选择排序的比较操作为 n (n - 1） / 2 次之间。
 	 * 选择排序的赋值操作介于 0 和 3 (n - 1） 次之间。
@@ -27,7 +25,7 @@ public class SelectionSort {
 	 * 交换次数比冒泡排序少多了，由于交换所需CPU时间比比较所需的CPU时间多，n值较小时，选择排序比冒泡排序快。
 	 * <p>
 	 * <br>
-	 * 稳定性：
+	 * 稳定性：O(1)
 	 * 选择排序是给每个位置选择当前元素最小的，
 	 * 比如给第一个位置选择最小的，在剩余元素里面给第二个元素选择第二小的，
 	 * 依次类推，直到第n-1个元素，<b>第n个元素不用选择了</b>，因为只剩下它一个最大的元素了。

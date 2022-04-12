@@ -16,6 +16,8 @@ import com.zkc.utils.MyUtils;
  * 如果2i+1>n, 则结点i无右孩子, 否则其右孩子rchild (i) 是结点2i+1.
  * ）。
  * 将根结点最大的堆叫做最大堆或大根堆，根结点最小的堆叫做最小堆或小根堆
+ * 
+ * 如何稳定？
  */
 public class HeapSort {
 	
@@ -51,7 +53,7 @@ public class HeapSort {
 	
 	/**
 	 * 堆插入
-	 * 向上调整当前元素
+	 * 向上调整当前元素 调整过程中如果父节点在左并与其同级节点一样大，父节点向下移动后顺序大于其同级节点，破坏了稳定性。
 	 * 空间复杂度O(logn),为插入时当前完全二叉树的高度
 	 */
 	private static void heapInsert(int[] arr, int currentIndex) {
@@ -92,8 +94,8 @@ public class HeapSort {
 		arr[i] = arr[j];
 		arr[j] = temp;
 	}
-	
-	
+
+
 //	private static void heapInsert2(int[] arr, int currentIndex) {
 //		int parentIndex = (currentIndex - 1) / 2;
 //		if (arr[currentIndex] > arr[parentIndex]) {
