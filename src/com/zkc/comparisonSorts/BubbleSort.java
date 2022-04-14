@@ -5,7 +5,7 @@ import com.zkc.utils.MyUtils;
 public class BubbleSort {
 	
 	public static void main(String[] args) {
-		int[] arr = MyUtils.getArray(9, 20);
+		int[] arr = MyUtils.getArray(9, -1);
 		MyUtils.printArr(arr);
 		bubbleSort(arr);
 		MyUtils.printArr(arr);
