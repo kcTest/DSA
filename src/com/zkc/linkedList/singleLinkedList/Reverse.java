@@ -1,4 +1,4 @@
-package com.zkc.singleLinkedList;
+package com.zkc.linkedList.singleLinkedList;
 
 import com.zkc.utils.MyUtils;
 

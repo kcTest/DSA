@@ -1,4 +1,4 @@
-package com.zkc.singleLinkedList;
+package com.zkc.linkedList.singleLinkedList;
 
 /**
  * 自定义单向链表

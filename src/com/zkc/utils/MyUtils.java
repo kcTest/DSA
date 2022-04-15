@@ -1,7 +1,12 @@
 package com.zkc.utils;
 
-import com.zkc.doubleLinkedList.DoubleLinkedList;
-import com.zkc.singleLinkedList.SingleLinkedList;
+import com.zkc.linkedList.doubleLinkedList.DoubleLinkedList;
+import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MyUtils {
 	
@@ -27,7 +32,6 @@ public class MyUtils {
 		System.out.println(sb.substring(0, sb.length() - 1));
 		System.out.println("------------------------------");
 	}
-	
 	
 	public static SingleLinkedList getSingleLinedList(int length, int bound) {
 		if (length < 2) {
@@ -99,5 +103,28 @@ public class MyUtils {
 		System.out.println(sb.substring(0, sb.length() - 1));
 		System.out.println("------------------------------");
 	}
+	
+	public static SingleLinkedList getSortedSingleLinedList(int length, int bound) {
+		if (length < 2) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		SingleLinkedList list = new SingleLinkedList();
+		SingleLinkedList.Node prev = null;
+		
+		int[] sortedArray = getArray(length, bound);
+		Arrays.sort(sortedArray);
+		for (int j : sortedArray) {
+			SingleLinkedList.Node sNode = new SingleLinkedList.Node(j);
+			if (prev == null) {
+				list.head = sNode;
+			} else {
+				prev.next = sNode;
+			}
+			prev = sNode;
+		}
+		
+		return list;
+	}
+	
 	
 }

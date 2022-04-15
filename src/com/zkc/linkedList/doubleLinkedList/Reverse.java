@@ -1,4 +1,4 @@
-package com.zkc.doubleLinkedList;
+package com.zkc.linkedList.doubleLinkedList;
 
 import com.zkc.utils.MyUtils;
 

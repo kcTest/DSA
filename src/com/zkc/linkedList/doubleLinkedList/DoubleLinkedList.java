@@ -1,4 +1,4 @@
-package com.zkc.doubleLinkedList;
+package com.zkc.linkedList.doubleLinkedList;
 
 /**
  * 自定义双向链表
