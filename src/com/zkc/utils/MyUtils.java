@@ -1,5 +1,6 @@
 package com.zkc.utils;
 
+import com.zkc.doubleLinkedList.DoubleLinkedList;
 import com.zkc.singleLinkedList.SingleLinkedList;
 
 public class MyUtils {
@@ -34,16 +35,38 @@ public class MyUtils {
 		}
 		
 		SingleLinkedList list = new SingleLinkedList();
-		SingleLinkedList.Node current = list.head;
+		SingleLinkedList.Node prev = null;
+		//新建节点后更新上一个节点的下一个节点
 		for (int i = 0; i < length; i++) {
 			SingleLinkedList.Node sNode = new SingleLinkedList.Node((int) (Math.random() * bound));
-			if (current == null) {
+			if (prev == null) {
 				list.head = sNode;
-				current = sNode;
 			} else {
-				current.next = sNode;
-				current = current.next;
+				prev.next = sNode;
 			}
+			prev = sNode;
+		}
+		
+		return list;
+	}
+	
+	public static DoubleLinkedList getDoubleLinedList(int length, int bound) {
+		if (length < 2) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		
+		DoubleLinkedList list = new DoubleLinkedList();
+		DoubleLinkedList.Node prev = null;
+		for (int i = 0; i < length; i++) {
+			DoubleLinkedList.Node sNode = new DoubleLinkedList.Node((int) (Math.random() * bound));
+			if (prev == null) {
+				list.head = sNode;
+			} else {
+				//新建节点后更新上一个节点的下一个节点
+				prev.next = sNode;
+				sNode.prev = prev;
+			}
+			prev = sNode;
 		}
 		
 		return list;
@@ -62,4 +85,19 @@ public class MyUtils {
 		System.out.println(sb.substring(0, sb.length() - 1));
 		System.out.println("------------------------------");
 	}
+	
+	public static void printDoubleLinkedList(DoubleLinkedList list) {
+		if (list == null) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		DoubleLinkedList.Node current = list.head;
+		StringBuilder sb = new StringBuilder();
+		while (current != null) {
+			sb.append(current.data).append(",");
+			current = current.next;
+		}
+		System.out.println(sb.substring(0, sb.length() - 1));
+		System.out.println("------------------------------");
+	}
+	
 }
