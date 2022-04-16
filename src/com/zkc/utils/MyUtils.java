@@ -83,10 +83,10 @@ public class MyUtils {
 		SingleLinkedList.Node current = list.head;
 		StringBuilder sb = new StringBuilder();
 		while (current != null) {
-			sb.append(current.data).append(",");
+			sb.append(current.data).append("->");
 			current = current.next;
 		}
-		System.out.println(sb.substring(0, sb.length() - 1));
+		System.out.println(sb.substring(0, sb.length() - 2));
 		System.out.println("------------------------------");
 	}
 	
@@ -97,10 +97,10 @@ public class MyUtils {
 		DoubleLinkedList.Node current = list.head;
 		StringBuilder sb = new StringBuilder();
 		while (current != null) {
-			sb.append(current.data).append(",");
+			sb.append(current.data).append("->");
 			current = current.next;
 		}
-		System.out.println(sb.substring(0, sb.length() - 1));
+		System.out.println(sb.substring(0, sb.length() - 2));
 		System.out.println("------------------------------");
 	}
 	
@@ -113,6 +113,30 @@ public class MyUtils {
 		
 		int[] sortedArray = getArray(length, bound);
 		Arrays.sort(sortedArray);
+		for (int j : sortedArray) {
+			SingleLinkedList.Node sNode = new SingleLinkedList.Node(j);
+			if (prev == null) {
+				list.head = sNode;
+			} else {
+				prev.next = sNode;
+			}
+			prev = sNode;
+		}
+		
+		return list;
+	}
+	
+	public static SingleLinkedList getPalindromeSingleLinedList(int length, int bound) {
+		if (length < 3) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		SingleLinkedList list = new SingleLinkedList();
+		SingleLinkedList.Node prev = null;
+		
+		int[] sortedArray = getArray(length, bound);
+		for (int i = 0; i < sortedArray.length / 2; i++) {
+			sortedArray[sortedArray.length - 1 - i] = sortedArray[i];
+		}
 		for (int j : sortedArray) {
 			SingleLinkedList.Node sNode = new SingleLinkedList.Node(j);
 			if (prev == null) {

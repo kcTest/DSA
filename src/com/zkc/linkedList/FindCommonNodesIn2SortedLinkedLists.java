@@ -4,7 +4,7 @@ import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
 import com.zkc.utils.MyUtils;
 
 /**
- * 打印两个有序链表中的公共节点
+ * 打印两个有序链表中的公共节点 O(n)
  */
 public class FindCommonNodesIn2SortedLinkedLists {
 	

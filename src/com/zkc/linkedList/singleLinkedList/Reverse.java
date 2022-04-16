@@ -3,7 +3,7 @@ package com.zkc.linkedList.singleLinkedList;
 import com.zkc.utils.MyUtils;
 
 /**
- * 反转单链表
+ * 反转单链表 O(n)
  */
 public class Reverse {
 	
