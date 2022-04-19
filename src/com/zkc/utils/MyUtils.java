@@ -37,7 +37,7 @@ public class MyUtils {
 	}
 	
 	public static SingleLinkedList getSingleLinedList(int length, int bound) {
-		if (length < 2) {
+		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		
@@ -58,7 +58,7 @@ public class MyUtils {
 	}
 	
 	public static SpecialSingleLinkedList getSpecialSingleLinkedList(int length, int bound) {
-		if (length < 2) {
+		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		
@@ -89,7 +89,7 @@ public class MyUtils {
 	}
 	
 	public static DoubleLinkedList getDoubleLinedList(int length, int bound) {
-		if (length < 2) {
+		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		
@@ -110,6 +110,7 @@ public class MyUtils {
 		return list;
 	}
 	
+	
 	public static void printSingleLinkedList(SingleLinkedList list) {
 		if (list == null) {
 			throw new IllegalArgumentException("Illegal Argument");
@@ -121,6 +122,32 @@ public class MyUtils {
 			current = current.next;
 		}
 		System.out.println(sb.substring(0, sb.length() - 2));
+		System.out.println("------------------------------");
+	}
+	
+	public static void printIntersectSingleLinkedList(SingleLinkedList listA) {
+		if (listA == null) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		SingleLinkedList.Node current = listA.head;
+		StringBuilder sb = new StringBuilder();
+		Map<SingleLinkedList.Node, Integer> map = new HashMap<>();
+		while (current != null) {
+			if (map.containsKey(current)) {
+				int count = map.get(current);
+				if (count >= 1) {
+					sb.append(String.format("LINK TO %d(%s)->", current.data, Integer.toHexString(current.hashCode())));
+					break;
+				}
+				map.put(current, map.get(current) + 1);
+			} else {
+				map.put(current, 1);
+			}
+			sb.append(current.data).append("(").append(Integer.toHexString(current.hashCode())).append(")").append("->");
+			current = current.next;
+		}
+		sb.delete(sb.length() - 2, sb.length());
+		System.out.println(sb);
 		System.out.println("------------------------------");
 	}
 	
@@ -153,7 +180,7 @@ public class MyUtils {
 	}
 	
 	public static SingleLinkedList getSortedSingleLinedList(int length, int bound) {
-		if (length < 2) {
+		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		SingleLinkedList list = new SingleLinkedList();
@@ -175,7 +202,7 @@ public class MyUtils {
 	}
 	
 	public static SingleLinkedList getPalindromeSingleLinedList(int length, int bound) {
-		if (length < 3) {
+		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		SingleLinkedList list = new SingleLinkedList();
@@ -198,5 +225,117 @@ public class MyUtils {
 		return list;
 	}
 	
-	
+	public static SingleLinkedList[] getIntersectSingleLinedList(int length, int bound) {
+		
+		SingleLinkedList singleLinkedListA = getSingleLinedList(((int) (Math.random() * length) + 1), bound);
+		SingleLinkedList singleLinkedListB = getSingleLinedList(((int) (Math.random() * length) + 1), bound);
+		SingleLinkedList.Node curA = singleLinkedListA.head;
+		SingleLinkedList.Node curB = singleLinkedListB.head;
+		if (curA == null || curB == null) {
+			return null;
+		}
+		int countA = 0;
+		int countB = 0;
+		while (curA.next != null || curB.next != null) {
+			if (curA.next != null) {
+				curA = curA.next;
+				countA++;
+			}
+			if (curB.next != null) {
+				curB = curB.next;
+				countB++;
+			}
+		}
+		//B->C,A->C
+		if (System.currentTimeMillis() % 2 == 0) {
+			int countC = 0;
+			SingleLinkedList singleLinkedListC = getSingleLinedList(((int) (Math.random() * length) + 1), bound);
+			curA.next = singleLinkedListC.head;
+			curB.next = singleLinkedListC.head;
+			
+			//ADD CLOSED-LOOP, C.tail->(A.rand|B.rand)
+			if (System.currentTimeMillis() % 2 == 0) {
+				SingleLinkedList.Node curC = singleLinkedListC.head;
+				while ((curC != null && curC.next != null)) {
+					curC = curC.next;
+					countC++;
+				}
+				if (curC != null) {
+					if (System.currentTimeMillis() % 2 == 0) {
+						curA = singleLinkedListA.head;
+						int connIndex = (int) (Math.random() * (countA + countC));
+						countA = 0;
+						while (curA != null) {
+							if (connIndex == countA) {
+								curC.next = curA;
+								break;
+							}
+							curA = curA.next;
+							countA++;
+						}
+					} else {
+						curB = singleLinkedListB.head;
+						int connIndex = (int) (Math.random() * (countB + countC));
+						countB = 0;
+						while (curB != null) {
+							if (connIndex == countB) {
+								curC.next = curB;
+								break;
+							}
+							curB = curB.next;
+							countB++;
+						}
+					}
+				}
+			}
+		} else if (System.currentTimeMillis() % 3 == 0) {
+			{
+				int countC = 0;
+				int countD = 0;
+				SingleLinkedList singleLinkedListC = getSingleLinedList(((int) (Math.random() * length) + 1), bound);
+				SingleLinkedList singleLinkedListD = getSingleLinedList(((int) (Math.random() * length) + 1), bound);
+				curA.next = singleLinkedListC.head;
+				curB.next = singleLinkedListD.head;
+				
+				//ADD CLOSED-LOOP, C.tail->(A.rand) D.tail->(B.rand)
+				SingleLinkedList.Node curC = singleLinkedListC.head;
+				while ((curC != null && curC.next != null)) {
+					curC = curC.next;
+					countC++;
+				}
+				SingleLinkedList.Node curD = singleLinkedListD.head;
+				while ((curD != null && curD.next != null)) {
+					curD = curD.next;
+					countD++;
+				}
+				if (curC != null) {
+					curA = singleLinkedListA.head;
+					int connIndex = (int) (Math.random() * (countA + countC));
+					countA = 0;
+					while (curA != null) {
+						if (connIndex == countA) {
+							curC.next = curA;
+							break;
+						}
+						curA = curA.next;
+						countA++;
+					}
+				}
+				if (curD != null) {
+					curB = singleLinkedListB.head;
+					int connIndex = (int) (Math.random() * (countB + countD));
+					countB = 0;
+					while (curB != null) {
+						if (connIndex == countB) {
+							curD.next = curB;
+							break;
+						}
+						curB = curB.next;
+						countB++;
+					}
+				}
+			}
+		}
+		return new SingleLinkedList[]{singleLinkedListA, singleLinkedListB};
+	}
 }
