@@ -30,15 +30,15 @@ public class IntersectLinkedList {
 		System.out.println(loopStartA == null ? "loopStartA: null" : String.format("loopStartA: %d(%s)", loopStartA.data, Integer.toHexString(loopStartA.hashCode())));
 		System.out.println(loopStartB == null ? "loopStartA: null" : String.format("loopStartB: %d(%s)", loopStartB.data, Integer.toHexString(loopStartB.hashCode())));
 		
-		//1均无环
+		//1均无环(相交、不相交)
 		if (loopStartA == null && loopStartB == null) {
 			return getIntersectionNodeNoLoop(headA, headB, null);
 		}
-		//2一个有环 一个无环,不可能相交
+		//2一个有环 一个无环（不可能相交）
 		if (loopStartA == null || loopStartB == null) {
 			return null;
 		}
-		//3均有环
+		//3均有环（不想交、相交（一个环 共享一个起点、一个环 各有一个环的起点））
 		boolean intersect = false;
 		SingleLinkedList.Node cur = loopStartA;
 		while (cur != null) {
@@ -61,7 +61,7 @@ public class IntersectLinkedList {
 		//3.2.1 相交点位于环的起始节点及之前 各链表的环的起始节点为同一个节点
 		if (loopStartA == loopStartB) {
 			//传入起始节点作为终止节点，只遍历到终止节点，可以作为两个无环链表处理
-			return getIntersectionNodeNoLoop(headA, headB, loopStartA);
+			return getIntersectionNodeNoLoop(headA, headB, loopStartA.next);
 		}
 		//3.2.2 相交点位于各链表的环的起始节点，返回任意一个
 		return loopStartA;

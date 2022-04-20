@@ -254,7 +254,7 @@ public class MyUtils {
 			curB.next = singleLinkedListC.head;
 			
 			//ADD CLOSED-LOOP, C.tail->(A.rand|B.rand)
-			if (System.currentTimeMillis() % 2 == 0) {
+			if (System.currentTimeMillis() % 3 == 0) {
 				SingleLinkedList.Node curC = singleLinkedListC.head;
 				while ((curC != null && curC.next != null)) {
 					curC = curC.next;
