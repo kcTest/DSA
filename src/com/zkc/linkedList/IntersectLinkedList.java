@@ -14,6 +14,18 @@ public class IntersectLinkedList {
 		}
 		SingleLinkedList singleLinedListA = singleLinedLists[0];
 		SingleLinkedList singleLinedListB = singleLinedLists[1];
+
+//		SingleLinkedList singleLinedListA = new SingleLinkedList();
+//		SingleLinkedList singleLinedListB = new SingleLinkedList();
+//		SingleLinkedList.Node node21=new SingleLinkedList.Node(21);
+//		SingleLinkedList.Node node9=new SingleLinkedList.Node(9);
+//		SingleLinkedList.Node node3=new SingleLinkedList.Node(3);
+//		node21.next=node9;
+//		node9.next=node21;
+//		singleLinedListA.head=node21;
+//		node3.next=node9;
+//		singleLinedListB.head=node3;
+		
 		MyUtils.printIntersectSingleLinkedList(singleLinedListA);
 		MyUtils.printIntersectSingleLinkedList(singleLinedListB);
 		SingleLinkedList.Node node = getIntersectionNode(singleLinedListA.head, singleLinedListB.head);
@@ -30,40 +42,40 @@ public class IntersectLinkedList {
 		System.out.println(loopStartA == null ? "loopStartA: null" : String.format("loopStartA: %d(%s)", loopStartA.data, Integer.toHexString(loopStartA.hashCode())));
 		System.out.println(loopStartB == null ? "loopStartA: null" : String.format("loopStartB: %d(%s)", loopStartB.data, Integer.toHexString(loopStartB.hashCode())));
 		
-		//1均无环(相交、不相交)
+		//1均无环(相交、不相交) ======  =====---->
 		if (loopStartA == null && loopStartB == null) {
 			return getIntersectionNodeNoLoop(headA, headB, null);
 		}
-		//2一个有环 一个无环（不可能相交）
+		//2一个有环 一个无环（不可能相交）---->  ------>○
 		if (loopStartA == null || loopStartB == null) {
 			return null;
 		}
-		//3均有环（不想交、相交（一个环 共享一个起点、一个环 各有一个环的起点））
+		//3均有环（不相交、相交（一个环 共享一个起点、一个环 各有一个环的起点））
+		//判断是否相交
 		boolean intersect = false;
 		SingleLinkedList.Node cur = loopStartA;
-		while (cur != null) {
+		while (cur.next != null) {
 			//如果相交 遍历其中一个链表会遇到另一个链表的环的起点
 			if (cur == loopStartB) {
 				intersect = true;
 				break;
-			}
-			cur = cur.next;
-			//再次回到自己 没有遇到另一个链表的环的起点
-			if (cur == loopStartA) {
+			} else if (cur.next == loopStartA) {
+				//再次回到自己 没有遇到另一个链表的环的起点
 				break;
 			}
+			cur = cur.next;
 		}
-		//3.1不相交
+		//3.1不相交 ------>○  ---------->○
 		if (!intersect) {
 			return null;
 		}
 		//3.2相交 共享环
-		//3.2.1 相交点位于环的起始节点及之前 各链表的环的起始节点为同一个节点
+		//3.2.1 相交点位于环的起始节点及之前 各链表的环的起始节点为同一个节点 >--○ >○
 		if (loopStartA == loopStartB) {
 			//传入起始节点作为终止节点，只遍历到终止节点，可以作为两个无环链表处理
 			return getIntersectionNodeNoLoop(headA, headB, loopStartA.next);
 		}
-		//3.2.2 相交点位于各链表的环的起始节点，返回任意一个
+		//3.2.2 相交点位于各链表的环的起始节点，返回任意一个 -->○<--
 		return loopStartA;
 	}
 	
@@ -89,6 +101,7 @@ public class IntersectLinkedList {
 				}
 				if (slow == fast) {
 					coincideCount++;
+					//头部相遇 环的起点为头部 直接返回
 					if (slow == head) {
 						return slow;
 					}
