@@ -1,15 +1,11 @@
 package com.zkc.utils;
 
+import com.zkc.binaryTree.MyTreeNode;
 import com.zkc.linkedList.doubleLinkedList.DoubleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SpecialSingleLinkedList;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
 
 public class MyUtils {
 	
@@ -109,7 +105,6 @@ public class MyUtils {
 		
 		return list;
 	}
-	
 	
 	public static void printSingleLinkedList(SingleLinkedList list) {
 		if (list == null) {
@@ -337,5 +332,117 @@ public class MyUtils {
 			}
 		}
 		return new SingleLinkedList[]{singleLinkedListA, singleLinkedListB};
+	}
+	
+	public static Object[] getBinaryTree(int length, int bound) {
+		if (length < 1) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		MyTreeNode head = null;
+		List<MyTreeNode> nodes = new ArrayList<>();
+		//新建节点后更新上一个节点的下一个节点
+		for (int i = 0; i < length; i++) {
+			MyTreeNode node = new MyTreeNode((int) (Math.random() * bound));
+			nodes.add(node);
+		}
+		for (int i = 0; i < nodes.size(); i++) {
+			MyTreeNode node = nodes.get(i);
+			MyTreeNode left = null;
+			MyTreeNode right = null;
+			int leftIndex = 2 * i + 1;
+			int rightIndex = 2 * i + 2;
+			if (node == null) {
+				if (leftIndex < nodes.size()) {
+					nodes.set(leftIndex, null);
+				}
+				if (rightIndex < nodes.size()) {
+					nodes.set(rightIndex, null);
+				}
+			} else {
+				if (head == null) {
+					head = node;
+				}
+				if (leftIndex < nodes.size()) {
+					long l = System.currentTimeMillis() % 5;
+					if (l >= 4) {
+						nodes.set(leftIndex, null);
+					}
+					left = nodes.get(leftIndex);
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (rightIndex < nodes.size()) {
+					long l = System.currentTimeMillis() % 7;
+					if (l >= 5) {
+						nodes.set(rightIndex, null);
+					}
+					right = nodes.get(rightIndex);
+				}
+				node.left = left;
+				node.right = right;
+			}
+		}
+		return new Object[]{head, nodes};
+	}
+	
+	public static void printNodes(List<MyTreeNode> nodes) {
+		StringBuilder sb = new StringBuilder();
+		for (MyTreeNode node : nodes) {
+			sb.append(node == null ? "null," : String.format("%d,", node.val));
+		}
+		System.out.printf("[%s]%n\n", sb.substring(0, sb.length() - 1));
+	}
+	
+	public static void printBinaryTree(MyTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		System.out.println("InOrder:");
+		inOrderTraverse(head);
+		System.out.println();
+		System.out.println("======================");
+		System.out.println("PreOrder:");
+		preOrderTraverse(head);
+		System.out.println();
+		System.out.println("======================");
+		System.out.println("PostOrder:");
+		postOrderTraverse(head);
+		System.out.println();
+		System.out.println();
+		System.out.println("----------------------");
+		System.out.println();
+	}
+	
+	private static void inOrderTraverse(MyTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		//中序遍历 左->头->右
+		inOrderTraverse(head.left);
+		System.out.printf("%d,", head.val);
+		inOrderTraverse(head.right);
+	}
+	
+	private static void preOrderTraverse(MyTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		System.out.printf("%d,", head.val);
+		//先序遍历 头->左->右
+		preOrderTraverse(head.left);
+		preOrderTraverse(head.right);
+	}
+	
+	private static void postOrderTraverse(MyTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		//后序遍历 左->右->头
+		postOrderTraverse(head.left);
+		postOrderTraverse(head.right);
+		System.out.printf("%d,", head.val);
 	}
 }
