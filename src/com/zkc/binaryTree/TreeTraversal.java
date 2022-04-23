@@ -41,26 +41,16 @@ public class TreeTraversal {
 	private static void inOrderNoRecur(MyTreeNode head) {
 		Stack<MyTreeNode> stack = new Stack<>();
 		MyTreeNode cur = head;
-		while (cur != null) {
-			if (cur.left != null) {
+		//遍历到空节点
+		while (cur != null || !stack.isEmpty()) {
+			if (cur != null) {
 				//只有左侧进栈
 				stack.push(cur);
 				cur = cur.left;
-			} else if (cur.right != null) {
+			} else {
+				cur = stack.pop();
 				System.out.printf("%d,", cur.val);
 				cur = cur.right;
-			} else {
-				System.out.printf("%d,", cur.val);
-				//左右弹出时均转到右子树不为空的父节点
-				while (!stack.isEmpty() && stack.peek().right == null) {
-					System.out.printf("%d,", stack.pop().val);
-				}
-				if (stack.isEmpty()) {
-					return;
-				}
-				cur = stack.peek().right;
-				//转到右侧输出头
-				System.out.printf("%d,", stack.pop().val);
 			}
 		}
 	}
