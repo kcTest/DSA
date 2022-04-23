@@ -2,6 +2,7 @@ package com.zkc.binaryTree;
 
 import com.zkc.utils.MyUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -38,13 +39,11 @@ public class TreeTraversal {
 	 * 中序遍历二叉树  不使用递归  左->头->右
 	 */
 	private static void inOrderNoRecur(MyTreeNode head) {
-		if (head == null) {
-			return;
-		}
 		Stack<MyTreeNode> stack = new Stack<>();
 		MyTreeNode cur = head;
 		while (cur != null) {
 			if (cur.left != null) {
+				//只有左侧进栈
 				stack.push(cur);
 				cur = cur.left;
 			} else if (cur.right != null) {
@@ -52,6 +51,7 @@ public class TreeTraversal {
 				cur = cur.right;
 			} else {
 				System.out.printf("%d,", cur.val);
+				//左右弹出时均转到右子树不为空的父节点
 				while (!stack.isEmpty() && stack.peek().right == null) {
 					cur = stack.pop();
 					System.out.printf("%d,", cur.val);
@@ -70,9 +70,6 @@ public class TreeTraversal {
 	 * 先序遍历二叉树  不使用递归  头->左->右
 	 */
 	private static void preOrderNoRecur(MyTreeNode head) {
-		if (head == null) {
-			return;
-		}
 		Stack<MyTreeNode> stack = new Stack<>();
 		MyTreeNode cur = head;
 		while (cur != null) {
@@ -89,14 +86,10 @@ public class TreeTraversal {
 		}
 	}
 	
-	
 	/**
 	 * 后序遍历二叉树  不使用递归  左->右->头
 	 */
 	private static void postOrderNoRecur(MyTreeNode head) {
-		if (head == null) {
-			return;
-		}
 		Stack<MyTreeNode> stack = new Stack<>();
 		MyTreeNode cur = head;
 		while (cur != null) {
@@ -114,6 +107,31 @@ public class TreeTraversal {
 				}
 				cur = stack.isEmpty() ? null : stack.peek().right;
 			}
+		}
+	}
+	
+	/**
+	 * 后序遍历二叉树  不使用递归  左->右->头
+	 */
+	private static void postOrderNoRecur2(MyTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		Stack<MyTreeNode> stack1 = new Stack<>();
+		Stack<MyTreeNode> stack2 = new Stack<>();
+		stack1.push(head);
+		while (!stack1.isEmpty()) {
+			head = stack1.pop();
+			stack2.push(head);
+			if (head.left != null) {
+				stack1.push(head.left);
+			}
+			if (head.right != null) {
+				stack1.push(head.right);
+			}
+		}
+		while (!stack2.isEmpty()) {
+			System.out.printf("%d,", stack2.pop().val);
 		}
 	}
 }
