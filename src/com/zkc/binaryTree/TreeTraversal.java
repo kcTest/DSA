@@ -48,16 +48,16 @@ public class TreeTraversal {
 				stack.push(cur);
 				cur = cur.left;
 			} else if (cur.right != null) {
-				stack.push(cur);
+				System.out.printf("%d,", cur.val);
 				cur = cur.right;
 			} else {
 				System.out.printf("%d,", cur.val);
-				while (!stack.isEmpty() && (stack.peek().right == null || stack.peek().right == cur)) {
+				while (!stack.isEmpty() && stack.peek().right == null) {
 					cur = stack.pop();
 					System.out.printf("%d,", cur.val);
 				}
 				if (stack.isEmpty()) {
-					cur = null;
+					return;
 				} else {
 					System.out.printf("%d,", stack.peek().val);
 					cur = stack.pop().right;
