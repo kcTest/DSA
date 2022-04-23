@@ -53,15 +53,14 @@ public class TreeTraversal {
 				System.out.printf("%d,", cur.val);
 				//左右弹出时均转到右子树不为空的父节点
 				while (!stack.isEmpty() && stack.peek().right == null) {
-					cur = stack.pop();
-					System.out.printf("%d,", cur.val);
+					System.out.printf("%d,", stack.pop().val);
 				}
 				if (stack.isEmpty()) {
 					return;
-				} else {
-					System.out.printf("%d,", stack.peek().val);
-					cur = stack.pop().right;
 				}
+				cur = stack.peek().right;
+				//转到右侧输出头
+				System.out.printf("%d,", stack.pop().val);
 			}
 		}
 	}
@@ -105,6 +104,7 @@ public class TreeTraversal {
 					cur = stack.pop();
 					System.out.printf("%d,", cur.val);
 				}
+				//转到右侧不输出头
 				cur = stack.isEmpty() ? null : stack.peek().right;
 			}
 		}
