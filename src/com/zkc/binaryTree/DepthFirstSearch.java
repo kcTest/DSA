@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * 遍历二叉树
+ * 深度优先 遍历二叉树
  */
-public class TreeTraversal {
+public class DepthFirstSearch {
 	
 	public static void main(String[] args) {
-		Object[] objects = MyUtils.getBinaryTree(18, 10);
+		Object[] objects = MyUtils.getBinaryTree(9, 10);
 		if (objects.length != 2) {
 			return;
 		}
@@ -124,4 +124,5 @@ public class TreeTraversal {
 			System.out.printf("%d,", stack2.pop().val);
 		}
 	}
+
 }

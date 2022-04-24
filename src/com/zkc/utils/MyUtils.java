@@ -334,6 +334,35 @@ public class MyUtils {
 		return new SingleLinkedList[]{singleLinkedListA, singleLinkedListB};
 	}
 	
+	public static MyTreeNode arrayToTreeNode(Integer[] arr) {
+		if (arr == null || arr.length == 0) {
+			return null;
+		}
+		MyTreeNode head = new MyTreeNode(arr[0]);
+		Queue<MyTreeNode> queue = new LinkedList<>();
+		queue.add(head);
+		boolean isLeft = true;
+		for (int i = 1; i < arr.length && !queue.isEmpty(); i++) {
+			MyTreeNode node = queue.peek();
+			if (isLeft) {
+				if (arr[i] != null) {
+					node.left = new MyTreeNode(arr[i]);
+					queue.add(node.left);
+				}
+				isLeft = false;
+			} else {
+				if (arr[i] != null) {
+					node.right = new MyTreeNode(arr[i]);
+					queue.add(node.right);
+				}
+				queue.poll();
+				isLeft = true;
+			}
+		}
+		return head;
+	}
+	
+	
 	public static Object[] getBinaryTree(int length, int bound) {
 		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
@@ -351,6 +380,8 @@ public class MyUtils {
 			MyTreeNode right = null;
 			int leftIndex = 2 * i + 1;
 			int rightIndex = 2 * i + 2;
+			
+			
 			if (node == null) {
 				if (leftIndex < nodes.size()) {
 					nodes.set(leftIndex, null);
@@ -376,7 +407,7 @@ public class MyUtils {
 				}
 				if (rightIndex < nodes.size()) {
 					long l = System.currentTimeMillis() % 7;
-					if (l >= 5) {
+					if (l >= 4) {
 						nodes.set(rightIndex, null);
 					}
 					right = nodes.get(rightIndex);
@@ -385,7 +416,13 @@ public class MyUtils {
 				node.right = right;
 			}
 		}
-		return new Object[]{head, nodes};
+		List<MyTreeNode> treeNodes = new ArrayList<>();
+		for (int i = 0; i < nodes.size(); i++) {
+			if (nodes.get((i - 1) / 2) != null) {
+				treeNodes.add(nodes.get(i));
+			}
+		}
+		return new Object[]{head, treeNodes};
 	}
 	
 	public static void printNodes(List<MyTreeNode> nodes) {
