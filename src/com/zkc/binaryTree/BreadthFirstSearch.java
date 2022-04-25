@@ -10,12 +10,72 @@ import java.util.*;
 public class BreadthFirstSearch {
 	
 	public static void main(String[] args) {
-		Object[] objects = MyUtils.getBinaryTree(1000, 10);
-		if (objects.length != 2) {
-			return;
-		}
-		MyTreeNode head = (MyTreeNode) objects[0];
-		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
+//		Object[] objects = MyUtils.getBinaryTree(1000, 10);
+//		if (objects.length != 2) {
+//			return;
+//		}
+//		MyTreeNode head = (MyTreeNode) objects[0];
+//		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
+		Integer[] arr = new Integer[]{
+				1, 5, 8, 9, 7, 7, 8, 1, 4, 8, 1, 9, 0, 8, 7, 1, 7, 4, 2, 9, 8, 2, 4, null, null, 9, null, null, null, 6, 0, 9, 4, 1, 0, 1, 8, 9, 0, 1, 8, 9, 1, 0, 9, 6, 2, 5, null,
+				2, 3, 0, 2, 4, 8, 8, 8, 5, 0, 0, 9, 4, 9, 1, null, 0, 7, 2, 2, 3, null, 6, 1, 0, 8, 9, 9, 9, 4, 8, 4, 3, 4, 4, 0, null, null, 8, 3, 8, null, null, 0, null, 0, 4, 9,
+				1, 2, null, 4, 4, 0, 4, 3, 5, 5, 7, 4, 1, 6, null, 1, 0, null, null, null, 2, 8, 7, 7, null, null, 0, 2, 5, 5, 9, 3, 3, null, 7, 6, 6, 7, 9, 8, 1, 7, 7, 7, 2, 6,
+				null, 7, null, 4, 6, 4, 6, null, null, 9, 1, null, null, null, 5, 5, 5, 4, 2, 2, 8, 5, 1, 1, 3, 1, 3, 7, null, 2, null, 9, 1, 4, 4, 7, 7, null, 1, 5, 6, 2, 7, 3,
+				null, 9, 1, null, 2, 4, 4, 8, null, null, 7, null, 6, null, 7, 4, 3, 5, 8, 4, 8, 5, null, null, 8, null, null, null, 4, 4, null, null, null, null, 8, 3, 5, 5,
+				null, null, null, 1, 2, 0, null, null, 9, 3, null, 8, 3, 7, 1, 8, 9, 0, 1, 8, 2, null, 4, null, null, 8, null, null, null, null, 2, null, 4, 8, 5, 5, 3, 1, null,
+				null, 6, null, 1, null, null, 6, null, null, null, null, 7, 3, null, null, null, 8, 6, 4, null, 6, 9, 0, 7, 8, null, null, 0, 6, 7, null, null, 0, 0, 7, 2, 3, 2,
+				null, 0, 2, 3, null, 0, 1, 7, 9, 0, 7, null, null, null, null, 5, 8, 2, 6, 3, 2, 0, 4, null, null, 0, 9, 1, 1, 1, null, 1, 3, null, 7, 9, 1, 3, 3, 8, null, null, null,
+				null, 6, null, null, null, null, 9, 8, 1, 3, 8, 3, 0, 6, null, null, 8, 5, 6, 5, 2, 1, null, 5, null, 7, 0, 0, null, 9, 3, 9, null, 3, 0, 0, 9, 1, 7, 0, 2, null, 6, 8, 5,
+				null, null, null, null, null, 7, null, 2, 5, null, null, 9, null, null, null, null, null, null, null, null, null, null, null, 4, 1, null, 3, 6, 6, 2, 5, 5, 9,
+				null, null, 7, 8, null, null, 2, 7, 3, 7, 2, 5, null, 1, 3, 4, null, null, 8, 3, 6, 9, null, 1, null, null, null, null, 9, 7, 5, 2, null, 5, null, 6, 4, 5, null, 1, 2,
+				0, 6, null, 1, 6, null, null, 5, null, 7, 8, 4, 7, 8, 6, 4, null, 5, 6, 7, 9, 1, 0, 4, null, null, null, 6, 4, 8, 4, 5, null, 0, 4, 4, 0, 1, 7, 1, null, 1, null, 3, 6, null,
+				null, null, null, 8, null, 5, 0, 7, 5, null, null, 5, 8, null, null, 3, null, null, 8, null, 2, 4, null, null, null, null, null, null, null, 9, null, 9, null, 9,
+				null, null, null, null, 7, 1, null, null, 2, null, null, 5, 5, 5, 5, 6, 4, null, null, 1, 6, 4, 0, null, 0, 6, 3, 0, null, 5, 5, null, null, null, null, 2, null, 3, 6,
+				null, 3, 0, 5, 0, 1, 0, 3, 4, 9, 9, 2, 7, 3, 8, 6, 9, null, 5, 8, null, null, null, null, 9, 8, 0, 7, null, null, 8, 8, 6, 6, 0, 2, 7, 4, 2, 3, 8, 6, 4, null, 8, null, null,
+				null, 2, 0, null, 1, 3, 5, 4, 2, 2, 5, 8, 8, null, 3, 0, null, 1, 6, 0, null, null, 9, null, 2, null, 6, 8, 2, null, null, 5, null, null, null, 9, 6, 6, 4, 2, 0, null,
+				null, 1, null, 0, null, null, null, 6, 6, null, null, null, 4, 7, 9, null, 0, 1, null, null, 9, null, null, null, 4, null, 8, null, null, null, null, null, null,
+				4, null, 6, null, 3, null, null, 5, 1, 2, 5, null, 0, 7, 8, null, 7, null, null, 4, null, 4, 4, null, 2, null, 6, null, null, null, 7, null, null, null, null, 6, 4,
+				null, 6, null, 6, 9, null, null, null, 9, 6, null, 9, null, 3, null, 2, null, 7, 7, null, null, 0, null, 6, 3, null, null, null, null, null, null, 1, null, null,
+				null, 6, 9, 7, null, 7, null, 9, 3, 3, null, null, null, null, 4, null, null, 3, null, null, null, 3, 9, null, 0, 3, 1, 9, 6, 7, 9, 4, 8, null, null, 6, null, 1, 3, 7,
+				null, null, null, 3, null, 2, null, 8, 1, 1, null, null, 6, null, 7, 3, 5, null, 6, 3, 4, null, null, 5, 7, 1, null, null, 6, 4, 6, null, null, null, null, 5, 7, 0, 7,
+				0, null, 5, 8, 5, 5, 4, 5, null, null, null, null, null, null, 1, 7, null, null, 7, null, 9, 9, 6, 4, null, null, 3, 2, 1, null, 0, null, 0, 6, null, null, null, 1, 5,
+				null, null, null, 8, null, null, null, null, 3, 4, 8, null, null, 9, 6, 4, null, null, null, null, 8, 9, null, 1, null, null, null, 7, null, null, null, null,
+				null, 9, null, null, null, 4, 1, 6, 7, 0, null, null, null, 7, null, null, 8, null, null, null, null, null, null, null, 4, null, 9, null, null, null, null, 3,
+				0, 6, null, 5, null, 9, 9, null, null, 4, 3, 4, null, null, null, null, 8, null, 5, null, null, null, null, 5, 2, null, null, null, null, null, null, null, 2,
+				null, null, 2, 1, 8, 5, null, 0, null, 0, 3, 2, 4, 5, null, null, null, null, null, 7, null, null, 0, null, 0, null, null, null, 0, 3, 9, null, null, null, null,
+				5, null, null, 0, 5, 0, 0, null, 9, null, null, null, null, null, null, null, null, 8, null, 9, 3, 5, 9, 0, 5, 9, null, null, 9, 4, null, 0, 2, 0, null, null, 7,
+				null, 7, null, 5, 7, 8, 7, null, null, null, 3, 0, 3, null, null, null, null, null, 4, 5, null, null, 2, 3, null, 2, null, null, 7, null, null, 9, null, null,
+				9, 7, 1, null, null, 1, 6, 1, 8, null, null, 5, null, null, 3, 7, 9, 6, null, null, null, null, 1, null, null, null, 3, 7, 3, 2, 3, 3, null, 1, null, null, null,
+				1, null, null, 4, 3, 4, 8, 7, null, 0, 3, 0, null, 1, 1, null, null, null, null, null, 5, null, 6, 0, null, 3, 1, null, 6, null, null, 4, 0, 1, null, 6, 1, null, null,
+				9, 6, 4, 9, 0, 8, 9, 3, 3, 6, null, null, null, null, null, null, null, null, null, null, null, null, 2, null, null, null, null, null, 8, 5, 8, 3, 5, 4, null, 6,
+				null, 0, null, null, 6, null, 4, 3, null, null, null, null, null, null, null, null, null, null, null, null, null, null, 7, 3, null, null, 1, null, 2, 4, null,
+				null, null, 6, null, null, null, 6, null, 5, null, null, null, null, 1, null, null, 3, null, 1, null, 7, 1, null, null, 7, 1, 3, 4, 8, null, null, null, null,
+				null, 4, null, null, 4, null, null, null, 7, null, 6, null, null, 1, null, null, null, 7, 3, 3, null, null, null, null, 3, 0, null, null, 4, null, null, null,
+				null, null, null, null, null, null, null, 8, null, null, 9, null, null, 6, 6, 5, 2, null, 8, 3, 8, null, null, null, null, 6, 7, 0, null, null, null, null, 1, 1,
+				5, null, 0, 5, null, 5, null, null, null, 1, 2, null, 2, 9, 1, null, 2, 4, 1, null, null, null, 1, 8, 4, 4, 5, 2, null, null, 6, 4, 7, 5, 2, 9, null, 4, null, null, null,
+				null, null, 3, null, null, 5, 9, null, null, null, null, 9, null, 9, null, null, null, 2, null, 1, 9, null, null, null, null, null, 1, 9, 3, null, null, 1, 9, null,
+				5, 2, 1, 0, null, null, 1, 9, 8, 4, 7, null, null, 5, 7, null, null, null, null, 1, 2, 8, null, 6, 0, null, null, null, null, 0, null, null, null, 6, null, 2, 3, 0, 9,
+				null, null, 1, 4, 6, null, 8, null, null, 5, null, 3, 0, null, 6, null, null, null, null, null, 2, null, null, null, null, null, null, 2, 5, 8, 6, 9, null, null, null,
+				8, null, null, 9, 6, null, null, null, null, 3, null, null, null, null, 9, null, null, 2, null, null, null, null, null, null, 8, 8, null, null, null, null, null,
+				9, null, 6, null, 2, 5, null, null, 1, 2, null, 4, null, null, 4, null, null, 3, 5, null, 3, 3, null, null, 1, null, null, null, null, 4, null, 2, 3, null, 4, 5, 3, null,
+				7, null, null, null, 7, 6, null, null, 1, 3, null, 4, 9, 8, null, null, 0, null, 3, 4, null, 8, null, 1, null, null, 2, 2, null, null, 4, null, null, null, 3, null,
+				null, 2, null, null, null, 4, null, 5, null, null, null, null, 2, null, 5, null, null, null, null, null, null, 2, 7, 5, null, 6, null, null, null, null, 2, null, 0,
+				null, 3, null, 1, null, 9, 4, null, 3, null, null, null, null, null, null, null, 5, 5, 7, null, null, 1, null, 4, 6, null, null, null, 2, null, 5, 9, 0, 6, 2, null,
+				null, null, null, null, null, null, null, null, null, null, null, 5, null, 7, null, 2, 9, null, null, 1, null, null, null, 1, 6, null, 6, null, null, 0, 8, null,
+				4, null, null, null, null, 4, null, null, 0, null, 6, 0, null, null, null, 4, null, null, null, null, null, 0, null, null, null, null, null, null, null, null,
+				null, null, null, null, 0, 5, 4, 2, 6, 4, 5, 3, 4, null, null, 5, null, null, null, null, 4, null, null, 3, 6, 2, 0, null, 6, 6, null, null, null, null, 0, 6, null,
+				null, null, 3, 9, 4, null, null, null, null, null, 0, null, null, 6, 7, 0, null, 9, 2, null, 3, 3, null, null, 8, null, 3, null, null, null, 8, 5, 3, null, 2, 4,
+				null, 9, 6, 9, null, null, null, null, 6, null, 6, null, 5, 3, null, null, null, null, 4, null, null, null, 9, 0, 9, 7, 1, 1, null, 1, null, 1, 6, null, 5, null,
+				6, null, null, 1, null, null, null, null, null, null, 5, null, null, null, null, null, 3, null, 6, 1, null, 0, 2, null, null, 0, null, null, 0, null, null, null,
+				null, null, 3, null, null, 8, null, null, 5, 3, 3, null, null, null, null, null, null, null, 3, null, null, 0, 8, 7, null, null, 8, 1, null, null, null, null, null,
+				null, 7, null, null, null, null, null, null, null, null, null, null, null, 5, 2, null, 2, 6, null, null, null, null, null, null, null, 1, 5, 0, null, null, 2, null,
+				7, null, null, 6, null, null, null, null, null, null, null, null, null, null, null, null, null, 8, null, null, null, null, 3, null, null, 4, null, null, 2, null,
+				null, null, null, 0, 3, null, null, null, null, null, 7, null, 8, null, null, null, null, 8, 5, null, 3, 4, null, null, null, 8, null, null, null, null, null, null,
+				null, null, null, 3, 7, null, null, null, 4, 0, 3, null, null, 6, null, null, null, null, null, null, null, null, null, null, null, null, 8, null, null, null,
+				null, null, 2, null, null, null, null, null, null, null, null, null, 0, null, null, null, 2, null, null, null, 8, 2, null, null, null, null, null, null
+				, null, 8, null, null, null, null, null, null, null, null, null, null, 2, null, null, null, 2, 5, null, null, null, null, null, null, null, null, null,
+				null, null, 2, null, null, null, null, null, 8, null, null, null, null, null, null, null, null, null, null, 0, 5};
+		MyTreeNode head = MyUtils.arrayToTreeNode(arr);
 		levelOrderTraversal(head);
 		System.out.printf("\n\n%d\n", getMaxWidth(head));
 		System.out.printf("\n%d\n", widthOfBinaryTree(head));
@@ -101,57 +161,47 @@ public class BreadthFirstSearch {
 		if (head == null) {
 			return 0;
 		}
-		Queue<MyTreeNode> queue = new LinkedList<>();
-		queue.add(head);
+		//从左到右弹出
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(0);
+		//非空节点的序号 
+		Map<Integer, MyTreeNode> seqMap = new HashMap<>();
+		seqMap.put(0, head);
 		//当前层的节点个数
 		int currentLevelCount = queue.size();
+		//下一层起始位置
+		int nextLevelStart = 0;
+		//下一层结束位置
+		int nextLevelEnd = 0;
 		//下一层的节点个数
 		int nextLevelCount = 0;
-		int nextLevelTailNullCount = 0;
 		//记录最大节点数
 		int maxWidth = currentLevelCount;
 		while (!queue.isEmpty()) {
-			MyTreeNode cur = queue.poll();
-			if (cur == null) {
-				continue;
-			} else {
-				if (cur.left != null) {
-					queue.add(cur.left);
-					//左右节点加入队列 增加下层节点个数
-					nextLevelCount++;
-					nextLevelTailNullCount = 0;
-				} else {
-					if (nextLevelCount > 0) {
-						queue.add(null);
-						nextLevelCount++;
-						nextLevelTailNullCount++;
-					}
+			int parentSeq = queue.poll();
+			MyTreeNode cur = seqMap.remove(parentSeq);
+			int leftChildSeq = parentSeq * 2 + 1;
+			int rightChildSeq = parentSeq * 2 + 2;
+			if (cur.left != null) {
+				queue.add(leftChildSeq);
+				seqMap.put(leftChildSeq, cur.left);
+				if (nextLevelCount++ == 0) {
+					nextLevelStart = leftChildSeq;
 				}
-				if (cur.right != null) {
-					queue.add(cur.right);
-					//左右节点加入队列 增加下层节点个数
-					nextLevelCount++;
-					nextLevelTailNullCount = 0;
-				} else {
-					if (nextLevelCount > 0) {
-						queue.add(null);
-						nextLevelCount++;
-						nextLevelTailNullCount++;
-					}
-				}
+				nextLevelEnd = leftChildSeq;
 			}
-			currentLevelCount--;
-			//当前层的节点正好全部出队列 下一层节点正好全部入队列， 可以比较当前最大值与下一层节点数谁大
-			if (currentLevelCount == 0) {
-				if ((nextLevelCount - nextLevelTailNullCount) > maxWidth) {
-					//更新最大值为下一层节点总数
-					maxWidth = nextLevelCount - nextLevelTailNullCount;
+			if (cur.right != null) {
+				queue.add(rightChildSeq);
+				seqMap.put(rightChildSeq, cur.right);
+				if (nextLevelCount++ == 0) {
+					nextLevelStart = rightChildSeq;
 				}
-				//下一层作为当前层
+				nextLevelEnd = rightChildSeq;
+			}
+			if (--currentLevelCount == 0) {
+				maxWidth = Math.max(nextLevelEnd - nextLevelStart + 1, maxWidth);
 				currentLevelCount = nextLevelCount;
-				//下一层节点数重置，重新开始记录
 				nextLevelCount = 0;
-				nextLevelTailNullCount = 0;
 			}
 		}
 		return maxWidth;
