@@ -161,14 +161,14 @@ public class BreadthFirstSearch {
 		if (head == null) {
 			return 0;
 		}
-		//从左到右弹出
-		Queue<Integer> queue = new LinkedList<>();
-		queue.add(0);
-		//非空节点的序号 
-		Map<Integer, MyTreeNode> seqMap = new HashMap<>();
-		seqMap.put(0, head);
+		//从左到右弹出   非空节点
+		Queue<MyTreeNode> nodeQueue = new LinkedList<>();
+		nodeQueue.add(head);
+		//从左到右弹出   非空节点的序号 
+		Queue<Integer> seqQueue = new LinkedList<>();
+		seqQueue.add(0);
 		//当前层的节点个数
-		int currentLevelCount = queue.size();
+		int currentLevelCount = nodeQueue.size();
 		//下一层起始位置
 		int nextLevelStart = 0;
 		//下一层结束位置
@@ -177,22 +177,22 @@ public class BreadthFirstSearch {
 		int nextLevelCount = 0;
 		//记录最大节点数
 		int maxWidth = currentLevelCount;
-		while (!queue.isEmpty()) {
-			int parentSeq = queue.poll();
-			MyTreeNode cur = seqMap.remove(parentSeq);
-			int leftChildSeq = parentSeq * 2 + 1;
-			int rightChildSeq = parentSeq * 2 + 2;
+		while (!nodeQueue.isEmpty()) {
+			MyTreeNode cur = nodeQueue.poll();
+			int parentSeq = seqQueue.poll();
 			if (cur.left != null) {
-				queue.add(leftChildSeq);
-				seqMap.put(leftChildSeq, cur.left);
+				int leftChildSeq = parentSeq * 2 + 1;
+				nodeQueue.add(cur.left);
+				seqQueue.add(leftChildSeq);
 				if (nextLevelCount++ == 0) {
 					nextLevelStart = leftChildSeq;
 				}
 				nextLevelEnd = leftChildSeq;
 			}
 			if (cur.right != null) {
-				queue.add(rightChildSeq);
-				seqMap.put(rightChildSeq, cur.right);
+				int rightChildSeq = parentSeq * 2 + 2;
+				nodeQueue.add(cur.right);
+				seqQueue.add(rightChildSeq);
 				if (nextLevelCount++ == 0) {
 					nextLevelStart = rightChildSeq;
 				}
