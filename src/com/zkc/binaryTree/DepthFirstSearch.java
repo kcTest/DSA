@@ -179,17 +179,11 @@ public class DepthFirstSearch {
 		MyTreeNode cur = head;
 		while (cur != null || stack.size() > 0) {
 			if (cur != null) {
-				if (cur.left != null && cur.left.val >= cur.val) {
-					return false;
-				}
 				stack.add(cur);
 				cur = cur.left;
 			} else {
 				cur = stack.remove(stack.size() - 1);
 				if (prev >= cur.val) {
-					return false;
-				}
-				if (cur.right != null && cur.right.val <= cur.val) {
 					return false;
 				}
 				prev = cur.val;
