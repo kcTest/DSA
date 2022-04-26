@@ -180,23 +180,24 @@ public class DepthFirstSearch {
 		List<MyTreeNode> stack = new ArrayList<>();
 		boolean init = false;
 		int prev = 0;
-		while (head != null || stack.size() > 0) {
-			if (head != null) {
-				stack.add(head);
-				head = head.left;
+		MyTreeNode cur = head;
+		while (cur != null || stack.size() > 0) {
+			if (cur != null) {
+				stack.add(cur);
+				cur = cur.left;
 			} else {
-				head = stack.remove(stack.size() - 1);
+				cur = stack.remove(stack.size() - 1);
 				if (init) {
-					if (prev < head.val) {
-						prev = head.val;
+					if (prev < cur.val) {
+						prev = cur.val;
 					} else {
 						return false;
 					}
 				} else {
-					prev = head.val;
+					prev = cur.val;
 					init = true;
 				}
-				head = head.right;
+				cur = cur.right;
 			}
 		}
 		return true;
