@@ -16,7 +16,7 @@ public class DepthFirstSearch {
 		if (objects.length != 2) {
 			return;
 		}
-		Integer[] arr = new Integer[]{2, 1, 3};
+		Integer[] arr = new Integer[]{-2147483648};
 		MyTreeNode head = MyUtils.arrayToTreeNode(arr);
 //		MyTreeNode head = (MyTreeNode) objects[0];
 //		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
@@ -172,31 +172,21 @@ public class DepthFirstSearch {
 	 */
 	private static boolean isValidBST(MyTreeNode head) {
 		if (head == null) {
-			return false;
-		}
-		if (head.left == null && head.right == null) {
 			return true;
 		}
-		List<MyTreeNode> stack = new ArrayList<>();
-		boolean init = false;
-		int prev = 0;
+		Stack<MyTreeNode> stack = new Stack<>();
+		long prev = Long.MIN_VALUE;
 		MyTreeNode cur = head;
 		while (cur != null || stack.size() > 0) {
 			if (cur != null) {
-				stack.add(cur);
+				stack.push(cur);
 				cur = cur.left;
 			} else {
-				cur = stack.remove(stack.size() - 1);
-				if (init) {
-					if (prev < cur.val) {
-						prev = cur.val;
-					} else {
-						return false;
-					}
-				} else {
-					prev = cur.val;
-					init = true;
+				cur = stack.pop();
+				if (prev >= cur.val) {
+					return false;
 				}
+				prev = cur.val;
 				cur = cur.right;
 			}
 		}
