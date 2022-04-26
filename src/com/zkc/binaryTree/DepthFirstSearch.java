@@ -22,7 +22,7 @@ public class DepthFirstSearch {
 //		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
 		MyUtils.printBinaryTree(head);
 		printTreeWithoutRecursion(head);
-		System.out.printf("\n\n%s", isValidBST(head));
+		System.out.printf("\n\n%s", isValidBST(head, Long.MIN_VALUE, Long.MAX_VALUE));
 	}
 	
 	private static void printTreeWithoutRecursion(MyTreeNode head) {
@@ -174,16 +174,22 @@ public class DepthFirstSearch {
 		if (head == null) {
 			return true;
 		}
-		Stack<MyTreeNode> stack = new Stack<>();
+		List<MyTreeNode> stack = new ArrayList<>();
 		long prev = Long.MIN_VALUE;
 		MyTreeNode cur = head;
 		while (cur != null || stack.size() > 0) {
 			if (cur != null) {
-				stack.push(cur);
+				if (cur.left != null && cur.left.val >= cur.val) {
+					return false;
+				}
+				stack.add(cur);
 				cur = cur.left;
 			} else {
-				cur = stack.pop();
+				cur = stack.remove(stack.size() - 1);
 				if (prev >= cur.val) {
+					return false;
+				}
+				if (cur.right != null && cur.right.val <= cur.val) {
 					return false;
 				}
 				prev = cur.val;
@@ -191,5 +197,18 @@ public class DepthFirstSearch {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * 判断二叉树是否是搜索二叉树  对每个节点 左<头<右 中序遍历 判断值递增
+	 */
+	private static boolean isValidBST(MyTreeNode head, long min, long max) {
+		if (head == null) {
+			return true;
+		}
+		if (head.val <= min || head.val >= max) {
+			return false;
+		}
+		return isValidBST(head.left, min, head.val) && isValidBST(head.right, head.val, max);
 	}
 }
