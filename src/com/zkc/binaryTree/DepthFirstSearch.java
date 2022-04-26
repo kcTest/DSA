@@ -12,14 +12,17 @@ import java.util.Stack;
 public class DepthFirstSearch {
 	
 	public static void main(String[] args) {
-		Object[] objects = MyUtils.getBinaryTree(9, 10);
+		Object[] objects = MyUtils.getBinaryTree(30, 10);
 		if (objects.length != 2) {
 			return;
 		}
-		MyTreeNode head = (MyTreeNode) objects[0];
-		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
+		Integer[] arr = new Integer[]{2, 1, 3};
+		MyTreeNode head = MyUtils.arrayToTreeNode(arr);
+//		MyTreeNode head = (MyTreeNode) objects[0];
+//		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
 		MyUtils.printBinaryTree(head);
 		printTreeWithoutRecursion(head);
+		System.out.printf("\n\n%s", isValidBST(head));
 	}
 	
 	private static void printTreeWithoutRecursion(MyTreeNode head) {
@@ -44,10 +47,12 @@ public class DepthFirstSearch {
 		//遍历到空节点
 		while (cur != null || !stack.isEmpty()) {
 			if (cur != null) {
-				//只有左侧进栈
+				//不为空进栈 转到左侧
 				stack.push(cur);
 				cur = cur.left;
 			} else {
+				//当前空节点 为叶节点左侧或右侧空节点 父节点为叶子节点 
+				//弹出栈顶节点 转到节点右侧 
 				cur = stack.pop();
 				System.out.printf("%d,", cur.val);
 				cur = cur.right;
@@ -124,5 +129,76 @@ public class DepthFirstSearch {
 			System.out.printf("%d,", stack2.pop().val);
 		}
 	}
-
+	
+	/**
+	 * 判断二叉树是否是搜索二叉树  对每个节点 左<头<右 中序遍历 判断值递增
+	 */
+	private static boolean isSearchBinaryTree(MyTreeNode head) {
+		if (head == null) {
+			return false;
+		}
+		List<MyTreeNode> stack = new ArrayList<>();
+		List<Integer> values = new ArrayList<>();
+		MyTreeNode cur = head;
+		while (cur != null) {
+			if (cur.left != null) {
+				stack.add(cur);
+				cur = cur.left;
+			} else if (cur.right != null) {
+				values.add(cur.val);
+				cur = cur.right;
+			} else {
+				values.add(cur.val);
+				while (stack.size() > 0 && (stack.get(stack.size() - 1).right == null)) {
+					values.add(stack.remove(stack.size() - 1).val);
+				}
+				if (stack.size() == 0) {
+					break;
+				}
+				cur = stack.get(stack.size() - 1).right;
+				values.add(stack.remove(stack.size() - 1).val);
+			}
+		}
+		for (int i = 0; i < values.size() - 1; i++) {
+			if (values.get(i) > values.get(i + 1)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 判断二叉树是否是搜索二叉树  对每个节点 左<头<右 中序遍历 判断值递增
+	 */
+	private static boolean isValidBST(MyTreeNode head) {
+		if (head == null) {
+			return false;
+		}
+		if (head.left == null && head.right == null) {
+			return true;
+		}
+		List<MyTreeNode> stack = new ArrayList<>();
+		boolean init = false;
+		int prev = 0;
+		while (head != null || stack.size() > 0) {
+			if (head != null) {
+				stack.add(head);
+				head = head.left;
+			} else {
+				head = stack.remove(stack.size() - 1);
+				if (init) {
+					if (prev < head.val) {
+						prev = head.val;
+					} else {
+						return false;
+					}
+				} else {
+					prev = head.val;
+					init = true;
+				}
+				head = head.right;
+			}
+		}
+		return true;
+	}
 }
