@@ -151,7 +151,7 @@ public class BreadthFirstSearch {
 	/**
 	 * 判断是否是完全二叉树 宽度优先 判断序号连续
 	 */
-	private static boolean isCompleteTree(MyTreeNode head) {
+	private static boolean isCompleteTree2(MyTreeNode head) {
 		if (head == null) {
 			return true;
 		}
@@ -174,6 +174,35 @@ public class BreadthFirstSearch {
 			if (cur.right != null) {
 				nodeQueue.add(cur.right);
 				seqQueue.add(curSeq * 2 + 2);
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 判断是否是完全二叉树 宽度优先 判断
+	 * 无左有右、缺失左或右的节点之后的节点全为叶节点
+	 */
+	private static boolean isCompleteTree(MyTreeNode head) {
+		if (head == null) {
+			return true;
+		}
+		boolean beginLeafNode = false;
+		Queue<MyTreeNode> nodeQueue = new LinkedList<>();
+		nodeQueue.add(head);
+		while (!nodeQueue.isEmpty()) {
+			MyTreeNode cur = nodeQueue.poll();
+			if (cur.left == null && cur.right != null || beginLeafNode && cur.left != null) {
+				return false;
+			}
+			if (cur.left != null) {
+				nodeQueue.add(cur.left);
+			}
+			if (cur.right != null) {
+				nodeQueue.add(cur.right);
+			}
+			if (cur.left == null || cur.right == null) {
+				beginLeafNode = true;
 			}
 		}
 		return true;
