@@ -39,7 +39,7 @@ public class HeapSort {
 		for (int i = 0; i < arr.length; i++) {
 			heapInsert(arr, i);
 		}
-//		//从下往上堆化处理O(n)
+//		//节点按从下往上的顺序执行向下的堆化处理O(n)
 //		for (int i = arr.length - 1; i >= 0; i--) {
 //			heapify(arr, i, arr.length);
 //		}

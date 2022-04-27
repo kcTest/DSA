@@ -425,6 +425,36 @@ public class MyUtils {
 		return new Object[]{head, treeNodes};
 	}
 	
+	public static Object[] getCompleteBinaryTree(int bound) {
+		MyTreeNode head = null;
+		List<MyTreeNode> nodes = new ArrayList<>();
+		int length = (int) (Math.random() * 10 + 8);
+		//新建节点后更新上一个节点的下一个节点
+		for (int i = 0; i < length; i++) {
+			MyTreeNode node = new MyTreeNode((int) (Math.random() * bound));
+			nodes.add(node);
+		}
+		for (int i = 0; i < nodes.size(); i++) {
+			MyTreeNode node = nodes.get(i);
+			MyTreeNode left = null;
+			MyTreeNode right = null;
+			int leftIndex = 2 * i + 1;
+			int rightIndex = 2 * i + 2;
+			if (head == null) {
+				head = node;
+			}
+			if (leftIndex < nodes.size()) {
+				left = nodes.get(leftIndex);
+			}
+			if (rightIndex < nodes.size()) {
+				right = nodes.get(rightIndex);
+			}
+			node.left = left;
+			node.right = right;
+		}
+		return new Object[]{head, nodes};
+	}
+	
 	public static void printNodes(List<MyTreeNode> nodes) {
 		StringBuilder sb = new StringBuilder();
 		for (MyTreeNode node : nodes) {
