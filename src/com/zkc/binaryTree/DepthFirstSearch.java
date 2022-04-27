@@ -22,7 +22,8 @@ public class DepthFirstSearch {
 //		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
 		MyUtils.printBinaryTree(head);
 		printTreeWithoutRecursion(head);
-		System.out.printf("\n\n%s", isValidBST(head, Long.MIN_VALUE, Long.MAX_VALUE));
+		System.out.printf("\n\n%s", isValidBST(head));
+//		System.out.printf("\n\n%s", isValidBST(head, Long.MIN_VALUE, Long.MAX_VALUE));
 	}
 	
 	private static void printTreeWithoutRecursion(MyTreeNode head) {
@@ -174,15 +175,15 @@ public class DepthFirstSearch {
 		if (head == null) {
 			return true;
 		}
-		List<MyTreeNode> stack = new ArrayList<>();
+		Stack<MyTreeNode> stack = new Stack<>();
 		long prev = Long.MIN_VALUE;
 		MyTreeNode cur = head;
 		while (cur != null || stack.size() > 0) {
 			if (cur != null) {
-				stack.add(cur);
+				stack.push(cur);
 				cur = cur.left;
 			} else {
-				cur = stack.remove(stack.size() - 1);
+				cur = stack.pop();
 				if (prev >= cur.val) {
 					return false;
 				}
