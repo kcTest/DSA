@@ -362,8 +362,17 @@ public class MyUtils {
 		return head;
 	}
 	
+	public static class BTDS {
+		public MyTreeNode head;
+		public List<MyTreeNode> nodes;
+		
+		public BTDS(MyTreeNode head, List<MyTreeNode> nodes) {
+			this.head = head;
+			this.nodes = nodes;
+		}
+	}
 	
-	public static Object[] getBinaryTree(int length, int bound) {
+	public static BTDS getBinaryTree(int length, int bound) {
 		if (length < 1) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
@@ -422,13 +431,12 @@ public class MyUtils {
 				treeNodes.add(nodes.get(i));
 			}
 		}
-		return new Object[]{head, treeNodes};
+		return new BTDS(head,treeNodes);
 	}
 	
-	public static Object[] getCompleteBinaryTree(int bound) {
+	public static Object[] getCompleteBinaryTree(int length, int bound) {
 		MyTreeNode head = null;
 		List<MyTreeNode> nodes = new ArrayList<>();
-		int length = (int) (Math.random() * 10 + 8);
 		//新建节点后更新上一个节点的下一个节点
 		for (int i = 0; i < length; i++) {
 			MyTreeNode node = new MyTreeNode((int) (Math.random() * bound));

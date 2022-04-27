@@ -12,14 +12,11 @@ import java.util.Stack;
 public class DepthFirstSearch {
 	
 	public static void main(String[] args) {
-		Object[] objects = MyUtils.getBinaryTree(30, 10);
-		if (objects.length != 2) {
-			return;
-		}
+		MyUtils.BTDS result = MyUtils.getBinaryTree(30, 10);
+//		MyTreeNode head = result.head;
+//		MyUtils.printNodes(result.nodes);
 		Integer[] arr = new Integer[]{-2147483648};
 		MyTreeNode head = MyUtils.arrayToTreeNode(arr);
-//		MyTreeNode head = (MyTreeNode) objects[0];
-//		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
 		MyUtils.printBinaryTree(head);
 		printTreeWithoutRecursion(head);
 		System.out.printf("\n\n%s", isValidBST(head));

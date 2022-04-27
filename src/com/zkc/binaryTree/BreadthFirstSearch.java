@@ -10,16 +10,17 @@ import java.util.*;
 public class BreadthFirstSearch {
 	
 	public static void main(String[] args) {
-		Object[] objects = MyUtils.getCompleteBinaryTree(10);
-		if (objects.length != 2) {
-			return;
-		}
-		MyTreeNode head = (MyTreeNode) objects[0];
-		MyUtils.printNodes((List<MyTreeNode>) objects[1]);
+		MyUtils.BTDS result = MyUtils.getBinaryTree((int) (Math.random() * 16), 10);
+		MyTreeNode head = result.head;
+		MyUtils.printNodes(result.nodes);
+//		Integer[] arr = new Integer[]{1, 9, 7, 5, 6, 8, null, 9, 2, 9, 4, null, null};
+//		MyTreeNode head = MyUtils.arrayToTreeNode(arr);
 		levelOrderTraversal(head);
 		System.out.printf("\n\n%d\n", getMaxWidth(head));
 		System.out.printf("\n%d\n", widthOfBinaryTree(head));
 		System.out.printf("\n%s\n", isCompleteTree(head));
+		System.out.printf("\n%s\n", isFullTree(head));
+		System.out.printf("\n%s\n", isBalanced(head) != -1);
 	}
 	
 	/**
@@ -181,7 +182,7 @@ public class BreadthFirstSearch {
 	
 	/**
 	 * 判断是否是完全二叉树 宽度优先 判断
-	 * 无左有右、缺失左或右的节点之后的节点全为叶节点
+	 * 无左有右、缺失左或右的节点之后的节点全为不是叶节点，出现这两种情况不为完全二叉树
 	 */
 	private static boolean isCompleteTree(MyTreeNode head) {
 		if (head == null) {
@@ -206,6 +207,69 @@ public class BreadthFirstSearch {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * 判断是否是满二叉树 宽度优先 判断n=2^(depth-1),n为当前层节点个数,depth为当前层的深度。
+	 */
+	private static boolean isFullTree(MyTreeNode head) {
+		if (head == null) {
+			return true;
+		}
+		Queue<MyTreeNode> nodeQueue = new LinkedList<>();
+		nodeQueue.add(head);
+		int currentLevelCount = nodeQueue.size();
+		int currentLevelDepth = currentLevelCount;
+		int nextLevelCount = 0;
+		while (!nodeQueue.isEmpty()) {
+			MyTreeNode cur = nodeQueue.poll();
+			if (cur.left != null) {
+				nodeQueue.add(cur.left);
+				nextLevelCount++;
+			}
+			if (cur.right != null) {
+				nodeQueue.add(cur.right);
+				nextLevelCount++;
+			}
+			if (--currentLevelCount == 0) {
+				if (nextLevelCount > 0 && Math.pow(2, ++currentLevelDepth - 1) != nextLevelCount) {
+					return false;
+				}
+				currentLevelCount = nextLevelCount;
+				nextLevelCount = 0;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 判断是否是平衡二叉树 宽度优先 判断左右子树高度差是否超过1。
+	 */
+	private static int isBalanced(MyTreeNode head, boolean[] arrIsBalanced) {
+		if (head == null) {
+			return 0;
+		}
+		int leftDepth = isBalanced(head.left, arrIsBalanced);
+		int rightDepth = isBalanced(head.right, arrIsBalanced);
+		if (Math.abs(leftDepth - rightDepth) > 1) {
+			arrIsBalanced[0] = false;
+		}
+		return Math.max(leftDepth, rightDepth) + 1;
+	}
+	
+	/**
+	 * 判断是否是平衡二叉树 宽度优先 判断左右子树高度差是否超过1。
+	 */
+	private static int isBalanced(MyTreeNode head) {
+		if (head == null) {
+			return 0;
+		}
+		int leftDepth = isBalanced(head.left);
+		int rightDepth = isBalanced(head.right);
+		if (leftDepth == -1 || rightDepth == -1 || Math.abs(leftDepth - rightDepth) > 1) {
+			return -1;
+		}
+		return Math.max(leftDepth, rightDepth) + 1;
 	}
 	
 }
