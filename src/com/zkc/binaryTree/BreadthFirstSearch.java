@@ -10,7 +10,7 @@ import java.util.*;
 public class BreadthFirstSearch {
 	
 	public static void main(String[] args) {
-		MyUtils.BTDS result = MyUtils.getBinaryTree((int) (Math.random() * 16), 10);
+		MyUtils.BTDS result = MyUtils.getCompleteBinaryTree((int) (Math.random() * 16), 10);
 		MyTreeNode head = result.head;
 		MyUtils.printNodes(result.nodes);
 //		Integer[] arr = new Integer[]{1, 9, 7, 5, 6, 8, null, 9, 2, 9, 4, null, null};
@@ -20,7 +20,6 @@ public class BreadthFirstSearch {
 		System.out.printf("\n%d\n", widthOfBinaryTree(head));
 		System.out.printf("\n%s\n", isCompleteTree(head));
 		System.out.printf("\n%s\n", isFullTree(head));
-		System.out.printf("\n%s\n", isBalanced(head) != -1);
 	}
 	
 	/**
@@ -240,36 +239,6 @@ public class BreadthFirstSearch {
 			}
 		}
 		return true;
-	}
-	
-	/**
-	 * 判断是否是平衡二叉树 宽度优先 判断左右子树高度差是否超过1。
-	 */
-	private static int isBalanced(MyTreeNode head, boolean[] arrIsBalanced) {
-		if (head == null) {
-			return 0;
-		}
-		int leftDepth = isBalanced(head.left, arrIsBalanced);
-		int rightDepth = isBalanced(head.right, arrIsBalanced);
-		if (Math.abs(leftDepth - rightDepth) > 1) {
-			arrIsBalanced[0] = false;
-		}
-		return Math.max(leftDepth, rightDepth) + 1;
-	}
-	
-	/**
-	 * 判断是否是平衡二叉树 宽度优先 判断左右子树高度差是否超过1。
-	 */
-	private static int isBalanced(MyTreeNode head) {
-		if (head == null) {
-			return 0;
-		}
-		int leftDepth = isBalanced(head.left);
-		int rightDepth = isBalanced(head.right);
-		if (leftDepth == -1 || rightDepth == -1 || Math.abs(leftDepth - rightDepth) > 1) {
-			return -1;
-		}
-		return Math.max(leftDepth, rightDepth) + 1;
 	}
 	
 }

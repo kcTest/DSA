@@ -416,7 +416,7 @@ public class MyUtils {
 				}
 				if (rightIndex < nodes.size()) {
 					long l = System.currentTimeMillis() % 7;
-					if (l >= 4) {
+					if (l >= 5) {
 						nodes.set(rightIndex, null);
 					}
 					right = nodes.get(rightIndex);
@@ -431,10 +431,10 @@ public class MyUtils {
 				treeNodes.add(nodes.get(i));
 			}
 		}
-		return new BTDS(head,treeNodes);
+		return new BTDS(head, treeNodes);
 	}
 	
-	public static Object[] getCompleteBinaryTree(int length, int bound) {
+	public static BTDS getCompleteBinaryTree(int length, int bound) {
 		MyTreeNode head = null;
 		List<MyTreeNode> nodes = new ArrayList<>();
 		//新建节点后更新上一个节点的下一个节点
@@ -460,7 +460,7 @@ public class MyUtils {
 			node.left = left;
 			node.right = right;
 		}
-		return new Object[]{head, nodes};
+		return new BTDS(head, nodes);
 	}
 	
 	public static void printNodes(List<MyTreeNode> nodes) {
@@ -468,7 +468,7 @@ public class MyUtils {
 		for (MyTreeNode node : nodes) {
 			sb.append(node == null ? "null," : String.format("%d,", node.val));
 		}
-		System.out.printf("[%s]%n\n", sb.substring(0, sb.length() - 1));
+		System.out.printf("[%s]%n\n", sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "");
 	}
 	
 	public static void printBinaryTree(MyTreeNode head) {
