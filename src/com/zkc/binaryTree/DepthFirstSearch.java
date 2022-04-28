@@ -285,15 +285,15 @@ public class DepthFirstSearch {
 	 * 当前节点等于a或b直接返回当前节点， 左侧包a或b含返回a或b,右侧包含a或b返回a或b,如果左右均包含直接当前节点即为最新公共祖先
 	 */
 	private static MyTreeNode lowestCommonAncestor(MyTreeNode head, MyTreeNode nodeA, MyTreeNode nodeB) {
-		if (head == null || nodeA == null || nodeB == null) {
+		if (head == null || head == nodeA || head == nodeB) {
 			return null;
 		}
 		MyTreeNode nodeInLeft = lowestCommonAncestor(head.left, nodeA, nodeB);
 		MyTreeNode nodeInRight = lowestCommonAncestor(head.right, nodeA, nodeB);
 		//返回a、b或最近祖先。ab在同一条路径上 head最后更新为a或b；不在同一路线时 一定会出现左右同时不为null且只有回到最近祖先节点时才会出现
-		if (head == nodeA || head == nodeB || nodeInLeft  != null && nodeInRight != null) {
+		if (nodeInLeft != null && nodeInRight != null) {
 			return head;
 		}
-		return nodeInLeft  != null ? nodeInLeft  : nodeInRight;
+		return nodeInLeft != null ? nodeInLeft : nodeInRight;
 	}
 }
