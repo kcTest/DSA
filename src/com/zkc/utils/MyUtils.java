@@ -1,5 +1,6 @@
 package com.zkc.utils;
 
+import com.zkc.binaryTree.MyNewTreeNode;
 import com.zkc.binaryTree.MyTreeNode;
 import com.zkc.linkedList.doubleLinkedList.DoubleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
@@ -464,6 +465,9 @@ public class MyUtils {
 	}
 	
 	public static void printNodes(List<MyTreeNode> nodes) {
+		if (nodes == null || nodes.isEmpty()) {
+			return;
+		}
 		StringBuilder sb = new StringBuilder();
 		for (MyTreeNode node : nodes) {
 			sb.append(node == null ? "null," : String.format("%d,", node.val));
@@ -519,5 +523,112 @@ public class MyUtils {
 		postOrderTraverse(head.left);
 		postOrderTraverse(head.right);
 		System.out.printf("%d,", head.val);
+	}
+	
+	public static class NewBTDS {
+		public MyNewTreeNode head;
+		public List<MyNewTreeNode> nodes;
+		
+		public NewBTDS(MyNewTreeNode head, List<MyNewTreeNode> nodes) {
+			this.head = head;
+			this.nodes = nodes;
+		}
+	}
+	
+	public static NewBTDS getNewBinaryTree(int length, int bound) {
+		if (length < 1) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		MyNewTreeNode head = null;
+		List<MyNewTreeNode> nodes = new ArrayList<>();
+		//新建节点后更新上一个节点的下一个节点
+		for (int i = 0; i < length; i++) {
+			MyNewTreeNode node = new MyNewTreeNode((int) (Math.random() * bound));
+			nodes.add(node);
+		}
+		for (int i = 0; i < nodes.size(); i++) {
+			MyNewTreeNode node = nodes.get(i);
+			MyNewTreeNode left = null;
+			MyNewTreeNode right = null;
+			int leftIndex = 2 * i + 1;
+			int rightIndex = 2 * i + 2;
+			if (node == null) {
+				if (leftIndex < nodes.size()) {
+					nodes.set(leftIndex, null);
+				}
+				if (rightIndex < nodes.size()) {
+					nodes.set(rightIndex, null);
+				}
+			} else {
+				if (head == null) {
+					head = node;
+				}
+				if (leftIndex < nodes.size()) {
+					long l = System.currentTimeMillis() % 5;
+					if (l >= 4) {
+						nodes.set(leftIndex, null);
+					}
+					left = nodes.get(leftIndex);
+				}
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				if (rightIndex < nodes.size()) {
+					long l = System.currentTimeMillis() % 7;
+					if (l >= 5) {
+						nodes.set(rightIndex, null);
+					}
+					right = nodes.get(rightIndex);
+				}
+				if (left != null) {
+					left.parent = node;
+				}
+				if (right != null) {
+					right.parent = node;
+				}
+				node.left = left;
+				node.right = right;
+			}
+		}
+		List<MyNewTreeNode> treeNodes = new ArrayList<>();
+		for (int i = 0; i < nodes.size(); i++) {
+			if (nodes.get((i - 1) / 2) != null) {
+				treeNodes.add(nodes.get(i));
+			}
+		}
+		return new NewBTDS(head, treeNodes);
+	}
+	
+	
+	public static void printNewBinaryTree(MyNewTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		System.out.println("InOrder:");
+		inOrderTraverseNew(head);
+		System.out.println();
+	}
+	
+	private static void inOrderTraverseNew(MyNewTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		//中序遍历 左->头->右
+		inOrderTraverseNew(head.left);
+		System.out.printf("%d,", head.val);
+		inOrderTraverseNew(head.right);
+	}
+	
+	public static void printNewNodes(List<MyNewTreeNode> nodes) {
+		if (nodes == null || nodes.isEmpty()) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		for (MyNewTreeNode node : nodes) {
+			sb.append(node == null ? "null," : String.format("%d,", node.val));
+		}
+		System.out.printf("[%s]%n\n", sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "");
 	}
 }

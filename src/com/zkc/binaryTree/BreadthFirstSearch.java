@@ -240,5 +240,4 @@ public class BreadthFirstSearch {
 		}
 		return true;
 	}
-	
 }
