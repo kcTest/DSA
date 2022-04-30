@@ -16,10 +16,10 @@ public class Codec {
 				null, 9, 10, null, 13, 14, null, 16};
 		MyTreeNode headTemp = MyUtils.arrayToTreeNode(arr);
 		String s = serialize(headTemp);
-		System.out.printf("serialize:\n%s\n", s == null ? "" : s);
+		System.out.printf("serialize:\n%s\n", s);
 		MyTreeNode head = deserialize(s);
 		String s2 = serialize(head);
-		System.out.printf("deserialize:\n%s\n", s2 == null ? "" : s2);
+		System.out.printf("deserialize:\n%s\n", s2);
 	}
 	
 	/**
@@ -73,27 +73,26 @@ public class Codec {
 		if (s == null || s.length() == 0) {
 			return null;
 		}
-		Queue<MyTreeNode> queue = new LinkedList<>();
+		LinkedList<MyTreeNode> queue = new LinkedList<>();
 		String[] valArr = s.split(" ");
-		MyTreeNode head = new MyTreeNode(Integer.parseInt(valArr[0].trim()));
+		MyTreeNode head = new MyTreeNode(Integer.parseInt(valArr[0]));
 		queue.add(head);
 		boolean isLeft = true;
-		int zeroCount = 0;
 		for (int i = 1; i < valArr.length && !queue.isEmpty(); i++) {
 			String valStr = valArr[i];
-			MyTreeNode child = null;
-			if (valStr.contains(".")) {
-				zeroCount += Integer.parseInt(valStr.split("\\.")[1].trim());
+			int zeroCount = 0;
+			if (valStr.indexOf(".") > -1) {
+				zeroCount += Integer.parseInt(valStr.split("\\.")[1]);
 			}
 			if (zeroCount == 0) {
-				child = new MyTreeNode(Integer.parseInt(valStr.trim()));
-				MyTreeNode curHead = isLeft ? queue.peek() : queue.remove();
+				MyTreeNode child = new MyTreeNode(Integer.parseInt(valStr));
 				if (isLeft) {
-					curHead.left = child;
+					queue.getFirst().left = child;
 				} else {
-					curHead.right = child;
+					queue.removeFirst().right = child;
 				}
 				queue.add(child);
+				isLeft = !isLeft;
 			} else {
 				//left: n/2==0  left,n/2; n/2==1  right,n/2。
 				//right: n/2==0  right,n/2; n/2==1  left,n/2+1。
@@ -102,15 +101,12 @@ public class Codec {
 					if (!isLeft) {
 						skip += 1;
 					}
-				} else {
 					isLeft = !isLeft;
 				}
 				while (skip-- > 0 && !queue.isEmpty()) {
-					queue.remove();
+					queue.removeFirst();
 				}
-				zeroCount = 0;
 			}
-			isLeft = !isLeft;
 		}
 		
 		return head;
