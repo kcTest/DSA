@@ -417,7 +417,7 @@ public class MyUtils {
 				}
 				if (rightIndex < nodes.size()) {
 					long l = System.currentTimeMillis() % 7;
-					if (l >= 5) {
+					if (l >= 4) {
 						nodes.set(rightIndex, null);
 					}
 					right = nodes.get(rightIndex);
@@ -601,7 +601,6 @@ public class MyUtils {
 		return new NewBTDS(head, treeNodes);
 	}
 	
-	
 	public static void printNewBinaryTree(MyNewTreeNode head) {
 		if (head == null) {
 			return;
@@ -628,6 +627,26 @@ public class MyUtils {
 		StringBuilder sb = new StringBuilder();
 		for (MyNewTreeNode node : nodes) {
 			sb.append(node == null ? "null," : String.format("%d,", node.val));
+		}
+		System.out.printf("[%s]%n\n", sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "");
+	}
+	
+	public static void levelOrderTraversal(MyTreeNode head) {
+		if (head == null) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		Queue<MyTreeNode> queue = new LinkedList<>();
+		queue.add(head);
+		while (!queue.isEmpty()) {
+			MyTreeNode cur = queue.poll();
+			sb.append(String.format("%d,", cur.val));
+			if (cur.left != null) {
+				queue.add(cur.left);
+			}
+			if (cur.right != null) {
+				queue.add(cur.right);
+			}
 		}
 		System.out.printf("[%s]%n\n", sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "");
 	}
