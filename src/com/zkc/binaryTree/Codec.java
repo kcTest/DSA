@@ -22,6 +22,11 @@ public class Codec {
 		System.out.printf("deserialize:\n%s\n", s2 == null ? "" : s2);
 	}
 	
+	/**
+	 * 二叉树序列化成字符串  宽度优先遍历  从左到右
+	 * 每个节点转化后的字符串格式拼在一起:
+	 * 非空值格式为: 值+空格, 空值格式为: 小数点+连续遇到的空值个数+空格
+	 */
 	private static String serialize(MyTreeNode head) {
 		if (head == null) {
 			return "";
@@ -35,6 +40,7 @@ public class Codec {
 			MyTreeNode cur = queue.remove();
 			if (cur.left != null) {
 				if (zeroCount > 0) {
+					//追加之前收集的空节点字符串
 					sb.append(".").append(zeroCount).append(" ");
 					zeroCount = 0;
 				}
@@ -57,6 +63,12 @@ public class Codec {
 		return sb.toString();
 	}
 	
+	/**
+	 * 将序列化的字符串还原成二叉树，返回头节点
+	 * 字符串使用空格拆分 不带点的为节点值  带点的为连续空节点个数
+	 * 从头节点开始宽度优先  从左到右，对每个节点的左右子节点从解析后的数组中挨个取值作为左右子节点的值。
+	 * 先生成左再生产成右。遇到空值 计算需要跳过的父节点数量以及下个节点在设置时应该是设置左子节点还是右子节点
+	 */
 	private static MyTreeNode deserialize(String s) {
 		if (s == null || s.length() == 0) {
 			return null;
@@ -83,6 +95,8 @@ public class Codec {
 				}
 				queue.add(child);
 			} else {
+				//left: n/2==0  left,n/2; n/2==1  right,n/2。
+				//right: n/2==0  right,n/2; n/2==1  left,n/2+1。
 				int skip = zeroCount / 2;
 				if (zeroCount % 2 == 1) {
 					if (!isLeft) {
@@ -91,7 +105,6 @@ public class Codec {
 				} else {
 					isLeft = !isLeft;
 				}
-				
 				while (skip-- > 0 && !queue.isEmpty()) {
 					queue.remove();
 				}
