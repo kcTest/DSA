@@ -294,30 +294,13 @@ public class DepthFirstSearch {
 		if (head1 == null || head2 == null) {
 			return false;
 		}
-		boolean left = isSubtree(head1.left, head2);
-		if (left) {
-			return true;
-		}
-		boolean right = isSubtree(head1.right, head2);
-		if (right) {
-			return true;
-		}
-		if (head1.val == head2.val) {
-			boolean head = preOrder(head1, head2);
-			if (head) {
-				return true;
-			}
-		}
-		return false;
+		return isSubtree(head1.left, head2) || isSubtree(head1.right, head2) || (head1.val == head2.val && preOrder(head1, head2));
 	}
 	
 	private static boolean preOrder(MyTreeNode head1, MyTreeNode head2) {
 		if (head1 != head2 && (head1 == null || head2 == null)) {
 			return false;
 		}
-		if (head1 == null) {
-			return true;
-		}
-		return head1.val == head2.val && preOrder(head1.left, head2.left) && preOrder(head1.right, head2.right);
+		return head1 == null || head1.val == head2.val && preOrder(head1.left, head2.left) && preOrder(head1.right, head2.right);
 	}
 }
