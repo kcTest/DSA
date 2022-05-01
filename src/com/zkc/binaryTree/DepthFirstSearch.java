@@ -2,9 +2,7 @@ package com.zkc.binaryTree;
 
 import com.zkc.utils.MyUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 深度优先 遍历二叉树
@@ -12,26 +10,33 @@ import java.util.Stack;
 public class DepthFirstSearch {
 	
 	public static void main(String[] args) {
-		MyUtils.BTDS result = MyUtils.getBinaryTree((int) (Math.random() * 16), 90);
-		MyTreeNode head = result.head;
-		MyUtils.printNodes(result.nodes);
+//		MyUtils.BTDS result = MyUtils.getBinaryTree((int) (Math.random() * 16), 90);
+//		MyTreeNode head = result.head;
+//		MyUtils.printNodes(result.nodes);
 //		Integer[] arr = new Integer[]{-2147483648};
 //		MyTreeNode head = MyUtils.arrayToTreeNode(arr);
-		MyUtils.printBinaryTree(head);
-		printTreeWithoutRecursion(head);
-		System.out.printf("\n\n%s", isValidBST(head, Long.MIN_VALUE, Long.MAX_VALUE));
-		System.out.printf("\n\n%s", isValidBST2(head));
-		System.out.printf("\n\n%s", isValidBST3(head));
-		System.out.printf("\n\n%s", isFullTree(head) != -1);
-		System.out.printf("\n\n%s", isBalanced(head) != -1);
-		MyTreeNode nodeA = result.nodes.get((int) (Math.random() * result.nodes.size() - 1));
-		MyTreeNode nodeB = result.nodes.get((int) (Math.random() * result.nodes.size() / 2 - 1));
-		MyUtils.printNodes(result.nodes);
-		MyTreeNode ancestor = lowestCommonAncestor(head, nodeA, nodeB);
-		System.out.printf("\n\nnodeA:%s,nodeB:%s,ancestor:%s\n",
-				nodeA == null ? "null" : nodeA.val,
-				nodeB == null ? "null" : nodeB.val,
-				ancestor == null ? "null" : ancestor.val);
+//		MyUtils.printBinaryTree(head);
+//		printTreeWithoutRecursion(head);
+//		System.out.printf("\n\n%s", isValidBST(head, Long.MIN_VALUE, Long.MAX_VALUE));
+//		System.out.printf("\n\n%s", isValidBST2(head));
+//		System.out.printf("\n\n%s", isValidBST3(head));
+//		System.out.printf("\n\n%s", isFullTree(head) != -1);
+//		System.out.printf("\n\n%s", isBalanced(head) != -1);
+//		MyTreeNode nodeA = result.nodes.get((int) (Math.random() * result.nodes.size() - 1));
+//		MyTreeNode nodeB = result.nodes.get((int) (Math.random() * result.nodes.size() / 2 - 1));
+//		MyUtils.printNodes(result.nodes);
+//		MyTreeNode ancestor = lowestCommonAncestor(head, nodeA, nodeB);
+//		System.out.printf("\n\nnodeA:%s,nodeB:%s,ancestor:%s\n",
+//				nodeA == null ? "null" : nodeA.val,
+//				nodeB == null ? "null" : nodeB.val,
+//				ancestor == null ? "null" : ancestor.val);
+		Integer[] arr1 = new Integer[]{4, -9, 5, null, -1, null, 8, -6, 0, 7, null, null, -2, null, null, null, null, -3};
+		Integer[] arr2 = new Integer[]{5};
+//		Integer[] arr1 = new Integer[]{3, 4, 5, 1, 2};
+//		Integer[] arr2 = new Integer[]{4, 1, 2};
+		MyTreeNode head1 = MyUtils.arrayToTreeNode(arr1);
+		MyTreeNode head2 = MyUtils.arrayToTreeNode(arr2);
+		System.out.println(isSubtree(head1, head2));
 	}
 	
 	private static void printTreeWithoutRecursion(MyTreeNode head) {
@@ -152,25 +157,6 @@ public class DepthFirstSearch {
 		}
 		return isValidBST(head.left, min, head.val) && isValidBST(head.right, head.val, max);
 	}
-	
-	//	/**
-//	 * 判断是否是平衡二叉树 递归  判断 当前节点大于左侧最大 小于右侧最小
-//	 */
-//	private static Object[] isBalanced2(MyTreeNode head) {
-//		if (head == null) {
-//			return null;
-//		}
-//		Object[] left = isBalanced2(head.left);
-//		Object[] right = isBalanced2(head.right);
-//		boolean isBalanced = (left != null && (left.isBalanced && head.val > left.max))
-//				&& (right != null && (right.isBalanced && head.val < right.min));
-//		
-//		int min = left != null ? Math.min(left.min, head.val) : head.val;
-//		min = right != null ? Math.min(right.min, min) : min;
-//		int max = left != null ? Math.max(left.max, head.val) : head.val;
-//		max = right != null ? Math.max(right.max, max) : max;
-//		return new Object[]{isBalanced, min, max};
-//	}
 	
 	/**
 	 * 判断二叉树是否是搜索二叉树  对每个节点 左<头<右 中序遍历 判断值递增
@@ -295,5 +281,38 @@ public class DepthFirstSearch {
 			return head;
 		}
 		return nodeInLeft != null ? nodeInLeft : nodeInRight;
+	}
+	
+	
+	/**
+	 * 判断二叉树是否是另一二叉树的子树， 包含结构相同和值相同的子树。
+	 * 先遍历head1 遇到与head2的头的值相同的节点时，分别从head1当前遍历到的节点位置及head2开始遍历对比
+	 * 遍历每个节点或者都为null或者值都相同返回真。
+	 */
+	public static boolean isSubtree(MyTreeNode head1, MyTreeNode head2) {
+		if (head1 == null || head2 == null) {
+			return false;
+		}
+		if (head1.val == head2.val) {
+			boolean head = preOrder(head1, head2);
+			if (head) {
+				return true;
+			}
+		}
+		boolean left = isSubtree(head1.left, head2);
+		if (left) {
+			return true;
+		}
+		return isSubtree(head1.right, head2);
+	}
+	
+	private static boolean preOrder(MyTreeNode head1, MyTreeNode head2) {
+		if (head1 != head2 && (head1 == null || head2 == null)) {
+			return false;
+		}
+		if (head1 == null) {
+			return true;
+		}
+		return head1.val == head2.val && preOrder(head1.left, head2.left) && preOrder(head1.right, head2.right);
 	}
 }
