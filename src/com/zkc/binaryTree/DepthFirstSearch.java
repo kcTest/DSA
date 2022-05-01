@@ -286,6 +286,7 @@ public class DepthFirstSearch {
 	
 	/**
 	 * 判断二叉树是否是另一二叉树的子树， 包含结构相同和值相同的子树。
+	 * (由先序改为后序 先从下往上查找 如果遇到相同的节点即使最后不是子树 因为靠近底部 遍历的数量平均也会比使用先序少)
 	 * 先遍历head1 遇到与head2的头的值相同的节点时，分别从head1当前遍历到的节点位置及head2开始遍历对比
 	 * 遍历每个节点或者都为null或者值都相同返回真。
 	 */
@@ -293,17 +294,21 @@ public class DepthFirstSearch {
 		if (head1 == null || head2 == null) {
 			return false;
 		}
+		boolean left = isSubtree(head1.left, head2);
+		if (left) {
+			return true;
+		}
+		boolean right = isSubtree(head1.right, head2);
+		if (right) {
+			return true;
+		}
 		if (head1.val == head2.val) {
 			boolean head = preOrder(head1, head2);
 			if (head) {
 				return true;
 			}
 		}
-		boolean left = isSubtree(head1.left, head2);
-		if (left) {
-			return true;
-		}
-		return isSubtree(head1.right, head2);
+		return false;
 	}
 	
 	private static boolean preOrder(MyTreeNode head1, MyTreeNode head2) {
