@@ -2,11 +2,16 @@ package com.zkc.utils;
 
 import com.zkc.binaryTree.MyNewTreeNode;
 import com.zkc.binaryTree.MyTreeNode;
+import com.zkc.graph.MyGraph;
+import com.zkc.graph.MyGraphEdge;
+import com.zkc.graph.MyGraphNode;
 import com.zkc.linkedList.doubleLinkedList.DoubleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SpecialSingleLinkedList;
+import jdk.nashorn.internal.lookup.Lookup;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MyUtils {
 	
@@ -650,4 +655,134 @@ public class MyUtils {
 		}
 		System.out.printf("[%s]%n\n", sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "");
 	}
+	
+	public static MyGraph getGraph(int nodeCount, int bound) {
+		return getGraph(nodeCount, bound, false);
+	}
+	
+	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight) {
+		if (nodeCount == 0) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		//随机生成图结构  可能不连通 可能有向  
+		//生成节点值 不重复  
+		List<Integer> nodeValLst = new ArrayList<>();
+		while (nodeValLst.size() < nodeCount) {
+			int nodeVal = (int) (Math.random() * bound);
+			while (nodeValLst.contains(nodeVal)) {
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				nodeVal = (int) (Math.random() * bound);
+			}
+			nodeValLst.add(nodeVal);
+		}
+		Collections.sort(nodeValLst);
+		Map<Integer, Map<Integer, Integer>> adjacencyNodeMap = new LinkedHashMap<>();
+		for (Integer val : nodeValLst) {
+			//为当前节点生成邻接节点及权重  随机指向已存在的节点 数量随机  邻接的下一个节点不重复 
+			Map<Integer, Integer> adjacentNodes = new HashMap<>();
+			int adjacentNodeCount = ((int) (Math.random() * nodeCount)) / 2;
+			//已经作为别的节点的邻接点 允许没有自己的邻接点 暂时只检查之前的 
+			if (adjacentNodeCount == 0 && adjacencyNodeMap.values().stream().noneMatch(x -> x.containsKey(val))) {
+				//减少不连通的情况
+				adjacentNodeCount = 2;
+			}
+			for (int i = 0; i < adjacentNodeCount; i++) {
+				//邻接点值
+				int nextNodeVal = nodeValLst.get((int) (Math.random() * (nodeCount - 1)));
+				while (adjacentNodes.containsKey(nextNodeVal) || nextNodeVal == val) {
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					nextNodeVal = nodeValLst.get((int) (Math.random() * (nodeCount - 1)));
+				}
+				//当前节点到邻接点的边权重 
+				int weight = (int) (Math.random() * bound);
+				if (adjacencyNodeMap.containsKey(nextNodeVal)) {
+					Map<Integer, Integer> weightMap = adjacencyNodeMap.get(nextNodeVal);
+					if (weightMap.containsKey(val)) {
+						weight = weightMap.get(val);
+					}
+				}
+				adjacentNodes.put(nextNodeVal, weight);
+			}
+			adjacencyNodeMap.put(val, adjacentNodes);
+		}
+		//以上先生成邻接表的数据 打印
+		StringBuilder sbOriStr = new StringBuilder();
+		adjacencyNodeMap.forEach((k, v) -> {
+			sbOriStr.append("[").append(k).append(",");
+			sbOriStr.append("[");
+			if (v.size() > 0) {
+				v.forEach((nextNode, weight) -> {
+					sbOriStr.append(nextNode.intValue());
+					if (showWeight) {
+						sbOriStr.append("(").append(weight).append(")");
+					}
+					sbOriStr.append(",");
+				});
+				sbOriStr.deleteCharAt(sbOriStr.length() - 1);
+			}
+			sbOriStr.append("]");
+			sbOriStr.append("]\n");
+		});
+		
+		//根据基本的邻接表数据生成自定义的图结构（或其他结构）
+		//nodes节点会按值顺序添加 方便对比新生成的邻接表字符串
+		MyGraph g = new MyGraph();
+		for (int i = 0; i < nodeValLst.size(); i++) {
+			MyGraphNode node = new MyGraphNode(nodeValLst.get(i));
+			//索引作为key
+			g.nodes.put(i, node);
+		}
+		//
+		for (int i = 0; i < nodeValLst.size(); i++) {
+			MyGraphNode node = g.nodes.get(i);
+			Map<Integer, Integer> weightMap = adjacencyNodeMap.get(node.val);
+			weightMap.forEach((nextNodeVal, weight) -> {
+				MyGraphNode nextNode = g.nodes.get(nodeValLst.indexOf(nextNodeVal));
+				nextNode.in++;
+				node.out++;
+				node.nextNodes.add(nextNode);
+				MyGraphEdge edge = new MyGraphEdge(weight, node, nextNode);
+				node.nextEdges.add(edge);
+				g.edges.add(edge);
+			});
+		}
+		//生成好的图再打印成邻接表的字符串形式对比前后是否一致
+		StringBuilder sbNewStr = new StringBuilder();
+		g.nodes.forEach((index, node) -> {
+			sbNewStr.append("[").append(node.val).append(",");
+			if (node.nextNodes.size() > 0) {
+				sbNewStr.append("[");
+				node.nextNodes.forEach(nextNode -> {
+					sbNewStr.append(nextNode.val);
+					if (showWeight) {
+						MyGraphEdge edge = g.edges.stream().filter(e -> e.from == node && e.to == nextNode).findFirst().orElse(null);
+						if (edge == null) {
+							throw new RuntimeException("edge not found");
+						}
+						sbNewStr.append("(").append(edge.weight).append(")");
+					}
+					sbNewStr.append(",");
+				});
+				sbNewStr.deleteCharAt(sbNewStr.length() - 1);
+				sbNewStr.append("]");
+			} else {
+				sbNewStr.append("[]");
+			}
+			sbNewStr.append("]\n");
+		});
+		if (!sbOriStr.toString().equals(sbNewStr.toString())) {
+			throw new RuntimeException("graph invalid");
+		}
+		System.out.println(sbNewStr);
+		return g;
+	}
+	
 }
