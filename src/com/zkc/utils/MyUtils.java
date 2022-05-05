@@ -655,14 +655,21 @@ public class MyUtils {
 	}
 	
 	public static MyGraph getGraph(int nodeCount, int bound) {
-		return getGraph(nodeCount, bound, false, false);
+		//随机
+		return getGraph(nodeCount, bound, false, false, false);
 	}
 	
 	public static MyGraph getDirectedAcyclicGraph(int nodeCount, int bound) {
-		return getGraph(nodeCount, bound, false, true);
+		//有向无环
+		return getGraph(nodeCount, bound, false, true, false);
 	}
 	
-	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight, boolean acyclic) {
+	public static MyGraph getUnDirectedAcyclicGraph(int nodeCount, int bound) {
+		//无向
+		return getGraph(nodeCount, bound, false, false, true);
+	}
+	
+	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight, boolean acyclic, boolean undirected) {
 		if (nodeCount == 0) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
@@ -688,7 +695,14 @@ public class MyUtils {
 			//为当前节点生成邻接节点及权重  随机指向已存在的节点 数量随机  邻接的下一个节点不重复 
 			Map<Integer, Integer> adjacentNodes = new HashMap<>();
 			//有向无环  简单处理 只指向后面的节点
-			int adjacentNodeCount = j == nodeValLst.size() - 1 ? (int) (Math.random() * (nodeCount - 1)) / 2 : ((int) (Math.random() * (nodeCount - j))) * 6 / 7;
+			int adjacentNodeCount = (int) (Math.random() * (nodeCount - 1)) / 2;
+			if (acyclic) {
+				if (j == nodeValLst.size() - 1) {
+					adjacentNodeCount = (int) (Math.random() * (nodeCount - 1)) / 2;
+				} else {
+					adjacentNodeCount = ((int) (Math.random() * (nodeCount - j))) * 6 / 7;
+				}
+			}
 			//已经作为别的节点的邻接点 允许没有自己的邻接点 暂时只检查之前的 
 			if (adjacentNodeCount == 0) {
 				if (adjacencyNodeMap.values().stream().noneMatch(x -> x.containsKey(val))) {
@@ -737,6 +751,18 @@ public class MyUtils {
 				adjacentNodes.put(nextNodeVal, weight);
 			}
 			adjacencyNodeMap.put(val, adjacentNodes);
+		}
+		if (undirected) {
+			//补齐双向
+			for (Map.Entry<Integer, Map<Integer, Integer>> e : adjacencyNodeMap.entrySet()) {
+				int from = e.getKey();
+				e.getValue().forEach((to, weight) -> {
+					Map<Integer, Integer> map = adjacencyNodeMap.get(to);
+					if (!map.containsKey(from)) {
+						map.put(from, weight);
+					}
+				});
+			}
 		}
 		//以上先生成邻接表的数据 打印
 		StringBuilder sbOriStr = new StringBuilder();
