@@ -8,10 +8,8 @@ import com.zkc.graph.MyGraphNode;
 import com.zkc.linkedList.doubleLinkedList.DoubleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SpecialSingleLinkedList;
-import jdk.nashorn.internal.lookup.Lookup;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class MyUtils {
 	
@@ -657,10 +655,14 @@ public class MyUtils {
 	}
 	
 	public static MyGraph getGraph(int nodeCount, int bound) {
-		return getGraph(nodeCount, bound, false);
+		return getGraph(nodeCount, bound, false, false);
 	}
 	
-	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight) {
+	public static MyGraph getDirectedAcyclicGraph(int nodeCount, int bound) {
+		return getGraph(nodeCount, bound, false, true);
+	}
+	
+	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight, boolean acyclic) {
 		if (nodeCount == 0) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
@@ -681,25 +683,48 @@ public class MyUtils {
 		}
 		Collections.sort(nodeValLst);
 		Map<Integer, Map<Integer, Integer>> adjacencyNodeMap = new LinkedHashMap<>();
-		for (Integer val : nodeValLst) {
+		for (int j = 0; j < nodeValLst.size(); j++) {
+			Integer val = nodeValLst.get(j);
 			//为当前节点生成邻接节点及权重  随机指向已存在的节点 数量随机  邻接的下一个节点不重复 
 			Map<Integer, Integer> adjacentNodes = new HashMap<>();
-			int adjacentNodeCount = ((int) (Math.random() * nodeCount)) / 2;
+			//有向无环  简单处理 只指向后面的节点
+			int adjacentNodeCount = j == nodeValLst.size() - 1 ? (int) (Math.random() * (nodeCount - 1)) / 2 : ((int) (Math.random() * (nodeCount - j))) * 6 / 7;
 			//已经作为别的节点的邻接点 允许没有自己的邻接点 暂时只检查之前的 
-			if (adjacentNodeCount == 0 && adjacencyNodeMap.values().stream().noneMatch(x -> x.containsKey(val))) {
-				//减少不连通的情况
-				adjacentNodeCount = 2;
+			if (adjacentNodeCount == 0) {
+				if (adjacencyNodeMap.values().stream().noneMatch(x -> x.containsKey(val))) {
+					//减少不连通的情况
+					adjacentNodeCount = 1;
+				}
+			} else {
+				//最后一个节点以作为邻接节点 简单处理 直接不再指向其他节点
+				if (acyclic && j == nodeValLst.size() - 1 && adjacencyNodeMap.values().stream().anyMatch(x -> x.containsKey(val))) {
+					adjacentNodeCount = 0;
+				}
 			}
 			for (int i = 0; i < adjacentNodeCount; i++) {
 				//邻接点值
-				int nextNodeVal = nodeValLst.get((int) (Math.random() * (nodeCount - 1)));
+				int nextNodeVal = nodeValLst.get((int) (Math.random() * nodeCount));
+				if (acyclic) {
+					//有向无环  简单处理 只指向后面的节点
+					int nextNodeIndex = j == nodeValLst.size() - 1 ? (int) (Math.random() * (nodeCount - 1)) : (int) (Math.random() * (nodeCount - j - 1)) + j + 1;
+					nextNodeVal = nodeValLst.get(nextNodeIndex);
+				}
 				while (adjacentNodes.containsKey(nextNodeVal) || nextNodeVal == val) {
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					nextNodeVal = nodeValLst.get((int) (Math.random() * (nodeCount - 1)));
+					nextNodeVal = nodeValLst.get((int) (Math.random() * nodeCount));
+					if (acyclic) {
+						if (j == nodeValLst.size() - 1) {
+							int nextNodeIndex = (int) (Math.random() * (nodeCount - 1));
+							nextNodeVal = nodeValLst.get(nextNodeIndex);
+						} else {
+							int nextNodeIndex = (int) (Math.random() * (nodeCount - j - 1)) + j + 1;
+							nextNodeVal = nodeValLst.get(nextNodeIndex);
+						}
+					}
 				}
 				//当前节点到邻接点的边权重 
 				int weight = (int) (Math.random() * bound);
@@ -715,22 +740,26 @@ public class MyUtils {
 		}
 		//以上先生成邻接表的数据 打印
 		StringBuilder sbOriStr = new StringBuilder();
-		adjacencyNodeMap.forEach((k, v) -> {
+		for (Map.Entry<Integer, Map<Integer, Integer>> e : adjacencyNodeMap.entrySet()) {
+			Integer k = e.getKey();
+			Map<Integer, Integer> v = e.getValue();
 			sbOriStr.append("[").append(k).append(",");
 			sbOriStr.append("[");
 			if (v.size() > 0) {
-				v.forEach((nextNode, weight) -> {
+				for (Map.Entry<Integer, Integer> entry : v.entrySet()) {
+					Integer nextNode = entry.getKey();
+					Integer weight = entry.getValue();
 					sbOriStr.append(nextNode.intValue());
 					if (showWeight) {
 						sbOriStr.append("(").append(weight).append(")");
 					}
 					sbOriStr.append(",");
-				});
+				}
 				sbOriStr.deleteCharAt(sbOriStr.length() - 1);
 			}
 			sbOriStr.append("]");
 			sbOriStr.append("]\n");
-		});
+		}
 		
 		//根据基本的邻接表数据生成自定义的图结构（或其他结构）
 		//nodes节点会按值顺序添加 方便对比新生成的邻接表字符串
@@ -744,7 +773,9 @@ public class MyUtils {
 		for (int i = 0; i < nodeValLst.size(); i++) {
 			MyGraphNode node = g.nodes.get(i);
 			Map<Integer, Integer> weightMap = adjacencyNodeMap.get(node.val);
-			weightMap.forEach((nextNodeVal, weight) -> {
+			for (Map.Entry<Integer, Integer> entry : weightMap.entrySet()) {
+				Integer nextNodeVal = entry.getKey();
+				Integer weight = entry.getValue();
 				MyGraphNode nextNode = g.nodes.get(nodeValLst.indexOf(nextNodeVal));
 				nextNode.in++;
 				node.out++;
@@ -752,15 +783,24 @@ public class MyUtils {
 				MyGraphEdge edge = new MyGraphEdge(weight, node, nextNode);
 				node.nextEdges.add(edge);
 				g.edges.add(edge);
-			});
+			}
 		}
 		//生成好的图再打印成邻接表的字符串形式对比前后是否一致
+		StringBuilder sbNewStr = graphToAdjacentListStr(showWeight, g);
+		if (!sbOriStr.toString().equals(sbNewStr.toString())) {
+			throw new RuntimeException("graph invalid");
+		}
+		System.out.println(sbNewStr);
+		return g;
+	}
+	
+	private static StringBuilder graphToAdjacentListStr(boolean showWeight, MyGraph g) {
 		StringBuilder sbNewStr = new StringBuilder();
-		g.nodes.forEach((index, node) -> {
+		for (MyGraphNode node : g.nodes.values()) {
 			sbNewStr.append("[").append(node.val).append(",");
 			if (node.nextNodes.size() > 0) {
 				sbNewStr.append("[");
-				node.nextNodes.forEach(nextNode -> {
+				for (MyGraphNode nextNode : node.nextNodes) {
 					sbNewStr.append(nextNode.val);
 					if (showWeight) {
 						MyGraphEdge edge = g.edges.stream().filter(e -> e.from == node && e.to == nextNode).findFirst().orElse(null);
@@ -770,19 +810,15 @@ public class MyUtils {
 						sbNewStr.append("(").append(edge.weight).append(")");
 					}
 					sbNewStr.append(",");
-				});
+				}
 				sbNewStr.deleteCharAt(sbNewStr.length() - 1);
 				sbNewStr.append("]");
 			} else {
 				sbNewStr.append("[]");
 			}
 			sbNewStr.append("]\n");
-		});
-		if (!sbOriStr.toString().equals(sbNewStr.toString())) {
-			throw new RuntimeException("graph invalid");
 		}
-		System.out.println(sbNewStr);
-		return g;
+		return sbNewStr;
 	}
 	
 }
