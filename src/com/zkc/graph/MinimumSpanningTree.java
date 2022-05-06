@@ -67,30 +67,26 @@ public class MinimumSpanningTree {
 				while (!uncheckedEdges.isEmpty()) {
 					//找出权值最小边加入返回结果集 
 					MyGraphEdge minEdge = new MyGraphEdge(Integer.MAX_VALUE, null, null);
-					boolean allChecked = true;
-					for (MyGraphEdge nextEdge : uncheckedEdges) {
+					for (Iterator<MyGraphEdge> iterator = uncheckedEdges.iterator(); iterator.hasNext(); ) {
+						MyGraphEdge nextEdge = iterator.next();
 						if (nextEdge.to.visits == 0) {
-							//说明还有节点未加入最小生成树
-							allChecked = false;
 							if (nextEdge.weight < minEdge.weight) {
 								minEdge = nextEdge;
 							}
+						} else {
+							iterator.remove();
 						}
 					}
-					//如果全部边都已比较过 相当于最小生成树已经形成 不需要再从剩下未移除的边中挑选 跳到下一节点或另一个树中
-					if (allChecked) {
-						break;
-					}
-					edges.add(minEdge);
 					//标记下一节点相当于加入了最小生成树
-					minEdge.to.visits++;
-					//找到移除
-					uncheckedEdges.remove(minEdge);
-					//新增待比较的边 为当前边指向的节点所对应的外向边
-					uncheckedEdges.addAll(minEdge.to.nextEdges);
+					if (minEdge.to != null) {
+						minEdge.to.visits++;
+						//如果全部边都已比较过 相当于最小生成树已经形成 不需要再从剩下未移除的边中挑选 跳到下一节点或另一个树中
+						edges.add(minEdge);
+						//新增待比较的边 为当前边指向的节点所对应的外向边
+						uncheckedEdges.addAll(minEdge.to.nextEdges);
+					}
 				}
 			}
-			
 		}
 		return edges;
 	}
