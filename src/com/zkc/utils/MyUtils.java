@@ -11,6 +11,9 @@ import com.zkc.linkedList.singleLinkedList.SpecialSingleLinkedList;
 
 import java.util.*;
 
+/**
+ * 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
+ */
 public class MyUtils {
 	
 	public static int[] getArray(int length, int bound) {
@@ -666,7 +669,7 @@ public class MyUtils {
 	
 	public static MyGraph getUnDirectedAcyclicGraph(int nodeCount, int bound) {
 		//无向
-		return getGraph(nodeCount, bound, false, false, true);
+		return getGraph(nodeCount, bound, true, false, true);
 	}
 	
 	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight, boolean acyclic, boolean undirected) {
@@ -695,7 +698,7 @@ public class MyUtils {
 			//为当前节点生成邻接节点及权重  随机指向已存在的节点 数量随机  邻接的下一个节点不重复 
 			Map<Integer, Integer> adjacentNodes = new HashMap<>();
 			//有向无环  简单处理 只指向后面的节点
-			int adjacentNodeCount = (int) (Math.random() * (nodeCount - 1)) / 2;
+			int adjacentNodeCount = (int) (Math.random() * nodeCount) / 2;
 			if (acyclic) {
 				if (j == nodeValLst.size() - 1) {
 					adjacentNodeCount = (int) (Math.random() * (nodeCount - 1)) / 2;
