@@ -63,23 +63,13 @@ public class MinimumSpanningTree {
 			//标记该节点 相当于加入了最小生成树
 			if (node.visits++ == 0) {
 				//所有新找到的节点的外向边  从中找出权值最小的
-				Queue<MyGraphEdge> uncheckedEdges = new LinkedList<>(node.nextEdges);
+				Queue<MyGraphEdge> uncheckedEdges = new PriorityQueue<>(Comparator.comparingInt(e -> e.weight));
+				uncheckedEdges.addAll(node.nextEdges);
 				while (!uncheckedEdges.isEmpty()) {
 					//找出权值最小边加入返回结果集 
-					MyGraphEdge minEdge = new MyGraphEdge(Integer.MAX_VALUE, null, null);
-					for (Iterator<MyGraphEdge> iterator = uncheckedEdges.iterator(); iterator.hasNext(); ) {
-						MyGraphEdge nextEdge = iterator.next();
-						if (nextEdge.to.visits == 0) {
-							if (nextEdge.weight < minEdge.weight) {
-								minEdge = nextEdge;
-							}
-						} else {
-							iterator.remove();
-						}
-					}
+					MyGraphEdge minEdge = uncheckedEdges.poll();
 					//标记下一节点相当于加入了最小生成树
-					if (minEdge.to != null) {
-						minEdge.to.visits++;
+					if (minEdge.to.visits++ == 0) {
 						//如果全部边都已比较过 相当于最小生成树已经形成 不需要再从剩下未移除的边中挑选 跳到下一节点或另一个树中
 						edges.add(minEdge);
 						//新增待比较的边 为当前边指向的节点所对应的外向边
