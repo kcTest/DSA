@@ -673,7 +673,7 @@ public class MyUtils {
 	}
 	
 	public static MyGraph getGraph(int nodeCount, int bound, boolean showWeight, boolean acyclic, boolean undirected) {
-		if (nodeCount == 0) {
+		if (nodeCount == 0 || nodeCount > bound) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
 		//随机生成图结构  可能不连通 可能有向  
@@ -743,7 +743,7 @@ public class MyUtils {
 						}
 					}
 				}
-				//当前节点到邻接点的边权重 
+				//当前节点到邻接点的边权重 暂时让两个节点之间的俩个边权重一样
 				int weight = (int) (Math.random() * bound);
 				if (adjacencyNodeMap.containsKey(nextNodeVal)) {
 					Map<Integer, Integer> weightMap = adjacencyNodeMap.get(nextNodeVal);
