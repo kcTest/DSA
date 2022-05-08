@@ -15,6 +15,7 @@ public class FindingTheShortestPaths {
 	 * Dijkstra 算法是一种用于寻找图中节点间最短路径的算法。
 	 * 对于图中给定的源节点，该算法寻找该节点与其他节点之间的最短路径。
 	 * 它也可以用来寻找从单个节点到单个目的地节点的最短路径，一旦确定了到目的地节点的最短路径，就停止该算法。
+	 * 权值不能为负数 否则每次计算都会小于上一次计算的值  会一直更新下去
 	 */
 	private static void dijkstraAlgorithm(MyGraph graph) {
 		if (graph == null || graph.nodes.size() == 0) {
@@ -40,7 +41,7 @@ public class FindingTheShortestPaths {
 			}
 		});
 		while (!queue.isEmpty()) {
-			//选择最小距离的未访问节点，计算源节点通过该节点到每个未访问邻居的距离，如果距离较小则更新邻居的距离 标记为已处理
+			//选择与源节点距离最小的未访问节点，计算源节点通过该节点到每个未访问邻居的距离，如果距离较小则更新邻居的距离 标记为已处理
 			DistInfo distInfo = queue.poll();
 			MyGraphNode curNode = distInfo.node;
 			curNode.visits++;

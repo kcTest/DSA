@@ -2,9 +2,7 @@ package com.zkc.utils;
 
 import com.zkc.binaryTree.MyNewTreeNode;
 import com.zkc.binaryTree.MyTreeNode;
-import com.zkc.graph.MyGraph;
-import com.zkc.graph.MyGraphEdge;
-import com.zkc.graph.MyGraphNode;
+import com.zkc.graph.*;
 import com.zkc.linkedList.doubleLinkedList.DoubleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SingleLinkedList;
 import com.zkc.linkedList.singleLinkedList.SpecialSingleLinkedList;
@@ -367,6 +365,38 @@ public class MyUtils {
 			}
 		}
 		return head;
+	}
+	
+	public static void printTrie(MyTrieNode head) {
+		if (head == null) {
+			return;
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("N-LV%d [K= , P=%d, E=%d;]\n", 0, head.pass, head.end));
+		Queue<MyTrieNode> queue = new LinkedList<>();
+		queue.add(head);
+		Map<MyTrieNode, Integer> levelMap = new HashMap<>();
+		levelMap.put(head, 1);
+		int childLevel = 0;
+		while (!queue.isEmpty()) {
+			MyTrieNode cur = queue.poll();
+			boolean newLine = levelMap.get(cur) > childLevel;
+			childLevel = levelMap.get(cur);
+			if (cur.children.size() > 0) {
+				sb.append(newLine ? String.format("N-LV%d [", childLevel) : "");
+				for (Map.Entry<Character, MyTrieNode> entry : cur.children.entrySet()) {
+					Character k = entry.getKey();
+					MyTrieNode next = entry.getValue();
+					sb.append(String.format("K=%s, P=%d, E=%d; ", k, next.pass, next.end));
+					queue.add(next);
+					levelMap.put(next, childLevel + 1);
+				}
+			}
+			if (!queue.isEmpty() && levelMap.get(queue.peek()) > childLevel) {
+				sb.append("]\n");
+			}
+		}
+		System.out.println(sb);
 	}
 	
 	public static class BTDS {

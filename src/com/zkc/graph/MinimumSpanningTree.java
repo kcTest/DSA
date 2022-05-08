@@ -40,7 +40,7 @@ public class MinimumSpanningTree {
 			MyGraphNode pTo = unionFind.find(edge.to);
 			if (pFrom != pTo) {
 				unionFind.union(pFrom, pTo);
-				//不同根合并 合并后
+				//不同根没有共同节点合并  合并后
 				result.add(edge);
 			}
 		}
