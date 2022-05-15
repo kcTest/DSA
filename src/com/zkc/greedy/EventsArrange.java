@@ -20,8 +20,8 @@ public class EventsArrange {
 //		int[][] events = new int[][]{new int[]{2, 10}, new int[]{2, 10},
 //				new int[]{3, 10}, new int[]{3, 10}, new int[]{4, 10},
 //				new int[]{7, 8}, new int[]{8, 9}, new int[]{9, 10}, new int[]{12, 12}, new int[]{12, 12}}; //9
-//		int[][] events = new int[][]{new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 10}, new int[]{1, 1}, new int[]{1, 4}, new int[]{5, 5}};
-		int[][] events = new int[][]{new int[]{1, 1}, new int[]{1, 2}, new int[]{1, 3}, new int[]{1, 4}, new int[]{1, 5}};//5
+		int[][] events = new int[][]{new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 5}, new int[]{1, 10}, new int[]{1, 1}, new int[]{1, 4}, new int[]{5, 5}};
+//		int[][] events = new int[][]{new int[]{1, 1}, new int[]{1, 2}, new int[]{1, 3}, new int[]{1, 4}, new int[]{1, 5}};//5
 		
 		System.out.println(bestArrange(events));
 	}
@@ -75,80 +75,34 @@ public class EventsArrange {
 		return min;
 	}
 	
-	private static int bestArrange3(int[][] events) {
+	private static int backup(int[][] events) {
 		
-		int count = 0;
 		Arrays.sort(events, Comparator.comparingInt(e -> e[0]));
-		Set<Integer> eventPos = new TreeSet<>();
-		for (int i = 0; i < events.length; i++) {
-			eventPos.add(i);
-		}
-		Map<int[], Integer> deleteRecord = new HashMap<>();
-		while (eventPos.size() > 0) {
-			
-			int visitDay = 0;
-			
-			int[] minEvent = new int[2];
-			
-			List<Integer> temp = new ArrayList<>();
-			Iterator<Integer> iterator = eventPos.iterator();
-			int nextPhaseStart = 0;
-			while (iterator.hasNext()) {
-				Integer pos = iterator.next();
-				int[] event = events[pos];
-				if (!deleteRecord.containsKey(event)) {
-					deleteRecord.put(event, 0);
-				}
-				if (visitDay == 0) {
-					visitDay = event[0] + deleteRecord.get(event);
-					temp.add(pos);
-					if (event[1] - (event[0] + deleteRecord.get(event)) < (minEvent[0] == 0 ? Integer.MAX_VALUE : minEvent[1] - (minEvent[0] + deleteRecord.get(minEvent)))) {
-						minEvent = event;
-					}
-				} else {
-					if ((event[0] + deleteRecord.get(event)) <= visitDay) {
-						temp.add(pos);
-						if (event[1] - (event[0] + deleteRecord.get(event)) < (minEvent[0] == 0 ? Integer.MAX_VALUE : minEvent[1] - (minEvent[0] + deleteRecord.get(minEvent)))) {
-							minEvent = event;
-						}
-					} else {
-						nextPhaseStart = event[0];
-						System.out.printf("下阶段起始位置：已删除数据是否为0, %d\n", deleteRecord.get(event));
-						break;
-					}
-					
-				}
+		List<int[]> ealierAndShorterSort = new ArrayList<>(Arrays.asList(events));
+		int start = ealierAndShorterSort.get(0)[0];
+		List<int[]> curLenSort = new ArrayList<>();
+		int differStart = 1;
+		int curLenSortAdd = 0;
+		for (int i = 0; i < ealierAndShorterSort.size(); i++) {
+			int[] event = ealierAndShorterSort.get(i);
+			int curStart = event[0];
+			if (curStart == start) {
+				curLenSort.add(curLenSortAdd++, event);
 			}
-			
-			if (temp.size() > 0) {
-				int delete = minEvent[1] - (minEvent[0] + deleteRecord.get(minEvent)) + 1;
-				if (nextPhaseStart > 0 && nextPhaseStart <= minEvent[1]) {
-					delete -= (minEvent[1] - nextPhaseStart + 1);
+			if (curStart != start || i == ealierAndShorterSort.size() - 1) {
+				curLenSort.sort(Comparator.comparingInt(e -> e[1] - e[0]));
+				if (curStart != start) {
+					differStart++;
+					i--;
+					start = curStart;
 				}
-				boolean cut = false;
-				int minPos = temp.get(0);
-				for (int pos : temp) {
-					int[] event = events[pos];
-					int deleteNum = deleteRecord.get(event) + delete;
-					if (deleteNum == (event[1] - event[0] + 1)) {
-						eventPos.remove(pos);
-						cut = true;
-						deleteRecord.remove(event);
-					} else {
-						deleteRecord.put(event, deleteNum);
-						if (!cut && ((event[1] - (event[0] + deleteNum) + 1) < (events[minPos][1] - (events[minPos][0] + deleteRecord.get(events[minPos])) + 1))) {
-							minPos = pos;
-						}
-					}
+				for (int j = 0; j < curLenSortAdd; j++) {
+					ealierAndShorterSort.set(i - (curLenSortAdd - j - 1), curLenSort.get(j));
 				}
-				if (!cut) {
-					eventPos.remove(minPos);
-					deleteRecord.remove(events[minPos]);
-				}
-				count += Math.min(temp.size(), delete);
+				curLenSortAdd = 0;
+				curLenSort.clear();
 			}
 		}
-		
-		return count;
+		return 0;
 	}
 }
