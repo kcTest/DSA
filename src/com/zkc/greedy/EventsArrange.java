@@ -48,68 +48,23 @@ public class EventsArrange {
 				latest.add(earliest.poll());
 			}
 			if (start > today || earliest.size() == 0) {
-				if (latest.size() > 0) {
-					while (latest.size() > 0) {
-						if (latest.peek()[1] < today) {
-							latest.poll();
-						} else {
-							if (earliest.size() > 0 && today == start) {
-								break;
-							}
-							latest.poll();
-							count++;
-							today++;
+				while (latest.size() > 0) {
+					if (latest.peek()[1] < today) {
+						latest.poll();
+					} else {
+						if (earliest.size() > 0 && today == start) {
+							break;
 						}
+						latest.poll();
+						count++;
+						today++;
 					}
-				} else {
-					today = start;
 				}
+				today = start;
 			}
 		}
 		return count;
 	}
-	
-	/**
-	 * 保持选取开始最早 结束最早
-	 * 在按开始最早排序的堆中选取符合条件的event放入 按结束最早的堆中
-	 */
-	private static int bestArrange2(int[][] events) {
-		PriorityQueue<int[]> earliest = new PriorityQueue<>(new Earliest());
-		for (int[] event : events) {
-			earliest.add(event);
-		}
-		PriorityQueue<int[]> latest = new PriorityQueue<>(new Latest());
-		int count = 0;
-		int today = 0;
-		while (earliest.size() > 0) {
-			int[] event = earliest.peek();
-			int start = event[0];
-			int end = event[1];
-			if (start <= today && end >= today) {
-				latest.add(earliest.poll());
-			}
-			if (start > today || earliest.size() == 0) {
-				if (latest.size() > 0) {
-					while (latest.size() > 0) {
-						if (latest.peek()[1] < today) {
-							latest.poll();
-						} else {
-							if (earliest.size() > 0 && today == start) {
-								break;
-							}
-							latest.poll();
-							count++;
-							today++;
-						}
-					}
-				} else {
-					today = start;
-				}
-			}
-		}
-		return count;
-	}
-	
 	
 	private static class Earliest implements Comparator<int[]> {
 		@Override
