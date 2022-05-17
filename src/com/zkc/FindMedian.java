@@ -5,20 +5,6 @@ import java.util.PriorityQueue;
 
 public class FindMedian {
 	
-	private static class AscComparator implements Comparator<Integer> {
-		@Override
-		public int compare(Integer o1, Integer o2) {
-			return o1 - o2;
-		}
-	}
-	
-	private static class DesComparator implements Comparator<Integer> {
-		@Override
-		public int compare(Integer o1, Integer o2) {
-			return o2 - o1;
-		}
-	}
-	
 	public static void main(String[] args) {
 		String[] actionArr = new String[]{"MedianFinder", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian", "addNum", "findMedian"};
 		Integer[] dataArr = new Integer[]{null, 40, null, 12, null, 16, null, 14, null, 35, null, 19, null, 34, null, 35, null, 28, null, 35, null, 26, null, 6, null, 8, null, 2, null, 14, null, 25, null, 25, null, 4, null, 33, null, 18, null, 10, null, 14, null, 27, null, 3, null, 35, null, 13, null, 24, null, 27, null, 14, null, 5, null, 0, null, 38, null, 19, null, 25, null, 11, null, 14, null, 31, null, 30, null, 11, null, 31, null, 0, null};
@@ -107,6 +93,20 @@ public class FindMedian {
 				}
 				return (secondHalfAsc.peek() + firstHalfDesc.peek()) / 2.0;
 			}
+		}
+	}
+	
+	private static class AscComparator implements Comparator<Integer> {
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return o1 - o2;
+		}
+	}
+	
+	private static class DesComparator implements Comparator<Integer> {
+		@Override
+		public int compare(Integer o1, Integer o2) {
+			return o2 - o1;
 		}
 	}
 }
