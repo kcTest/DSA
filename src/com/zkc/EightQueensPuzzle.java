@@ -1,5 +1,6 @@
 package com.zkc;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -24,6 +25,7 @@ public class EightQueensPuzzle {
 	}
 	
 	private static List<List<String>> solveEightQueue(int dim) {
+		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS").format(new Date(System.currentTimeMillis())));
 		//生成n*n的数组
 		RowCell[][] rowArr = new RowCell[dim][dim];
 		for (int i = 0; i < dim; i++) {
@@ -37,6 +39,7 @@ public class EightQueensPuzzle {
 		//记录结果
 		List<List<String>> ret = new ArrayList<>();
 		solveEightQueueSub(ret, rowArr, 0, validCellPerRow);
+		System.out.println(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss:SSS").format(new Date(System.currentTimeMillis())));
 		return ret;
 	}
 	
@@ -85,34 +88,29 @@ public class EightQueensPuzzle {
 	private static void handleCrossedCell(RowCell curRowCell, RowCell[][] rowArr) {
 		Queue<RowCell> invalidCellQ = new LinkedList<>();
 		//找到需要被禁用的单元格  十字线 对角线  不考虑同行及向上的部分
-		for (int i = 0; i < rowArr.length; i++) {
-			int nextRowIdx = curRowCell.rowIdx + i;
-			if (nextRowIdx < rowArr.length) {
-				int nextColIdx = curRowCell.colIdx + i;
-				if (nextColIdx < rowArr.length) {
-					//对角线右下
-					RowCell diagonalBottomRight = rowArr[nextRowIdx][nextColIdx];
-					if (diagonalBottomRight.valid && diagonalBottomRight != curRowCell) {
-						diagonalBottomRight.valid = false;
-						invalidCellQ.add(diagonalBottomRight);
-					}
-				}
-				int prevColIdx = curRowCell.colIdx - i;
-				if (prevColIdx >= 0) {
-					//对角线左下
-					RowCell diagonalBottomLeft = rowArr[nextRowIdx][prevColIdx];
-					if (diagonalBottomLeft.valid && diagonalBottomLeft != curRowCell) {
-						diagonalBottomLeft.valid = false;
-						invalidCellQ.add(diagonalBottomLeft);
-					}
+		int colIdx = curRowCell.colIdx;
+		for (int offSet = 1; offSet < rowArr.length - curRowCell.rowIdx; offSet++) {
+			//正下
+			int bottomY = curRowCell.rowIdx + offSet;
+			RowCell cellBottom = rowArr[bottomY][colIdx];
+			if (cellBottom.valid && cellBottom != curRowCell) {
+				cellBottom.valid = false;
+				invalidCellQ.add(cellBottom);
+			}
+			//对角线左下
+			if (colIdx - offSet >= 0) {
+				RowCell cellBottomLeft = rowArr[bottomY][colIdx - offSet];
+				if (cellBottomLeft.valid && cellBottomLeft != curRowCell) {
+					cellBottomLeft.valid = false;
+					invalidCellQ.add(cellBottomLeft);
 				}
 			}
-			if (i > curRowCell.rowIdx) {
-				//正下
-				RowCell sameCol = rowArr[i][curRowCell.colIdx];
-				if (sameCol.valid && sameCol != curRowCell) {
-					sameCol.valid = false;
-					invalidCellQ.add(sameCol);
+			//对角线右下
+			if (colIdx + offSet < rowArr.length) {
+				RowCell cellBottomRight = rowArr[bottomY][colIdx + offSet];
+				if (cellBottomRight.valid && cellBottomRight != curRowCell) {
+					cellBottomRight.valid = false;
+					invalidCellQ.add(cellBottomRight);
 				}
 			}
 		}
