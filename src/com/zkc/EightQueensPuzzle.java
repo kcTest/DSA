@@ -5,8 +5,7 @@ import java.util.*;
 public class EightQueensPuzzle {
 	
 	public static void main(String[] args) {
-//		int dim=(int) (Math.random() * 9);
-		int dim = 5;
+		int dim = 4;
 		List<List<String>> result = solveEightQueue(dim);
 		StringBuilder sb = new StringBuilder();
 		sb.append("[\n");
@@ -21,9 +20,7 @@ public class EightQueensPuzzle {
 		System.out.print(sb);
 	}
 	
-	
 	private static List<List<String>> solveEightQueue(int dim) {
-		List<List<String>> result = new ArrayList<>();
 		RowCell[][] rowArr = new RowCell[dim][dim];
 		for (int i = 0; i < dim; i++) {
 			for (int j = 0; j < dim; j++) {
@@ -31,97 +28,87 @@ public class EightQueensPuzzle {
 				rowArr[i][j] = rowCell;
 			}
 		}
-		Set<RowCell> invalidCells = new HashSet<>();
-		List<RowCell> validCellPerRow = new ArrayList<>();
-		solveEightQueueSub(result, rowArr, 0, validCellPerRow, invalidCells);
-		return result;
+		RowCell[] validCellPerRow = new RowCell[dim];
+		List<List<String>> ret = new ArrayList<>();
+		solveEightQueueSub(ret, rowArr, 0, validCellPerRow);
+		return ret;
 	}
 	
-	
-	private static void solveEightQueueSub(List<List<String>> result, RowCell[][] rowArr, int curRowIdx, List<RowCell> validCellPerRow, Set<RowCell> invalidCells) {
+	private static void solveEightQueueSub(List<List<String>> ret, RowCell[][] rowArr, int curRowIdx, RowCell[] validCellPerRow) {
 		if (curRowIdx == rowArr.length) {
 			List<String> rowStrLst = new ArrayList<>();
 			for (RowCell cell : validCellPerRow) {
 				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < rowArr.length; i++) {
-					if (i == cell.colIdx) {
-						sb.append("Q");
-					} else {
-						sb.append(".");
-					}
+					sb.append(i == cell.colIdx ? "Q" : ".");
 				}
 				rowStrLst.add(sb.toString());
 			}
-			result.add(rowStrLst);
+			ret.add(rowStrLst);
 			return;
 		}
 		for (RowCell curRowCell : rowArr[curRowIdx]) {
-			for (int i = rowArr.length - 1; i >= curRowCell.rowIdx; i--) {
-				if (validCellPerRow.size() > i) {
-					Set<RowCell> crossCellSet = validCellPerRow.get(i).crossCellSet;
-					validCellPerRow.remove(i);
-					for (RowCell rowCell : crossCellSet) {
-						invalidCells.remove(rowCell);
-						rowCell.valid = true;
-					}
+			for (int i = curRowCell.rowIdx; i < rowArr.length; i++) {
+				if (validCellPerRow[i] == null) {
+					break;
+				}
+				Queue<RowCell> crossCellSet = validCellPerRow[i].invalidCellQ;
+				validCellPerRow[i] = null;
+				while (crossCellSet.size() > 0) {
+					crossCellSet.poll().valid = true;
 				}
 			}
-			if (!curRowCell.valid) {
-				continue;
+			if (curRowCell.valid) {
+				handleCrossedCell(curRowCell, rowArr);
+				validCellPerRow[curRowCell.rowIdx] = curRowCell;
+				solveEightQueueSub(ret, rowArr, curRowIdx + 1, validCellPerRow);
 			}
-			handleCrossedCell(curRowCell, rowArr, invalidCells);
-			validCellPerRow.add(curRowCell.rowIdx, curRowCell);
-			solveEightQueueSub(result, rowArr, curRowIdx + 1, validCellPerRow, invalidCells);
 		}
 	}
 	
-	private static void handleCrossedCell(RowCell curRowCell, RowCell[][] rowArr, Set<RowCell> invalidCells) {
-		Set<RowCell> linkedCell = new HashSet<>();
+	private static void handleCrossedCell(RowCell curRowCell, RowCell[][] rowArr) {
+		Queue<RowCell> invalidCellQ = new LinkedList<>();
 		for (int i = 0; i < rowArr.length; i++) {
-			if (i > curRowCell.rowIdx) {
-				RowCell sameCol = rowArr[i][curRowCell.colIdx];
-				if (sameCol != curRowCell && !invalidCells.contains(sameCol)) {
-					sameCol.valid = false;
-					linkedCell.add(sameCol);
-					invalidCells.add(sameCol);
-				}
-			}
 			int nextRowIdx = curRowCell.rowIdx + i;
-			if (nextRowIdx >= 0 && nextRowIdx < rowArr.length) {
+			if (nextRowIdx < rowArr.length) {
 				int nextColIdx = curRowCell.colIdx + i;
-				if (nextColIdx >= 0 && nextColIdx < rowArr.length) {
+				if (nextColIdx < rowArr.length) {
 					RowCell diagonalBottomRight = rowArr[nextRowIdx][nextColIdx];
-					if (diagonalBottomRight != curRowCell && !invalidCells.contains(diagonalBottomRight)) {
+					if (diagonalBottomRight.valid && diagonalBottomRight != curRowCell) {
 						diagonalBottomRight.valid = false;
-						linkedCell.add(diagonalBottomRight);
-						invalidCells.add(diagonalBottomRight);
+						invalidCellQ.add(diagonalBottomRight);
 					}
 				}
 				int prevColIdx = curRowCell.colIdx - i;
-				if (prevColIdx >= 0 && prevColIdx < rowArr.length) {
+				if (prevColIdx >= 0) {
 					RowCell diagonalBottomLeft = rowArr[nextRowIdx][prevColIdx];
-					if (diagonalBottomLeft != curRowCell && !invalidCells.contains(diagonalBottomLeft)) {
+					if (diagonalBottomLeft.valid && diagonalBottomLeft != curRowCell) {
 						diagonalBottomLeft.valid = false;
-						linkedCell.add(diagonalBottomLeft);
-						invalidCells.add(diagonalBottomLeft);
-						
+						invalidCellQ.add(diagonalBottomLeft);
 					}
 				}
 			}
+			if (i > curRowCell.rowIdx) {
+				RowCell sameCol = rowArr[i][curRowCell.colIdx];
+				if (sameCol.valid && sameCol != curRowCell) {
+					sameCol.valid = false;
+					invalidCellQ.add(sameCol);
+				}
+			}
 		}
-		curRowCell.crossCellSet = linkedCell;
+		curRowCell.invalidCellQ = invalidCellQ;
 	}
 	
 	private static class RowCell {
 		public int rowIdx;
 		public int colIdx;
-		public Set<RowCell> crossCellSet;
+		public Queue<RowCell> invalidCellQ;
 		public boolean valid;
 		
 		public RowCell(int rowNo, int colNo) {
 			this.rowIdx = rowNo;
 			this.colIdx = colNo;
-			crossCellSet = new HashSet<>();
+			invalidCellQ = new LinkedList<>();
 			valid = true;
 		}
 	}
