@@ -29,8 +29,9 @@ public class FindingTheShortestPaths {
 		//返回结果 目标节点及距离
 		Map<MyGraphNode, DistInfo> disMap = new HashMap<>(graph.nodes.size());
 		//从初始节点开始添加判断  更新其后节点距离后将其后节点加入队列   到所有节点最小距离全部确定后队列为空  
+		//某个节点修改后 无法自动调整成堆  只能通过添加删除调整  当前做法开始只取一个点 每次新增或移除  不修改队列中的值  不需要考虑 
 		PriorityQueue<DistInfo> queue = new PriorityQueue<>(Comparator.comparingInt(p -> p.dis));
-		graph.nodes.values().forEach(node -> {
+		for (MyGraphNode node : graph.nodes.values()) {
 			//到其他所有节点距离未知  默认设置为一个最大值
 			DistInfo destInfo = new DistInfo(node, Integer.MAX_VALUE);
 			disMap.put(node, destInfo);
@@ -39,14 +40,14 @@ public class FindingTheShortestPaths {
 				destInfo.dis = 0;
 				queue.add(destInfo);
 			}
-		});
+		}
 		while (!queue.isEmpty()) {
 			//选择与源节点距离最小的未访问节点，计算源节点通过该节点到每个未访问邻居的距离，如果距离较小则更新邻居的距离 标记为已处理
 			DistInfo distInfo = queue.poll();
 			MyGraphNode curNode = distInfo.node;
 			curNode.visits++;
 			//更新当前节点的后面节点距离源节点的距离
-			curNode.nextEdges.forEach(e -> {
+			for (MyGraphEdge e : curNode.nextEdges) {
 				//已经处理过不再处理
 				if (e.to.visits == 0) {
 					DistInfo nextNodeDistInfo = disMap.get(e.to);
@@ -61,7 +62,7 @@ public class FindingTheShortestPaths {
 						queue.add(nextNodeDistInfo);
 					}
 				}
-			});
+			}
 		}
 		StringBuilder sb = new StringBuilder();
 		disMap.forEach((target, distInfo) -> {
