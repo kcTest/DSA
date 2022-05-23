@@ -109,20 +109,20 @@ public class Hanota {
 	}
 	
 	/**
-	 * @param size FROM.size
-	 * @param A    左
-	 * @param B    中
-	 * @param C    右
-	 *             <p>左侧的前n-1个元素移到中间 第n个移到右侧 再把中间n-1个元素移动到右侧
+	 * @param n 第n个要移动的元素
+	 * @param A 左
+	 * @param B 中
+	 * @param C 右
+	 *          <p>左侧的前n-1个元素移到中间 第n个移到右侧 再把中间n-1个元素移动到右侧
 	 */
-	private static void move(int size, List<Integer> A, List<Integer> B, List<Integer> C) {
-		if (size == 1) {
+	private static void move(int n, List<Integer> A, List<Integer> B, List<Integer> C) {
+		if (n == 1) {
 			C.add(A.remove(A.size() - 1));
 			return;
 		}
-		move(size - 1, A, C, B);
+		move(n - 1, A, C, B);
 		C.add(A.remove(A.size() - 1));
-		move(size - 1, B, A, C);
+		move(n - 1, B, A, C);
 	}
 	
 	
