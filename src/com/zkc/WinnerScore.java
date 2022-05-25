@@ -21,12 +21,15 @@ public class WinnerScore {
 		if (left == right) {
 			return first ? curMax + ori[left] : curMax;
 		}
+		//选左侧
 		int retTempA = first ? ori[left] + curMax : curMax;
 		int selectLeft = winnerScore(ori, left + 1, right, !first, retTempA);
 		
+		//选右侧
 		int retTempB = first ? ori[right] + curMax : curMax;
 		int selectRight = winnerScore(ori, left, right - 1, !first, retTempB);
 		
+		//先选的情况返回最大的路线 后选的情况下另一方会尽量取最大值所以会返回最小路线
 		return first ? Math.max(selectLeft, selectRight) : Math.min(selectLeft, selectRight);
 	}
 }
