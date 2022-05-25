@@ -2,6 +2,9 @@ package com.zkc;
 
 public class WinnerScore {
 	
+	/**
+	 * 俩人每次分别从数组左边或右边选一个最大的数字  返回数字之和较大一方的值
+	 */
 	public static void main(String[] args) {
 		int[] nums = new int[]{3, 1, 9, 5, 4, 2};
 		int max = getWinnerScore(nums);
