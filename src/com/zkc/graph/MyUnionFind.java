@@ -10,17 +10,17 @@ import java.util.Map;
  * 1.查找过程中路径压缩
  * 2.合并过程中根据级别决定谁作为父树
  */
-public class MyUnionFind {
+public class MyUnionFind<T> {
 	
 	/**
 	 * 是始终将较小的树附加到较大的树的根上。由于影响运行时间的是树的深度，
 	 * 所以深度较小的树被添加到深度较大的树的根下，这样只会增加深度相等的树。如当两个相同深度 r 的树合并时，结果为 r + 1
 	 */
-	private Map<MyGraphNode, Integer> rankMap = new HashMap<>();
-	private Map<MyGraphNode, MyGraphNode> parentMap = new HashMap<>();
+	private Map<T, Integer> rankMap = new HashMap<>();
+	private Map<T, T> parentMap = new HashMap<>();
 	
 	
-	public void makeSet(MyGraphNode n) {
+	public void makeSet(T n) {
 		if (!parentMap.containsKey(n)) {
 			parentMap.put(n, n);
 			rankMap.put(n, 0);
@@ -30,8 +30,8 @@ public class MyUnionFind {
 	/**
 	 * Find 操作跟随指定查询节点 n 的父指针链，直到到达根元素。这个根元素表示 n 所属的集合，并且可能是 n 本身。Find 返回它到达的根元素
 	 */
-	public MyGraphNode find(MyGraphNode n) {
-		//路径压缩 访问到根节点的每个节点可以直接附加到根节点使得到的树更加扁平化，不仅加快了未来对这些元素的操作，而且加快了直接或间接引用这些元素的操作。
+	public T find(T n) {
+		//路径压缩 访问到根节点的过程中遇到的每个节点可以直接附加到根节点使得到的树更加扁平化，不仅加快了未来对这些元素的操作，而且加快了直接或间接引用这些元素的操作。
 		//n的父节点不是根节点继续向上找到根节点  n直接附加到根节点
 		if (parentMap.get(n) != n) {
 			parentMap.put(n, find(parentMap.get(n)));
@@ -42,9 +42,9 @@ public class MyUnionFind {
 	/**
 	 * 如果根的级别不同，那么较大级别的树成为父树，而 n1 和 n2 的级别不变。如果级别相同，那么任何一个都可以成为父级，但是新父级的级别增加了一级
 	 */
-	public void union(MyGraphNode n1, MyGraphNode n2) {
-		MyGraphNode p1 = find(n1);
-		MyGraphNode p2 = find(n2);
+	public void union(T n1, T n2) {
+		T p1 = find(n1);
+		T p2 = find(n2);
 		if (p1 == p2) {
 			//同根
 			return;
@@ -62,5 +62,4 @@ public class MyUnionFind {
 			parentMap.put(p2, p1);
 		}
 	}
-	
 }

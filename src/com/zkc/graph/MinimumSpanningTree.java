@@ -27,7 +27,7 @@ public class MinimumSpanningTree {
 		if (graph == null) {
 			return null;
 		}
-		MyUnionFind unionFind = new MyUnionFind();
+		MyUnionFind<MyGraphNode> unionFind = new MyUnionFind<>();
 		graph.nodes.values().forEach(unionFind::makeSet);
 		List<MyGraphEdge> edges = new ArrayList<>(graph.edges);
 		edges.sort(Comparator.comparing(e -> e.weight));
