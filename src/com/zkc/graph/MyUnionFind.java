@@ -29,8 +29,12 @@ public class MyUnionFind<T> {
 	
 	/**
 	 * Find 操作跟随指定查询节点 n 的父指针链，直到到达根元素。这个根元素表示 n 所属的集合，并且可能是 n 本身。Find 返回它到达的根元素
+	 * 前提所有操作的节点已经添加到map中
 	 */
 	public T find(T n) {
+		if (!parentMap.containsKey(n)) {
+			return null;
+		}
 		//路径压缩 访问到根节点的过程中遇到的每个节点可以直接附加到根节点使得到的树更加扁平化，不仅加快了未来对这些元素的操作，而且加快了直接或间接引用这些元素的操作。
 		//n的父节点不是根节点继续向上找到根节点  n直接附加到根节点
 		if (parentMap.get(n) != n) {
@@ -41,8 +45,12 @@ public class MyUnionFind<T> {
 	
 	/**
 	 * 如果根的级别不同，那么较大级别的树成为父树，而 n1 和 n2 的级别不变。如果级别相同，那么任何一个都可以成为父级，但是新父级的级别增加了一级
+	 * 前提所有操作的节点已经添加到map中
 	 */
 	public void union(T n1, T n2) {
+		if (!parentMap.containsKey(n1) || !parentMap.containsKey(n2)) {
+			return;
+		}
 		T p1 = find(n1);
 		T p2 = find(n2);
 		if (p1 == p2) {
