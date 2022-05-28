@@ -32,20 +32,33 @@ public class MaxAreaOfIsland {
 			for (int j = 0; j < colLen; j++) {
 				bfs(i, j, rowLen, colLen, table);
 				if (curMax > max) {
+					//记录最大值
 					max = curMax;
 				}
+				//找到岛或没有找到 均重置 
 				curMax = 0;
 			}
 		}
 		return max;
 	}
 	
+	/**
+	 * @param rowIdx 当前单元格行索引
+	 * @param colIdx 当前单元格列索引
+	 * @param rowLen 二维数组总行数
+	 * @param colLen 二维数组总列数
+	 * @param table  二维数组
+	 */
 	private static void bfs(int rowIdx, int colIdx, int rowLen, int colLen, int[][] table) {
+		//是否越界  当前单元格是否为1
 		if (rowIdx < 0 || rowIdx >= rowLen || colIdx < 0 || colIdx >= colLen || table[rowIdx][colIdx] != 1) {
 			return;
 		}
+		//找到一个1计数
 		curMax++;
+		//修改数据源  当前位置改为非1 标识已经检查过 后续再遍历到该单元格会跳过
 		table[rowIdx][colIdx] = 0;
+		//继续向当前单元格相邻的上右下左四个方向去遍历
 		bfs(rowIdx - 1, colIdx, rowLen, colLen, table);
 		bfs(rowIdx, colIdx + 1, rowLen, colLen, table);
 		bfs(rowIdx + 1, colIdx, rowLen, colLen, table);
