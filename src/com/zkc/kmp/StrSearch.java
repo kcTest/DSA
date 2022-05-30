@@ -1,22 +1,15 @@
 package com.zkc.kmp;
 
-import javafx.geometry.Pos;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Knuth-Morris-Pratt 字符串搜索算法(或 KMP 算法)在字符串s中找到与字符串w匹配的起始索引m。
- * O(N) n为字符串s的长度
  */
 public class StrSearch {
 	
 	public static void main(String[] args) {
-		String s = "ABC ABCDAB ABCDABCDABDE ABCDABD A ABACABABC ";
+		String s = "ABC ABCDAB  ABACABABC ABCDABCDABDE ABACABABA PARTICIPATE IN PARACHUTEPARTICIPATE IN PARACHUTE ABCDABD  ";
+		String w = "ABC";
 //		String w = "ABCDABD";
-		String w = "ABACABABC";
-//		String w = "ABACABAAC";
+//		String w = "ABACABABC";
 //		String w = "ABACABABA";
 //		String w = "PARTICIPATE IN PARACHUTE";
 		int[] ret = kmpSearch(s, w);
@@ -85,8 +78,6 @@ public class StrSearch {
 	 * i=1时 B之前只存在前缀A 不存在两个匹配的前缀和后缀 填写0
 	 * i=2时 C之前存在前缀A和后缀B 但是不等 填0
 	 * 。
-	 * i=4时 A之前不存在两个匹配的前缀和后缀 因为当前字符与起始字符A一样 如果填写0 从W[0]开始与S[i]对比仍然不一致，S[i]需要增加来到下一位继续再与W[0]对比。
-	 * 这一步可以设置T[i]为-1而不是0 省一步不必要的对比，可以直接来到S[i+1]与W[0]对比。
 	 * <p>
 	 * i	0	1	2	3	4	5	6	7
 	 * W[i]	A	B	C	D	A	B	D
@@ -107,6 +98,8 @@ public class StrSearch {
 	 * W[i]	P	A	R	T	I	C	I	P	A	T	E		I	N		P	A	R	A	C	H	U	T	E
 	 * T[i]	-1	0	0	0	0	0	0	-1	0	2	0	0	0	0	0	-1	0	0	3	0	0	0	0	0	0
 	 * <p>==========================
+	 * <p>
+	 * O(N)  n为字符串s的长度
 	 *
 	 * @param s 字符数组 要搜索的文本
 	 * @param w 字符数组 要寻找的单词
@@ -127,6 +120,7 @@ public class StrSearch {
 		//W匹配的次数
 		int nP = 0;
 		while (j < S.length) {
+			//相等同时移动指针
 			if (S[j] == W[k]) {
 				j++;
 				k++;
@@ -137,12 +131,12 @@ public class StrSearch {
 					k = T[k];
 				}
 			} else {
-				//从W的起始位置对比 S跳到下一个 
+				//如果W的0位置已经不相同  S从当前字符直接跳到下一个 再与W0位置开始对比
 				if (T[k] == -1) {
 					j++;
 					k = 0;
 				} else {
-					//跳到W前位置的备选回溯位置再进行对比  S中的字符不变
+					//跳到W前位置的备选回溯位置再进行对比  S中的当前对比字符不变 通过T可以减少不必要的对比 提高时间
 					k = T[k];
 				}
 			}
@@ -151,28 +145,37 @@ public class StrSearch {
 		return P;
 	}
 	
+	/**
+	 * O(m)
+	 */
 	private static int[] getKmpTable(char[] W) {
-		
+		//存放W中每个字符的候选对比位置 也是当前字符之前存在的匹配的俩个前缀和后缀的长度  当S[j]与W[k]不匹配时 使用候选位置再与S[j]对比
+		//长度加一 当S中能够找到W俩次及以上时会用到  当W第一次匹配完成后借助最后一个设置的候选位置继续寻找下一个
 		int[] T = new int[W.length + 1];
-		//T中当前位置
-		int pos = 1;
-		//W中当前位置的子字符串候选的对比回溯位置 也为当前字符之前存在的匹配的前缀和后缀的最大长度 从0开始
-		int cnd = 0;
+		//0位置之前没有字符  直接设置-1 对比不匹配时移动到S[++j]
 		T[0] = -1;
-		while (pos < W.length) {
-			if (W[pos] == W[cnd]) {
-				T[pos] = T[cnd];
+		//1位置之前只有一个字符 找不到俩个匹配的前缀和后缀 长度为0  对比不匹配的时移动到W[0]从W头部开始与S[j]对比
+		T[1] = 0;
+		//代表W中当前字符的前一个字符的候选位置T[pos-1]
+		int cnd = 0;
+		//直接从2开始
+		int pos = 2;
+		while (pos < T.length) {
+			//当前字符的前一个字符是否等于其候选位置字符  如果相等 当前字符的候选位置增加 相当于前缀和后缀的长度分别扩大
+			//abxabc c的前一个字符为b b的候选位置为1 此时b等于1位置 所有c的候选位置为2 
+			if (W[pos - 1] == W[cnd]) {
+				T[pos++] = ++cnd;
 			} else {
-				T[pos] = cnd;
-				//
-				while (cnd >= 0 && W[pos] != W[cnd]) {
+				//adxabc  c的前一个字符为b b的候选位置为1 此时b不等于1位置的d 所以将对比位置从1改为d的候选位置,下次就可以让b与d的候选位置继续比较
+				//如果还不相等继续取候选位置的候选位置
+				if (cnd > 0) {
 					cnd = T[cnd];
+				} else {
+					//如果对比位置的候选位置不大于0  不能再继续往前取0位置的候选位置 没有找到前缀和后缀 当前位置设置为0
+					T[pos++] = 0;
 				}
 			}
-			pos++;
-			cnd++;
 		}
-		T[pos] = cnd;
 		return T;
 	}
 	
