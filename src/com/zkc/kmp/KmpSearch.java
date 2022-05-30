@@ -3,7 +3,7 @@ package com.zkc.kmp;
 /**
  * Knuth-Morris-Pratt 字符串搜索算法(或 KMP 算法)在字符串s中找到与字符串w匹配的起始索引m。
  */
-public class StrSearch {
+public class KmpSearch {
 	
 	public static void main(String[] args) {
 		String s = "ABC ABCDAB  ABACABABC ABCDABCDABDE ABACABABA PARTICIPATE IN PARACHUTEPARTICIPATE IN PARACHUTE ABCDABD  ";
