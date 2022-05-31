@@ -1,4 +1,4 @@
-package com.zkc.kmp;
+package com.zkc.subString;
 
 /**
  * Knuth-Morris-Pratt 字符串搜索算法(或 KMP 算法)在字符串s中找到与字符串w匹配的起始索引m。
