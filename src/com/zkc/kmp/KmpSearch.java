@@ -7,8 +7,8 @@ public class KmpSearch {
 	
 	public static void main(String[] args) {
 		String s = "ABC ABCDAB  ABACABABC ABCDABCDABDE ABACABABA PARTICIPATE IN PARACHUTEPARTICIPATE IN PARACHUTE ABCDABD  ";
-		String w = "ABC";
-//		String w = "ABCDABD";
+//		String w = "ABC";
+		String w = "ABCDABD";
 //		String w = "ABACABABC";
 //		String w = "ABACABABA";
 //		String w = "PARTICIPATE IN PARACHUTE";
@@ -89,6 +89,9 @@ public class KmpSearch {
 	 * @return 一个整数数组 P (在S中找到W的位置) 长度为出现的次数
 	 */
 	private static int[] kmpSearch(String s, String w) {
+		if (s == null || s.length() == 0 || w == null || w.length() == 0 || w.length() > s.length()) {
+			return new int[0];
+		}
 		char[] S = s.toCharArray();
 		char[] W = w.toCharArray();
 		//当前选取字符在S中的位置
@@ -132,14 +135,14 @@ public class KmpSearch {
 	 * O(m)
 	 */
 	private static int[] getKmpTable(char[] W) {
-		//存放W中每个字符的候选对比位置 也是当前字符之前存在的匹配的俩个前缀和后缀的长度  当S[j]与W[k]不匹配时 使用候选位置再与S[j]对比
+		//存放W中每个字符的候选对比位置 也是当前字符之前能找到的前缀的下一个位置 也是当前字符之前存在的匹配的俩个前缀和后缀的长度  当S[j]与W[k]不匹配时 使用候选位置再与S[j]对比
 		//长度加一 当S中能够找到W俩次及以上时会用到  当W第一次匹配完成后借助最后一个设置的候选位置继续寻找下一个
 		int[] T = new int[W.length + 1];
 		//0位置之前没有字符  直接设置-1 对比不匹配时移动到S[++j]
 		T[0] = -1;
 		//1位置之前只有一个字符 找不到俩个匹配的前缀和后缀 长度为0  对比不匹配的时移动到W[0]从W头部开始与S[j]对比
 		T[1] = 0;
-		//代表W中当前字符的前一个字符的候选位置T[pos-1]
+		//代表W中当前字符的前一个字符的候选位置T[pos-1]或不断向前能够找到的候选位置的候选位置
 		int cnd = 0;
 		//直接从2开始
 		int pos = 2;
@@ -161,5 +164,4 @@ public class KmpSearch {
 		}
 		return T;
 	}
-	
 }
