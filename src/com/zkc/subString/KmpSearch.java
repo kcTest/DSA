@@ -148,7 +148,7 @@ public class KmpSearch {
 		int pos = 2;
 		while (pos < T.length) {
 			//当前字符的前一个字符是否等于其候选位置字符  如果相等 当前字符的候选位置增加 相当于前缀和后缀的长度分别扩大
-			//abxabc c的前一个字符为b b的候选位置为1 此时b等于1位置 所有c的候选位置为2 
+			//abxabc c的前一个字符为b b的候选位置为1 此时b等于1位置 所以c的候选位置为2 
 			if (W[pos - 1] == W[cnd]) {
 				T[pos++] = ++cnd;
 			} else {
