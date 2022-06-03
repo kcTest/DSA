@@ -1,4 +1,4 @@
-package com.zkc.linkedList.doubleLinkedList;
+package com.zkc.MononicQueue;
 
 import com.zkc.utils.MyUtils;
 
@@ -6,19 +6,16 @@ import java.util.LinkedList;
 
 /**
  * 给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
- * 使用double ended queue
+ * 使用 double ended Queue
  */
 public class MaxSlidingWindow {
 	public static void main(String[] args) {
 		int[] nums = MyUtils.getArray(7, 10);
+		MyUtils.printArr(nums);
 		int w = 3;
 		int[] ret = getMaxWindow(nums, w);
-		for (int num : nums) {
-			System.out.printf("%d, ", num);
-		}
-		System.out.println();
 		for (int j : ret) {
-			System.out.printf("%d, ", j);
+			System.out.printf("%d,", j);
 		}
 	}
 	
