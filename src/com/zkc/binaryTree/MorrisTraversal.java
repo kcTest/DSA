@@ -5,9 +5,10 @@ import com.zkc.utils.MyUtils;
 public class MorrisTraversal {
 	
 	public static void main(String[] args) {
-		MyUtils.BTDS ret = MyUtils.getCompleteBinaryTree(12, 20);
+		MyUtils.BTDS ret = MyUtils.getBinaryTree(7, 30);
 		MyUtils.printNodes(ret.nodes);
 		MyTreeNode head = ret.head;
+//		MyTreeNode head = MyUtils.arrayToTreeNode(new Integer[]{15, 8, 20,null, 10, 18, null});
 		System.out.println("Morris:");
 		morris(head);
 		System.out.println("\nPreOrder:");
@@ -16,6 +17,7 @@ public class MorrisTraversal {
 		inOrder(head);
 		System.out.println("\nPostOrder:");
 		postOrder(head);
+		System.out.printf("\nisBST:%s", isBST(head));
 	}
 	
 	/**
@@ -89,7 +91,7 @@ public class MorrisTraversal {
 	}
 	
 	/**
-	 * morris的遍历顺序中 被cur指向2次的节点只在第一次打印
+	 * morris的遍历顺序中 被cur指向2次的节点只在第二次打印
 	 */
 	private static void inOrder(MyTreeNode head) {
 		if (head == null) {
@@ -107,7 +109,7 @@ public class MorrisTraversal {
 					rightMost.right = cur;
 					cur = cur.left;
 				} else if (rightMost.right == cur) {
-					System.out.printf("%d,", rightMost.right.val);
+					System.out.printf("%d,", cur.val);
 					rightMost.right = null;
 					cur = cur.right;
 				}
@@ -170,5 +172,47 @@ public class MorrisTraversal {
 				print = true;
 			}
 		}
+	}
+	
+	
+	/**
+	 * morris的遍历顺序中 被cur指向2次的节点只在第二次比较
+	 */
+	private static boolean isBST(MyTreeNode head) {
+		if (head == null) {
+			return true;
+		}
+		MyTreeNode cur = head;
+		MyTreeNode rightMost;
+		int prev = Integer.MIN_VALUE;
+		while (cur != null) {
+			if (cur.left != null) {
+				rightMost = cur.left;
+				while (rightMost.right != null && rightMost.right != cur) {
+					rightMost = rightMost.right;
+				}
+				if (rightMost.right == null) {
+					rightMost.right = cur;
+					cur = cur.left;
+				} else if (rightMost.right == cur) {
+					if (cur.val <= prev) {
+						return false;
+					} else {
+						prev = cur.val;
+					}
+					rightMost.right = null;
+					cur = cur.right;
+				}
+			} else {
+				if (cur.val <= prev) {
+					return false;
+				} else {
+					prev = cur.val;
+				}
+				cur = cur.right;
+			}
+		}
+		
+		return true;
 	}
 }

@@ -2,8 +2,6 @@ package com.zkc.binaryTree;
 
 import com.zkc.utils.MyUtils;
 
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.List;
 
