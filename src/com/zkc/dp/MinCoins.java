@@ -2,17 +2,55 @@ package com.zkc.dp;
 
 import com.zkc.utils.MyUtils;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class MinCoins {
 	public static void main(String[] args) {
 		int[] coins = MyUtils.getArray(7, 15, true);
+//		int[] coins = new int[]{6, 4, 14, 11, 9, 2, 13};
 		MyUtils.printArr(coins);
 		int sum = (int) (Math.random() * 40) + 1;
+//		int sum = 35;
 		System.out.printf("combination:%d\n", sum);
 		System.out.println(minCoins1(coins, sum));
 		System.out.println(minCoins2(coins, sum));
 		System.out.println(minCoins3(coins, sum));
+		System.out.println(minCoins4(coins, sum));
+	}
+	
+	private static int minCoins4(int[] coins, int sum) {
+		//行索引代表当前来到coins数组的位置  列索引代表剩余可选的硬币值
+		int[][] record = new int[coins.length + 1][sum + 1];
+		//第一列剩余可选硬币值为0  为0时不选择硬币 直接全默认为0
+		//record.length - 1已经遍历完数组 还没有找到可以组成目标值的硬币 不能继续  最后一行直接设置无效
+		for (int j = 1; j < record[0].length; j++) {
+			record[record.length - 1][j] = -1;
+		}
+		//从倒数第二行第一列(从下到上 从左向右设置依赖，不能直接从上开始 下面的依赖还未设置好) 直到第一行
+		for (int j = 1; j < record[0].length; j++) {
+			for (int i = record.length - 2; i >= 0; i--) {
+				//每个单元格依赖左边select 和 下一行的 deselect
+				//不选择 剩余可选硬币值不变 跳到下一位
+				int deselect = record[i + 1][j];
+				//选择当前硬币 减去当前位置硬币的硬币值  可选值减少后再跳到下一位 列减少越界说明
+				//将上次遇到的硬币统计在内时 累积总值已经大于目标总值  不能继续选 路径无效   如2 5 4 选3来到4  3-2-5 
+				int select = (j - coins[i] > -1 ? record[i + 1][j - coins[i]] : -1);
+				if (deselect == -1 && select == -1) {
+					record[i][j] = -1;
+				} else if (deselect == -1) {
+					//当前硬币值被选择  后续的选择正好用完rest 有效路径 硬币值加1 
+					record[i][j] = select + 1;
+				} else if (select == -1) {
+					//不选当前硬币 即使后面最终有效  不需要将当前硬币统计在内
+					record[i][j] = deselect;
+				} else {
+					//取最小硬币值
+					record[i][j] = Math.min(deselect, 1 + select);
+				}
+			}
+		}
+		//当前所求结果idx为从0开始rest为sum的单元格的结果
+		return record[0][sum];
 	}
 	
 	private static int minCoins3(int[] coins, int sum) {
