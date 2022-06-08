@@ -25,6 +25,29 @@ public class MyUtils {
 		return ret;
 	}
 	
+	public static int[] getArray(int length, int bound, boolean removeZero) {
+		if (length < 2) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		int[] ret = new int[length];
+		for (int i = 0; i < length; i++) {
+			if (removeZero) {
+				ret[i] = (int) (Math.random() * bound);
+				while (ret[i] == 0) {
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					ret[i] = (int) (Math.random() * bound);
+				}
+			} else {
+				ret[i] = (int) (Math.random() * bound);
+			}
+		}
+		return ret;
+	}
+	
 	public static void printArr(int[] arr) {
 		if (arr == null) {
 			throw new IllegalArgumentException("Illegal Argument");
