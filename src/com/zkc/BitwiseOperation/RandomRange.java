@@ -47,5 +47,4 @@ public class RandomRange {
 		return (int) (Math.random() * 5) + 1;
 	}
 	
-	
 }
