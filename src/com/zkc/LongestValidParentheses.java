@@ -16,30 +16,20 @@ public class LongestValidParentheses {
 		char[] arr = s.toCharArray();
 		LinkedList<Integer> queue = new LinkedList<>();
 		for (int i = 0; i < arr.length; i++) {
-			if (arr[i] == ')') {
-				if (queue.size() > 0 && arr[queue.getLast()] == '(') {
-					queue.removeLast();
-				} else {
-					queue.addLast(i);
-				}
+			if (arr[i] == ')' && queue.size() > 0 && arr[queue.getLast()] == '(') {
+				queue.removeLast();
 			} else {
 				queue.addLast(i);
 			}
 		}
 		int start = -1;
-		int end = 0;
 		while (queue.size() > 0) {
-			int idx = queue.removeFirst();
-			end = idx;
-			if (end - start > 1 && end - start - 1 > max) {
-				max = end - start - 1;
-			}
+			int idx = queue.remove(0);
+			max = Math.max(idx - start - 1, max);
 			start = idx;
 		}
-		if (start <= arr.length - 2) {
-			if (arr.length - 1 - start > max) {
-				max = arr.length - 1 - start;
-			}
+		if (arr.length - 1 - start > max) {
+			max = arr.length - 1 - start;
 		}
 		return max;
 	}
