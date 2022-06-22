@@ -2,6 +2,9 @@ package com.zkc;
 
 import java.util.LinkedList;
 
+/**
+ * 给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+ */
 public class LongestValidParentheses {
 	public static void main(String[] args) {
 		String s = "()(((()))))";
@@ -11,6 +14,10 @@ public class LongestValidParentheses {
 		System.out.println(longestValidParentheses(s));
 	}
 	
+	/**
+	 * 遇到右括号 检查之前的位置是否是左括号 如果是消除
+	 * 最后未消除的括号之间的最大距离为序列的最大深度
+	 */
 	private static int longestValidParentheses(String s) {
 		int max = 0;
 		char[] arr = s.toCharArray();
