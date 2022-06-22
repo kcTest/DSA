@@ -2,7 +2,6 @@ package com.zkc;
 
 import com.zkc.utils.MyUtils;
 
-import java.net.IDN;
 import java.util.*;
 
 public class MatchSticksMakeSquare {
@@ -27,6 +26,7 @@ public class MatchSticksMakeSquare {
 		for (int matchstick : matchsticks) {
 			total += matchstick;
 		}
+		//逆序  先选较长的火柴填充  尽量降低火柴的可选范围
 		for (int i = 0, j = matchsticks.length - 1; i < j; i++, j--) {
 			int temp = matchsticks[i];
 			matchsticks[i] = matchsticks[j];
