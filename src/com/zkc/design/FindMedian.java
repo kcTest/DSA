@@ -1,4 +1,4 @@
-package com.zkc;
+package com.zkc.design;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;

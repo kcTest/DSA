@@ -55,13 +55,14 @@ public class CoinChange {
 				int backStep = 1;
 				//默认跳到头
 				while (j - coins[i] * backStep >= 0) {
-					//上一行该位置的值如果大于0  往前跳的步数不能大于这个值 此时可以停止 否则再往前跳所需个数会越来越大
+					//上一行该位置的值a3如果大于0（该值为使用a1 a2 a3凑成overHeadVal需要的最少硬币个数） 往前跳的步数不能大于这个值 如果大于可以停止 
+					// 否则再往前跳所需个数会越来越大  加上backwardVal至少会大于上一行最小值
 					if (overHeadVal > 0 && backStep > overHeadVal) {
 						break;
 					}
 					//回跳位置
 					int backwardIdx = j - coins[i] * backStep;
-					//回跳位置的值
+					//回跳位置的值 在上一行往回检查
 					int backwardVal = records[i - 1][backwardIdx];
 					//遇到遇到非负的值 用当前值加上步数为一种可能的组合 
 					if (backwardVal >= 0) {

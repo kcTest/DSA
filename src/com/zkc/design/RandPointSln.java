@@ -1,4 +1,4 @@
-package com.zkc;
+package com.zkc.design;
 
 /**
  * 实现函数 randPoint ，在圆中产生均匀随机点。
@@ -17,7 +17,7 @@ public class RandPointSln {
 		System.out.printf("\nr=%f,r1=%f", radius, Math.sqrt(Math.pow(point[0] - x_center, 2) + Math.pow(point[1] - y_center, 2)));
 	}
 	
-	public static class Solution {
+	private static class Solution {
 		
 		private final double radius;
 		private final double x_center;
