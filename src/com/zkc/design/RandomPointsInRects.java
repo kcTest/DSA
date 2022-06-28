@@ -1,9 +1,7 @@
 package com.zkc.design;
 
-import javax.swing.tree.TreeNode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * 设计一个算法来随机挑选一个被某一矩形覆盖的整数点。矩形周长上的点也算做是被矩形覆盖。所有满足要求的点必须等概率被返回
