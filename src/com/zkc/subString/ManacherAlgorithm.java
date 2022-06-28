@@ -120,7 +120,7 @@ public class ManacherAlgorithm {
 						maxR = curR;
 					}
 				} else if (leftBoundary > mirroredLeftBoundary) {
-					//左侧对称回文串的左边界超出最大左边界 i的回文半径为右边界到i的长度 不会超出
+					//左侧对称回文串的左边界超出最大左边界 i的回文半径为右边界到i的长度（或最大左边界到左侧对称i的长度） 不会超出
 					radiiRecord[i] = (maxC + (maxR - 1) - i) + 1;
 				}
 			}
