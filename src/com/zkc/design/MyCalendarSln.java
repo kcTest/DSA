@@ -30,7 +30,7 @@ public class MyCalendarSln {
 	 * 求最大重叠层数k
 	 * 当前线段与其余线段重叠的线段 作为新的线段与链表中之前的线段再去判断是否重叠 一直递归到0层 0位置 取过程中能获取的最大重叠层数返回  
 	 * 用record记录已经判断过的线段及当前位置
-	 *  从尾部添加新的日程  当前重叠次数依赖
+	 *  从尾部添加新的日程  当前重叠次数依赖下一层
 	 */
 	private static class MyCalendarThree {
 		int max = 1;
