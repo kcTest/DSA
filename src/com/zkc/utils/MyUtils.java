@@ -15,17 +15,14 @@ import java.util.*;
 public class MyUtils {
 	
 	public static int[] getArray(int length, int bound) {
-		if (length < 2) {
-			throw new IllegalArgumentException("Illegal Argument");
-		}
-		int[] ret = new int[length];
-		for (int i = 0; i < length; i++) {
-			ret[i] = (int) (Math.random() * bound);
-		}
-		return ret;
+		return getArray(length, bound, false, false);
 	}
 	
 	public static int[] getArray(int length, int bound, boolean removeZero) {
+		return getArray(length, bound, removeZero, false);
+	}
+	
+	public static int[] getArray(int length, int bound, boolean removeZero, boolean negative) {
 		if (length < 2) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
@@ -43,6 +40,11 @@ public class MyUtils {
 				}
 			} else {
 				ret[i] = (int) (Math.random() * bound);
+				if (negative) {
+					if ((System.currentTimeMillis() * i & 5) == 0) {
+						ret[i] = -ret[i];
+					}
+				}
 			}
 		}
 		return ret;
