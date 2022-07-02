@@ -1,4 +1,4 @@
-package com.zkc.BitwiseOperation;
+package com.zkc.design;
 
 public class PowAb {
 	public static void main(String[] args) {
