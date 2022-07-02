@@ -8,8 +8,14 @@ import com.zkc.utils.MyUtils;
 public class MaxSum {
 	public static void main(String[] args) {
 		int[] arr = MyUtils.getArray(6, 10, false, true);
+//		int[] arr = new int[]{-4, 9, -8, 9, 3, 7};
 		MyUtils.printArr(arr);
-		System.out.println(maxSum(arr));
+		for (int i = 0; i < 10000; i++) {
+			if (maxSum(arr) != maxSum2(arr)) {
+				System.out.println("error");
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -32,6 +38,28 @@ public class MaxSum {
 			maxSum = Math.max(maxSum, preSum);
 		}
 		return maxSum;
+	}
+	
+	private static int maxSum2(int[] arr) {
+		int max = arr[0];
+		int neg = Math.min(arr[0], 0);
+		int pos = Math.max(arr[0], 0);
+		int temp = arr[0];
+		for (int i = 1; i < arr.length; i++) {
+			if (neg + pos < 0) {
+				neg = 0;
+				pos = 0;
+				temp = 0;
+			}
+			if (arr[i] >= 0) {
+				pos += arr[i];
+			} else {
+				neg += arr[i];
+			}
+			temp += arr[i];
+			max = Math.max(max, temp);
+		}
+		return max;
 	}
 	
 }
