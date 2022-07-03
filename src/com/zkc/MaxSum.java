@@ -26,7 +26,7 @@ public class MaxSum {
 	 * <p>  如果小于0 与当前位置元素值相加会使最大累加和比当前位置值还小  不再相加   把当前位置的元素值作为当前位置求得的最大累加和 连续元素中断 从当前位置重新开始判断
 	 * 每次处理完成一个位置  把当前位置求得的最大累加和与已记录的最大值作比较
 	 */
-	private static int maxSum(int[] arr) {
+	private static int maxSum2(int[] arr) {
 		int preSum = arr[0];
 		int maxSum = arr[0];
 		for (int i = 1; i < arr.length; i++) {
@@ -40,7 +40,7 @@ public class MaxSum {
 		return maxSum;
 	}
 	
-	private static int maxSum2(int[] arr) {
+	private static int maxSum(int[] arr) {
 		int max = arr[0];
 		int neg = Math.min(arr[0], 0);
 		int pos = Math.max(arr[0], 0);
@@ -61,5 +61,4 @@ public class MaxSum {
 		}
 		return max;
 	}
-	
 }
