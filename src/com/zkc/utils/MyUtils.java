@@ -905,4 +905,12 @@ public class MyUtils {
 		return sbNewStr;
 	}
 	
+	public static String getAZString(int length) {
+		char[] arr = new char[(int) (Math.random() * length) + 1];
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = (char) ((int) (Math.random() * 26) + 'a');
+		}
+		return String.valueOf(arr);
+	}
+	
 }
