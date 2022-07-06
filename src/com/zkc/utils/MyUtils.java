@@ -913,4 +913,17 @@ public class MyUtils {
 		return String.valueOf(arr);
 	}
 	
+	public static int[][] get2DArray(int row, int col, int bound) {
+		if (col < 2) {
+			throw new IllegalArgumentException("Illegal Argument");
+		}
+		int[][] ret = new int[row][col];
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				ret[i][j] = (int) (Math.random() * bound)+1;
+			}
+		}
+		return ret;
+	}
+	
 }
