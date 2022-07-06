@@ -46,12 +46,14 @@ public class Str01Split {
 					record.put(numerator, new HashMap<>());
 				}
 				HashMap<Integer, Integer> numeratorMap = record.get(numerator);
+				int count = 1;
 				if (!numeratorMap.containsKey(denominator)) {
-					numeratorMap.put(denominator, 1);
+					numeratorMap.put(denominator, count);
 				} else {
-					numeratorMap.put(denominator, numeratorMap.get(denominator) + 1);
+					count = numeratorMap.get(denominator) + 1;
+					numeratorMap.put(denominator, count);
 				}
-				ret[i] = numeratorMap.get(denominator);
+				ret[i] = count;
 			}
 		}
 		return ret;
