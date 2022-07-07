@@ -1,4 +1,4 @@
-package com.zkc;
+package com.zkc.subString;
 
 import java.util.Stack;
 
@@ -35,10 +35,12 @@ public class CalExpression {
 					checkAndPush(stack, curVal);
 				}
 				if (c == '(') {
+					//获取括号内的值
 					int[] temp = getExpressionVal(charArr, i + 1);
 					i = temp[1];
 					checkAndPush(stack, temp[0]);
 				} else if (c == ')') {
+					//右括号结算
 					return new int[]{computeStack(stack), i};
 				} else {
 					stack.push(String.valueOf(c));
@@ -50,6 +52,7 @@ public class CalExpression {
 		if (getVal) {
 			checkAndPush(stack, curVal);
 		}
+		//终止位置结算
 		return new int[]{computeStack(stack), charArr.length - 1};
 	}
 	
