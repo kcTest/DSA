@@ -8,11 +8,10 @@ package com.zkc.dp;
 public class StoneGameIv {
 	
 	public static void main(String[] args) {
-//		int x = (int) (Math.random() * 100) + 1;
-		int x = 25;
+		int x = (int) (Math.random() * 100) + 1;
 		System.out.println(x);
-		System.out.println(win(x));
 		System.out.println(win2(x));
+		System.out.println(win(x));
 	}
 	
 	/**
@@ -22,7 +21,7 @@ public class StoneGameIv {
 		boolean[] record = new boolean[x + 1];
 		for (int rest = 1; rest <= x; rest++) {
 			for (int base = 1; base * base <= rest; base++) {
-				if (!win2(rest - base * base)) {
+				if (!record[rest - base * base]) {
 					record[rest] = true;
 					break;
 				}
