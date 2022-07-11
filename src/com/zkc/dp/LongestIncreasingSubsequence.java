@@ -34,9 +34,6 @@ public class LongestIncreasingSubsequence {
 	 */
 	private static int lengthOfLIS(int[] arr) {
 		int n = arr.length;
-		if (n == 1) {
-			return 1;
-		}
 		int[] record = new int[n];
 		int[] ends = new int[n];
 		//record[i]表示i位置及之前能够找到的最长递增子序列的长度.
