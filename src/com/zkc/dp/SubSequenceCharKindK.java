@@ -69,11 +69,13 @@ public class SubSequenceCharKindK {
 	}
 	
 	private static int sln(int[] arr, int i, int restKind) {
+		if (restKind == 0) {
+			return 1;
+		}
 		if (i == arr.length) {
 			//所有位置遍历完成 来到末尾 如果还有要选的  说明当前路线下无法选出  
-			return restKind == 0 ? 1 : 0;
+			return 0;
 		}
-		
 		//当前字符不选的路线 种类不变
 		int unselect = sln(arr, i + 1, restKind);
 		int select = 0;
