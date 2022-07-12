@@ -54,6 +54,10 @@ public class MyUtils {
 		if (arr == null) {
 			throw new IllegalArgumentException("Illegal Argument");
 		}
+		if (arr.length == 0) {
+			System.out.println("[]");
+			return;
+		}
 		StringBuilder sb = new StringBuilder();
 		for (int j : arr) {
 			sb.append(j).append(",");
