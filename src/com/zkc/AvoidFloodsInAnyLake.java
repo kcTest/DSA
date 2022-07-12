@@ -35,29 +35,20 @@ public class AvoidFloodsInAnyLake {
 	 * 如果遇到某号x湖泊下雨超过俩次 查看有没有可用的抽水次数 如果有对该号湖泊抽水 ans[i]=x; 如果无法抽水该号湖泊遇到洪水返回空数组。
 	 */
 	private static int[] avoidFlood(int[] rains) {
-		//第i号湖泊在哪天下雨
-		Map<Integer, List<Integer>> lakeRainDayIdx = new HashMap<>();
+		//第i号湖泊在第一次下雨的天数  遇到洪水能被抽干后不再考虑 更新为下一次下雨的天数
+		Map<Integer, Integer> lakeRainDayIdx = new HashMap<>();
 		//哪天是晴天
 		List<Integer> sunnyDayIdx = new ArrayList<>();
-		int[] ans = new int[ rains.length];
-		for (int i = 0; i <  rains.length; i++) {
+		int[] ans = new int[rains.length];
+		for (int i = 0; i < rains.length; i++) {
 			if (rains[i] > 0) {
 				int lakeNo = rains[i];
-				if (lakeRainDayIdx.containsKey(lakeNo)) {
-					//最多存放俩个
-					lakeRainDayIdx.get(lakeNo).add(i);
-				} else {
-					List<Integer> posLst = new ArrayList<>();
-					posLst.add(i);
-					lakeRainDayIdx.put(lakeNo, posLst);
-				}
-				List<Integer> posLst = lakeRainDayIdx.get(lakeNo);
 				//下雨达到两次
-				if (posLst.size() == 2) {
+				if (lakeRainDayIdx.containsKey(lakeNo)) {
 					//晴天数量
 					if (sunnyDayIdx.size() > 0) {
 						//求大于当前湖泊第一次下雨的最左的晴天出现在第几天   有可能存在比第一次下雨的那天更早的晴天 但是不能使用 只能找后面的
-						int validSunnyDay = findDryDayPos(sunnyDayIdx, posLst.get(0));
+						int validSunnyDay = findSunnyDayIdx(sunnyDayIdx, lakeRainDayIdx.get(lakeNo));
 						//可以抵消
 						if (validSunnyDay > -1) {
 							//当前湖泊抽干后再次被装满-1 
@@ -65,7 +56,6 @@ public class AvoidFloodsInAnyLake {
 							//用来抵消的晴天位置设置为当前湖泊的序号
 							ans[validSunnyDay] = lakeNo;
 							//耗掉一个晴天 当前湖泊第一次下雨的那天不需要再考虑
-							lakeRainDayIdx.get(lakeNo).remove(0);
 						} else {
 							//无法抽水 遇到洪水
 							return new int[]{};
@@ -78,6 +68,7 @@ public class AvoidFloodsInAnyLake {
 					//当前湖泊被装满-1 
 					ans[i] = -1;
 				}
+				lakeRainDayIdx.put(lakeNo, i);
 			} else {
 				sunnyDayIdx.add(i);
 			}
@@ -88,13 +79,13 @@ public class AvoidFloodsInAnyLake {
 		return ans;
 	}
 	
-	private static int findDryDayPos(List<Integer> dryDay, int i) {
+	private static int findSunnyDayIdx(List<Integer> dryDay, int lakeIdx) {
 		int dst = -1;
 		int left = 0;
 		int right = dryDay.size() - 1;
 		while (left <= right) {
 			int mid = left + ((right - left) >> 1);
-			if (dryDay.get(mid) > i) {
+			if (dryDay.get(mid) > lakeIdx) {
 				dst = mid;
 				right = mid - 1;
 			} else {
