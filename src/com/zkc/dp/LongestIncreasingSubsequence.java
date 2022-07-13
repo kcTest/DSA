@@ -20,7 +20,7 @@ public class LongestIncreasingSubsequence {
 	 * 可以使用数组record记录i位置及之前 能够找到的最长递增子序列.
 	 * 一.
 	 * 遍历arr 来到i位置时 在记录中遍历record的i-1之前在每个位置发现的最长递增子序列长度。
-	 * 如果某个位置k对应原始arr数组的数arr[k]比当前arr[i]要小，则record[k]+1为当前位置的record[i]的一个可选值。
+	 * 如果某个位置k对应原始arr数组的数arr[k]比当前arr[i]要小，arr[k+1]就比arr[i]要大,则record[k]+1为arr[i]作为结尾的长度,为当前位置的record[i]的一个可选值,不一定是全局最大值。
 	 * 从i-1遍历到开头 把所有符合的条件的值+1算出来取最大值作为record[i];
 	 * 所有位置的record信息设置完成后。遍历record再取最大值为最终返回结果。O(N^2)。
 	 * 二.
