@@ -39,13 +39,17 @@ public class ArithmeticSlices2 {
 		for (int i = 0; i < nums.length; i++) {
 			diffMapLst.add(new HashMap<>());
 			for (int j = i - 1; j >= 0; j--) {
-				int diff = nums[i] - nums[j];
-				int curCount = diffMapLst.get(i).getOrDefault(diff, 0);
+				long diff = (long)nums[i] - (long)nums[j];
+				if (diff > Integer.MAX_VALUE || diff <= Integer.MIN_VALUE) {
+					continue;
+				}
+				int diff2=(int)diff;
+				int curCount = diffMapLst.get(i).getOrDefault(diff2, 0);
 				//已经记录 长度至少为2  拼接当前数字结尾可以形成新的长度大于等于3的子序列 数量相同
-				int prevCount = diffMapLst.get(j).getOrDefault(diff, 0);
+				int prevCount = diffMapLst.get(j).getOrDefault(diff2, 0);
 				ans += prevCount;
 				//当前位置设置记录  数量再加上新的以j开头i结尾差值为k的长度为2的子序列数量为1
-				diffMapLst.get(i).put(diff, curCount + prevCount + 1);
+				diffMapLst.get(i).put(diff2, curCount + prevCount + 1);
 			}
 		}
 		return ans;
