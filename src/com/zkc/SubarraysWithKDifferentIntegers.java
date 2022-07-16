@@ -53,24 +53,20 @@ public class SubarraysWithKDifferentIntegers {
 	
 	private static int getCount(int[] arr, int k) {
 		int n = arr.length;
-		HashMap<Integer, Integer> map = new HashMap<>();
+		//1 <= nums[i], k <= nums.length。使用数组记录每个整数的个数
+		int[] map = new int[n + 1];
 		int i = 0, j = 0, ret = 0, kind = 0;
 		while (j < n) {
-			int jCount = map.getOrDefault(arr[j], 0);
-			if (jCount == 0) {
+			if (map[arr[j]]++ == 0) {
 				kind++;
 			}
-			map.put(arr[j], jCount + 1);
 			while (kind > k) {
 				//每次超出时结算i与j-1位置的结果 直到不再超出
 				//j停止在刚超出K的位置 每次结算时结果加j-1-i+1
 				ret += j - i;
-				int iCount = map.getOrDefault(arr[i], 0) - 1;
-				map.put(arr[i], iCount);
-				if (iCount == 0) {
+				if (--map[arr[i++]] == 0) {
 					kind--;
 				}
-				i++;
 			}
 			//如果来到末尾 i及之后的位置与j位置形成的子数组均不超过K, 剩余位置挨个结算， 每次结果加j-i+1
 			if (j == n - 1) {
