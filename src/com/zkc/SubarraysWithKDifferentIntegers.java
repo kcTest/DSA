@@ -2,9 +2,6 @@ package com.zkc;
 
 import com.zkc.utils.MyUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Given an integer array nums and an integer k, return the number of good subarrays of nums.
  * <p>

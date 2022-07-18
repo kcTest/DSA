@@ -2,6 +2,7 @@ package com.zkc.subString;
 
 import com.zkc.utils.MyUtils;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -16,14 +17,25 @@ import java.util.LinkedList;
  * 如 s=deafad,k=2  子序列为fd
  * 如 s=deaabc,k=3  子序列为ebc
  */
-public class MaxLenOfAlphabeticalOrder {
+public class MaxAlphabeticalOrderKLen {
 	public static void main(String[] args) {
-		String s = MyUtils.getAZString(11);
-		int k = (int) (Math.random() * s.length() / 2) + 1;
-//		String s = "deaabc";
+		String s = MyUtils.getAZString(20);
+		int k = (int) (Math.random() * s.length()) + 1;
+//		String s = "kgpt";
 //		int k = 3;
-		System.out.printf("s=%s; k=%d; ", s, k);
-		System.out.printf("ret=%s\n", getSubSequence(s, k));
+		System.out.printf("s=%s; k=%d\n", s, k);
+		System.out.printf("ret=%s\n", getSubsequence(s, k));
+		System.out.printf("ret=%s\n", getSubsequence2(s, k));
+//		for (int i = 0; i < 10000; i++) {
+//			String s = MyUtils.getAZString(100);
+//			int k = (int) (Math.random() * s.length()) + 1;
+//			String s1 = getSubsequence(s, k);
+//			String s2 = getSubsequence2(s, k);
+//			if (!s1.equals(s2)) {
+//				System.out.printf("s=%s; k=%d\n, s1=%s, s2=%s", s, k, s1, s2);
+//				break;
+//			}
+//		}
 	}
 	
 	/**
@@ -32,7 +44,7 @@ public class MaxLenOfAlphabeticalOrder {
 	 * 将栈中元素以从下往上的顺序和剩余元素拼接返回为最终k长度的最大字典序子序列结果。
 	 * 2.如果没有出现1的情况遍历到了结尾，栈中元素数量肯定大于k，从下往上取前k个元素拼接返回为最终k长度的最大字典序子序列结果。
 	 */
-	private static String getSubSequence(String s, int k) {
+	private static String getSubsequence(String s, int k) {
 		if (s == null || k > s.length()) {
 			return "";
 		}
@@ -63,5 +75,22 @@ public class MaxLenOfAlphabeticalOrder {
 			sb.append(deque.get(j));
 		}
 		return sb.toString();
+	}
+	
+	private static String getSubsequence2(String s, int k) {
+		if (s == null || k > s.length()) {
+			return "";
+		}
+		char[] chars = s.toCharArray();
+		int n = chars.length;
+		char[] stack = new char[n];
+		int size = 0;
+		for (int i = 0; i < chars.length; i++) {
+			while (size > 0 && chars[i] > stack[size - 1] && size + (n - i) > k) {
+				size--;
+			}
+			stack[size++] = chars[i];
+		}
+		return String.valueOf(stack, 0, k);
 	}
 }
