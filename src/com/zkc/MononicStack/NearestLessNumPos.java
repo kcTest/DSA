@@ -10,26 +10,26 @@ public class NearestLessNumPos {
 	public static void main(String[] args) {
 //		int[] arr = MyUtils.getArray(7, 20);
 //		int[] arr = new int[]{3, 2, 0, 6, 5, 0, 15};
+		// 54 54 54 41 41 41 41 44[c(4-2)=6] 54 54 54 
 		int[] arr = new int[]{4, 5, 4, 5, 4, 5, 4, 1};
 		MyUtils.printArr(arr);
 		System.out.println(getSubarrayNum(arr));
 		int[][] infoArr = getNearestLessNumPos(arr);
 		for (int i = 0; i < infoArr.length; i++) {
 			int[] info = infoArr[i];
-			if (info[0] == -1 && info[1] == -1) {
-				continue;
-			}
 			System.out.print("[");
 			System.out.print("[");
-			if (info[0] != -1) {
-				for (int j = info[0]; j < i; j++) {
-					System.out.printf("%d,", arr[j]);
+			if (info[0] != -1 || info[1] != -1) {
+				if (info[0] != -1) {
+					for (int j = info[0]; j < i; j++) {
+						System.out.printf("%d,", arr[j]);
+					}
 				}
-			}
-			System.out.printf("%d,", arr[i]);
-			if (info[1] != -1) {
-				for (int j = i + 1; j <= info[1]; j++) {
-					System.out.printf("%d,", arr[j]);
+				System.out.printf("%d,", arr[i]);
+				if (info[1] != -1) {
+					for (int j = i + 1; j <= info[1]; j++) {
+						System.out.printf("%d,", arr[j]);
+					}
 				}
 			}
 			System.out.print("]\n");
@@ -37,16 +37,18 @@ public class NearestLessNumPos {
 	}
 	
 	/**
-	 * 求满足子数组左右俩侧小于自己且离自己最近的数位于该个子数组俩端的子数组的总个数，
+	 * 子数组左右俩端都是该子数组内的最小值  求这样的子数组的总个数，
 	 * <p>
+	 * arr[i]作为右侧最小统计个数
 	 * 第一遍遍历先从左向右 将元素位置入栈，但要保持栈中每个位置对应的数值是单调递增的。
-	 * 遍历过程中 当遇到比自己大的数时，弹出栈顶lst,此时当前位置元素与弹出的lst中的每个元素组合可以产生一个
-	 * 符合要求的子数组，目标次数加上lst的位置个数，如果lst包含的是m个重复元素的位置，这些重复元素任取2个
-	 * 组合也是符合要求的子数组，目标次数再加上组合C(m-2)=m*m-1*...*1 / 2。
+	 * 遍历过程中 当遇到比栈顶元素大的数arr[i]时，弹出栈顶lst,此时arr[i]与弹出的lst中的每个元素组合可以产生一个
+	 * 符合要求的子数组，总次数加上lst的位置个数，如果lst包含的是m个重复元素的位置，这些重复元素任取2个作为左右边界
+	 * 组合也是符合要求的子数组，目标次数再加上组合C(m-2)=m*m-1 / 2。
 	 * 遍历完成后栈内lst挨个弹出，对每个lst求组合， 只有当lst存放位置个数大于1的时候个数才会大于0。
 	 * 以上过程求出了每个位置作为右侧最小值的情况下符合条件的子数组的个数 以及重复元素组合产生的符合条件的子数组的个数
 	 * <p>
-	 * 第二遍从右向左算出自己作为左边界最小值的情况下能够产生的符合要求的子数组个数。但不再计入重复元素产生的子数组个数。
+	 * arr[i]作为左侧最小统计个数
+	 * 第二遍从右向左算出自己作为左边界最小值的情况下能够产生的符合要求的子数组个数。但不再计入重复元素组合产生子数组的情况。
 	 * 俩遍个数总和返回
 	 */
 	private static int getSubarrayNum(int[] arr) {
@@ -55,6 +57,7 @@ public class NearestLessNumPos {
 		}
 		Stack<List<Integer>> stack = new Stack<>();
 		int count = 0;
+		//arr[i]作为右侧最小 找左侧离自己最近而且比自己大的
 		for (int i = 0; i < arr.length; i++) {
 			while (!stack.isEmpty() && arr[i] < arr[stack.peek().get(0)]) {
 				List<Integer> top = stack.pop();
@@ -72,6 +75,7 @@ public class NearestLessNumPos {
 			count += cn2(stack.pop().size());
 		}
 		for (int i = arr.length - 1; i >= 0; i--) {
+			//逆序 arr[i]作为左侧最小 找右侧离自己最近而且比自己大的
 			while (!stack.isEmpty() && arr[i] < arr[stack.peek().get(0)]) {
 				count += stack.pop().size();
 			}
@@ -91,10 +95,10 @@ public class NearestLessNumPos {
 	}
 	
 	/**
-	 * 给定一个数组 对于数组中每个数 求左右俩侧小于自己且离自己最近的数的位置信息
+	 * 给定一个数组 对于数组中每个数 求 左右俩侧小于自己且离自己最近的数的位置 某侧如果找不到则为-1
 	 * <p>
-	 * 建立栈，然后遍历每个位置,如果当前位置元素arr[i]大于栈顶元素值，入栈；如果等于,入栈但是和栈顶元素存入同一列表；如果小于，弹出栈顶元素并开始统设置栈顶元素的信息，
-	 * 此时栈顶元素右侧离自己最近的值是arr[i],左侧离自己最近的值是栈顶元素前一个位置的元素,弹出栈顶元素，再检查此时的栈顶元素，如果arr[i]还小于它，继续对当前栈顶元素进行
+	 * 建立栈，然后遍历每个位置,如果当前位置元素arr[i]大于栈顶元素值，入栈；如果等于,入栈但是和栈顶元素存入同一列表；如果小于，弹出栈顶元素并开始设置栈顶元素的信息，
+	 * 此时栈顶元素右侧离自己最近的值是arr[i],左侧离自己最近的值是栈顶元素前一个位置的元素(此时栈顶元素右侧比自己小左侧也比自己小),弹出栈顶元素，再检查此时的栈顶元素，如果arr[i]还小于它，继续对当前栈顶元素进行
 	 * 同样的处理。直到不再小于，arr[i]入栈。该过程使栈内元素始终保持单调递增。
 	 * 遍历完成后 对栈内元素 从上往下弹出并设置信息，右侧最小且距离自己最近的没有设置为-1，左侧为自己的前一个元素，最后一个左右均为-1。
 	 */
