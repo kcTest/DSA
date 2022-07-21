@@ -6,7 +6,7 @@ public class IsPowerOfN {
 //		System.out.println(isPowerOfTwo(32));
 //		System.out.println(isPowerOfFour(64));
 		for (int i = 0; i < 10; i++) {
-			System.out.println(isPowerOfThree(Integer.MIN_VALUE));
+			System.out.println(isPowerOfThree(Integer.MAX_VALUE));
 		}
 	}
 	
@@ -36,26 +36,12 @@ public class IsPowerOfN {
 		double curVal;
 		int zs = 1;
 		do {
-			curVal = Math.pow(3, zs << 1);
+			curVal = Math.pow(3, zs <<= 1);
 			if (curVal == n) {
 				return true;
 			} else if (curVal > n) {
-				int low = zs;
-				int high = zs << 1;
-				while (low <= high) {
-					int mid = low + ((high - low) >> 1);
-					curVal = Math.pow(3, mid);
-					if (curVal < n) {
-						low = mid + 1;
-					} else if (curVal == n) {
-						return true;
-					} else {
-						high = mid - 1;
-					}
-				}
-				return false;
+				return curVal % n == 0;
 			}
-			zs <<= 1;
 		} while (curVal < n);
 		return false;
 	}
