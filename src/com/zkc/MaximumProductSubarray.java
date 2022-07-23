@@ -15,19 +15,18 @@ public class MaximumProductSubarray {
 				break;
 			}
 		}
-//		long s = System.currentTimeMillis();
-//		for (int i = 0; i < 100000; i++) {
-//			int[] nums = MyUtils.getArray(9, 10, false, true);
-//			maxProduct(nums);
-//		}
-//		long s1 = System.currentTimeMillis();
-//		for (int i = 0; i < 100000; i++) {
-//			int[] nums = MyUtils.getArray(9, 10, false, true);
-//			maxProduct2(nums);
-//		}
-//		long s2 = System.currentTimeMillis();
-//		System.out.printf("t1=%d,t2=%d\n", s1 - s, s2 - s1);
-//		int[] nums = MyUtils.getArray(9, 10, false, true);
+		long s = System.currentTimeMillis();
+		for (int i = 0; i < 100000; i++) {
+			int[] nums = MyUtils.getArray(9, 10, false, true);
+			maxProduct(nums);
+		}
+		long s1 = System.currentTimeMillis();
+		for (int i = 0; i < 100000; i++) {
+			int[] nums = MyUtils.getArray(9, 10, false, true);
+			maxProduct2(nums);
+		}
+		long s2 = System.currentTimeMillis();
+		System.out.printf("t1=%d,t2=%d\n", s1 - s, s2 - s1);
 	}
 	
 	/**
@@ -39,11 +38,11 @@ public class MaximumProductSubarray {
 			return nums[0];
 		}
 		int pre = 0, max = 0;
-		for (int i = 0; i < n; i++) {
-			if (nums[i] == 0) {
+		for (int num : nums) {
+			if (num == 0) {
 				pre = 0;
 			} else {
-				pre = pre == 0 ? nums[i] : pre * nums[i];
+				pre = pre == 0 ? num : pre * num;
 			}
 			max = Math.max(max, pre);
 		}
@@ -69,36 +68,28 @@ public class MaximumProductSubarray {
 	 * ...start......i......j........end,x....
 	 * ..start.....i......end,x...
 	 * <p>
-	 * 遍历每个数相乘直到遇到0的位置x，可以确定一个不含0的有效范围 并记录之前遇到的第一个负数和最后一个负数，也记录[start,firstNeg]的乘积,
+	 * 遍历每个数相乘直到遇到0的位置x，可以确定一个不含0的有效范围 并记录之前遇到的第一个负数和最后一个负数
 	 * start默认=0 每次处理完成后start=x+1，如果当前数不为0但是来到末尾 end=x,否则end=x-1
 	 * 如果负数数量为奇数 用x位置之前的乘积除以nums[x-1,end]得到p1为[start,end-1]范围上含偶数个负数的最大乘积，为当前范围内获取的最大乘积 与max比较
 	 * 如果负数数量为偶数 end位置之前的乘积为当前范围内获取的最大乘积 与max比较
 	 * 如果范围内只有一个数 这个数为当前范围内获取的最大乘积 与max比较
 	 */
 	private static int maxProduct(int[] nums) {
-		int n = nums.length, max = 0, curProduct = 0, firstNeg = -1, firstNegProduct = 0, lastNeg = -1, lastNegProduct = 0, countNeg = 0, start = 0;
+		int n = nums.length, max = 0, curProduct = 0, firstNeg = -1, lastNeg = -1, countNeg = 0, start = 0;
 		if (n == 1) {
 			return nums[0];
 		}
-		boolean addlast = false;
 		for (int i = 0; i < n; i++) {
 			int num = nums[i];
+			if (num < 0) {
+				countNeg++;
+				if (firstNeg == -1) {
+					firstNeg = i;
+				}
+				lastNeg = i;
+			}
 			if (num != 0) {
 				curProduct = curProduct == 0 ? num : curProduct * num;
-				if (num < 0) {
-					addlast = true;
-					lastNegProduct = num;
-					countNeg++;
-					if (firstNeg == -1) {
-						firstNegProduct = curProduct;
-						firstNeg = i;
-					}
-					lastNeg = i;
-				} else {
-					if (addlast) {
-						lastNegProduct *= num;
-					}
-				}
 			}
 			if (num == 0 || i == n - 1) {
 				if ((countNeg & 1) == 0) {
@@ -109,21 +100,19 @@ public class MaximumProductSubarray {
 					if (end - start == 0) {
 						max = Math.max(max, curProduct);
 					} else {
-						//去掉范围内头部到第一个负数之间的乘积
-//						int p1 = curProduct / firstNegProduct;
-//						while (start <= firstNeg) {
-//							p1 /= nums[start++];
-//						}
-						//去掉范围内尾部到最后一个负数之间的乘积
-//						int p2 = curProduct;
-//						while (end >= lastNeg) {
-//							p2 /= nums[end--];
-//						}
-						max = Math.max(max, Math.max(curProduct / firstNegProduct, curProduct / lastNegProduct));
+						/* 去掉范围内头部到第一个负数之间的乘积 */
+						int p1 = curProduct;
+						while (start <= firstNeg) {
+							p1 /= nums[start++];
+						}
+						/* 去掉范围内尾部到最后一个负数之间的乘积 */
+						int p2 = curProduct;
+						while (end >= lastNeg) {
+							p2 /= nums[end--];
+						}
+						max = Math.max(max, Math.max(p1, p2));
 					}
 				}
-				lastNegProduct = 0;
-				firstNegProduct = 0;
 				firstNeg = -1;
 				curProduct = 0;
 				start = i + 1;
