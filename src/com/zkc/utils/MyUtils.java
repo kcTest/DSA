@@ -62,7 +62,7 @@ public class MyUtils {
 		for (int j : arr) {
 			sb.append(j).append(",");
 		}
-		System.out.println(sb.substring(0, sb.length() - 1));
+		System.out.println(sb.deleteCharAt(sb.length() - 1));
 		System.out.println("------------------------------");
 	}
 	
@@ -930,4 +930,14 @@ public class MyUtils {
 		return ret;
 	}
 	
+	public static void print2DArray(int[][] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			StringBuilder sb = new StringBuilder();
+			for (int j : arr[i]) {
+				sb.append(j).append(", ");
+			}
+			System.out.println(sb.delete(sb.length() - 2, sb.length()));
+		}
+		System.out.println("=======================================");
+	}
 }

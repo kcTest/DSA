@@ -1,6 +1,6 @@
 package com.zkc.design;
 
-public class SqrtN {
+public class SqrtX {
 	public static void main(String[] args) {
 		int n = 2147395599;
 		System.out.println(Integer.MAX_VALUE);
@@ -35,5 +35,25 @@ public class SqrtN {
 		}
 		return (int) ret;
 		
+	}
+	
+	private static int sqrtX(int n) {
+		if (n == 0) {
+			return 0;
+		}
+		long l = 1, r = n, ret = 1;
+		while (l <= r) {
+			long mid = l + ((r - l) >> 1);
+			long cur = mid * mid;
+			if (cur < n) {
+				ret = mid;
+				l = mid + 1;
+			} else if (cur == n) {
+				return (int) mid;
+			} else {
+				r = mid - 1;
+			}
+		}
+		return (int) ret;
 	}
 }
