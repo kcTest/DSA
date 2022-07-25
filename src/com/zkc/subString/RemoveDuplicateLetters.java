@@ -39,32 +39,29 @@ public class RemoveDuplicateLetters {
 	private static String removeDuplicateLetters(String s) {
 		char[] chars = s.toCharArray();
 		//记录字母出现次数
-		Map<Character, Integer> map = new HashMap<>();
+		int[] count = new int[26];
 		for (char c : chars) {
-			map.put(c, map.containsKey(c) ? map.get(c) + 1 : 1);
+			count[c - 'a']++;
 		}
-		LinkedList<Character> lst = new LinkedList<>();
 		//记录每个字母是否已经添加
 		boolean[] added = new boolean[26];
+		StringBuilder sb = new StringBuilder();
 		for (char cur : chars) {
-			map.put(cur, map.get(cur) - 1);
+			count[cur - 'a']--;
 			if (!added[cur - 'a']) {
 				//直到不再小于前一个已保存的元素的字典序
-				while (lst.size() > 0) {
-					char pre = lst.getLast();
-					if (cur < pre && map.get(pre) > 0) {
-						added[lst.removeLast() - 'a'] = false;
+				while (sb.length() > 0) {
+					char pre = sb.charAt(sb.length() - 1);
+					if (cur < pre && count[pre - 'a'] > 0) {
+						sb.deleteCharAt(sb.length() - 1);
+						added[pre - 'a'] = false;
 					} else {
 						break;
 					}
 				}
-				lst.addLast(cur);
+				sb.append(cur);
 				added[cur - 'a'] = true;
 			}
-		}
-		StringBuilder sb = new StringBuilder();
-		for (char c : lst) {
-			sb.append(c);
 		}
 		return sb.toString();
 	}
