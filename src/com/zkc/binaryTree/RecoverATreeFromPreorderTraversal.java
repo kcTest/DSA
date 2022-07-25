@@ -2,9 +2,6 @@ package com.zkc.binaryTree;
 
 import com.zkc.utils.MyUtils;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * We run a preorder depth-first search (DFS) on the root of a binary tree.
  * <p>
