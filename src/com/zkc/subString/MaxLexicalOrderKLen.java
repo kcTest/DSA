@@ -17,7 +17,7 @@ import java.util.LinkedList;
  * 如 s=deafad,k=2  子序列为fd
  * 如 s=deaabc,k=3  子序列为ebc
  */
-public class MaxAlphabeticalOrderKLen {
+public class MaxLexicalOrderKLen {
 	public static void main(String[] args) {
 		String s = MyUtils.getAZString(20);
 		int k = (int) (Math.random() * s.length()) + 1;

@@ -12,7 +12,7 @@ package com.zkc;
  * zzzz
  * 如给定str=aaab,它是序列中的5个,如给定str=bzzz,它是序列中的36558个,
  */
-public class SeqInKLenAlphabetOrderStrs {
+public class SeqInKLenLexicalOrderStrs {
 	public static void main(String[] args) {
 		int n = (int) (Math.random() * 10) + 1;
 		String s = "bzzz";// MyUtils.getAZString(n);
