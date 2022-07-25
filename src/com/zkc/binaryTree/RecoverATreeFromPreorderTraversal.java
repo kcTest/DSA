@@ -36,55 +36,68 @@ public class RecoverATreeFromPreorderTraversal {
 		MyUtils.printBinaryTree(recoverFromPreorder(s));
 	}
 	
+	/**
+	 * 遍历字符
+	 * 遇到'-' level增加；遇到数字 字符串记录，如果下一位是'-'或者当前已经是最后一位 用记录level和数字创建新节点node 。
+	 * level递增 设置左子节点 ；level相等设置兄弟节点 ； level递减 设置某个父节点的右子节点。
+	 * node.level>last.level 设置last.left=node; node.level==last.level，设置last.parent.right=node;
+	 * node.level<last.leve,向上查找父节点直到找到一个节点的level>last.level(或者上级==last.level-1),设置last.right=node。
+	 * 设置完成后cur指向新增节点，level再次从0开始增加,str清空。
+	 */
 	private static MyTreeNode recoverFromPreorder(String traversal) {
 		int n = traversal.length();
-		Map<MyTreeNode, MyTreeNode> parentMap = new HashMap<>();
-		Map<MyTreeNode, Integer> levelMap = new HashMap<>();
 		int level = 0;
-		int preLevel = 0;
-		MyTreeNode head = null;
-		MyTreeNode cur = null;
+		MyTreeNode2 head = null, last = null;
 		StringBuilder sb = new StringBuilder();
-		boolean set = false;
+		char[] chars = traversal.toCharArray();
 		for (int i = 0; i < n; i++) {
-			if (set) {
-				int val = Integer.parseInt(sb.toString());
-				MyTreeNode node = new MyTreeNode(val);
-				if (head == null) {
-					head = node;
-				} else {
-					if (level > preLevel) {
-						cur.left = node;
-					} else if (level == preLevel) {
-						cur = parentMap.get(cur);
-						cur.right = node;
-					} else {
-						while (levelMap.get(cur) >= level) {
-							cur = parentMap.get(cur);
-						}
-						cur.right = node;
-					}
-				}
-				parentMap.put(node, cur);
-				levelMap.put(node, level);
-				cur = node;
-				preLevel = level;
-				level = 0;
-				set = false;
-				sb = new StringBuilder();
+			if (chars[i] == '-') {
+				level++;
 			} else {
-				char c = traversal.charAt(i);
-				if (c == '-') {
-					level++;
-				} else {
-					sb.append(c);
-					if (i == n - 1 || (traversal.charAt(i + 1) == '-')) {
-						i--;
-						set = true;
+				sb.append(chars[i]);
+				if (i == n - 1 || (chars[i + 1] == '-')) {
+					MyTreeNode2 node = new MyTreeNode2(level, new MyTreeNode(Integer.parseInt(sb.toString())));
+					if (head != null) {
+						if (level > last.level) {
+							last.node.left = node.node;
+						} else if (level >= last.level) {
+							last = last.parent;
+							last.node.right = node.node;
+						} else {
+							//一直向上
+							while (level <= last.level) {
+								last = last.parent;
+							}
+							last.node.right = node.node;
+						}
+					} else {
+						head = node;
 					}
+					node.setParent(last);
+					last = node;
+					level = 0;
+					sb = new StringBuilder();
 				}
 			}
 		}
-		return head;
+		return head.node;
+	}
+	
+	/**
+	 * 再包装一层 不用map
+	 */
+	private static class MyTreeNode2 {
+		public int level;
+		public MyTreeNode node;
+		public MyTreeNode2 parent;
+		
+		public void setParent(MyTreeNode2 parent) {
+			this.parent = parent;
+		}
+		
+		public MyTreeNode2(int level, MyTreeNode node) {
+			this.level = level;
+			this.node = node;
+		}
 	}
 }
