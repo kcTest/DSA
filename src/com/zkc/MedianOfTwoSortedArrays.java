@@ -74,15 +74,13 @@ public class MedianOfTwoSortedArrays {
 				bot++;
 			}
 		}
-		if (mid != k) {
-			if (top == m) {
-				for (int i = mid; i < k; i++, bot++) {
-					nums3[i] = nums2[bot];
-				}
-			} else if (bot == n) {
-				for (int i = mid; i < k; i++, top++) {
-					nums3[i] = nums1[top];
-				}
+		if (top == m) {
+			for (int i = mid; i < k; i++, bot++) {
+				nums3[i] = nums2[bot];
+			}
+		} else if (bot == n) {
+			for (int i = mid; i < k; i++, top++) {
+				nums3[i] = nums1[top];
 			}
 		}
 		return ((m + n) & 1) == 0 ? ((double) ((nums3[k - 1] + nums3[k - 2])) / 2) : nums3[k - 1];
