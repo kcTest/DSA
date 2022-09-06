@@ -53,6 +53,10 @@ public class MergeKSortedLists {
 		}
 	}
 	
+	/**
+	 * 遍历数组将每个节点值放入堆中
+	 * 再从堆中依次弹出堆顶元素 构建ListNode
+	 */
 	private static ListNode mergeKLists(ListNode[] lists) {
 		if (lists.length == 0) {
 			return null;
