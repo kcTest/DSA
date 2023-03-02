@@ -26,12 +26,14 @@ public class BurstBalloons {
 	
 	public static void main(String[] args) {
 //		int[] nums = MyUtils.getArray(5, 10);
-//		int[] nums = new int[]{3, 1, 5, 8, 9};
-		int[] nums = new int[]{3, 1, 5, 8};
+		int[] nums = new int[]{3, 1, 5, 8, 9};
+//		int[] nums = new int[]{3, 1, 5, 8};
 //		int[] nums = new int[]{ 1, 5, };
 //		int[] nums = new int[]{5,};
 		MyUtils.printArr(nums);
-		System.out.println(maxCoins(nums));
+//		System.out.println(maxCoins(nums));
+		System.out.println(maxCoins2(nums));
+		System.out.println(maxCoins3(nums));
 	}
 	
 	
@@ -83,5 +85,79 @@ public class BurstBalloons {
 		
 		return max;
 	}
+	
+	private static int maxCoins2(int[] nums) {
+		int n = nums.length;
+		int[] nums2 = new int[n + 2];
+		nums2[0] = 1;
+		nums2[n + 1] = 1;
+		System.arraycopy(nums, 0, nums2, 1, n);
+		//使用数组记录保存指定范围内的结果 不再重复递归
+		int[][] ret = new int[n + 2][n + 2];
+		int max = f2(nums2, 1, n, ret);
+		return max;
+	}
+	
+	private static int f2(int[] nums, int l, int r, int[][] ret) {
+		if (ret[l][r] > 0) {
+			return ret[l][r];
+		}
+		if (l == r) {
+			ret[l][r] = nums[l - 1] * nums[l] * nums[l + 1];
+			return ret[l][r];
+		}
+		
+		int max = 0;
+		
+		int maxLeft = nums[l - 1] * nums[l] * nums[r + 1] + f2(nums, l + 1, r, ret);
+		max = Math.max(max, maxLeft);
+		
+		int maxRight = f2(nums, l, r - 1, ret) + nums[l - 1] * nums[r] * nums[r + 1];
+		max = Math.max(max, maxRight);
+		
+		for (int i = l + 1; i <= r - 1; i++) {
+			int maxMiddle = f2(nums, l, i - 1, ret) + f2(nums, i + 1, r, ret) + nums[l - 1] * nums[i] * nums[r + 1];
+			max = Math.max(max, maxMiddle);
+		}
+		ret[l][r] = max;
+		return ret[l][r];
+	}
+	
+	/**
+	 * dp
+	 * 每个单元格[i,j]表示 数组nums在i->j范围内击破气球能获得的最大硬币数
+	 * ij表示数组范围索引 i不能大于j  设置的单元格均处于对角线及右上的半部分
+	 * 根据f2对角线直接设置 其余每个单元格计算依赖其左及左下方的单元格的值
+	 * 初始直接设置对角线的值 所以沿对角线从右下往左上设置值  直到右上角的单元格
+	 */
+	private static int maxCoins3(int[] nums) {
+		int n = nums.length + 2;
+		int[] arr = new int[n];
+		arr[0] = 1;
+		arr[n - 1] = 1;
+		System.arraycopy(nums, 0, arr, 1, n - 2);
+		int[][] ret = new int[n][n];
+		//设置对角线已  对角线往上开始  arr比原数组长度+2 形成的表格多包围一层  最外层的单元格不需要设置  
+		for (int i = 1; i <= n - 2; i++) {
+			ret[i][i] = arr[i - 1] * arr[i] * arr[i + 1];
+		}
+		//斜线方向需要设置的轮次 由原数组长度决定 n-2-1  
+		for (int loop = n - 3, dis = 0; loop >= 1; loop--, dis++) {
+			//外层不设置 起始单元格为倒数第三行n-1-1-1 倒数第二排n-1-1 
+			// i每轮初始减1,结束行为第一行; j与i的差=dis 每轮dis++ ;
+			for (int i = n - 3 - dis, j = i + (dis + 1); i >= 1; i--, j--) {
+				int maxLeft = arr[i - 1] * arr[i] * arr[j + 1] + ret[i + 1][j];
+				int maxRight = ret[i][j - 1] + arr[i - 1] * arr[j] * arr[j + 1];
+				int max = Math.max(maxLeft, maxRight);
+				for (int m = i + 1; m <= j - 1; m++) {
+					int maxMiddle = ret[i][m - 1] + ret[m + 1][j] + arr[i - 1] * arr[m] * arr[j + 1];
+					max = Math.max(max, maxMiddle);
+				}
+				ret[i][j] = max;
+			}
+		}
+		return ret[1][n - 2];
+	}
+	
 	
 }
