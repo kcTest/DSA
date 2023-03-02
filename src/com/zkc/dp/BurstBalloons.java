@@ -26,7 +26,8 @@ public class BurstBalloons {
 	
 	public static void main(String[] args) {
 //		int[] nums = MyUtils.getArray(5, 10);
-		int[] nums = new int[]{3, 1, 5, 8, 9};
+//		int[] nums = new int[]{3, 1, 5, 8, 9};
+		int[] nums = new int[]{3, 1, 5, 8};
 //		int[] nums = new int[]{ 1, 5, };
 //		int[] nums = new int[]{5,};
 		MyUtils.printArr(nums);
@@ -46,8 +47,12 @@ public class BurstBalloons {
 	 */
 	private static int maxCoins(int[] nums) {
 		int n = nums.length;
-		int max = f(nums, 0, n - 1);
-		return max;
+		int[] nums2 = new int[n + 2];
+		//边界外设置为1 去除方法内边界判断  
+		nums2[0] = 1;
+		nums2[n + 1] = 1;
+		System.arraycopy(nums, 0, nums2, 1, n);
+		return f(nums2, 1, n);
 	}
 	
 	/**
@@ -57,22 +62,22 @@ public class BurstBalloons {
 	private static int f(int[] nums, int l, int r) {
 		//l=r范围最小 当前位置结果先被确定 计算当前位置时 左或右位置可能有元素 
 		if (l == r) {
-			return (l - 1 < 0 ? 1 : nums[l - 1]) * nums[l] * (l + 1 > nums.length - 1 ? 1 : nums[l + 1]);
+			return nums[l - 1] * nums[l] * nums[l + 1];
 		}
 		
 		int max = 0;
 		
 		//左边界最后击破[00000[l....]0000] l左侧可能有值 最右边界外r+1可能有值 
-		int maxLeft = (l - 1 < 0 ? 1 : nums[l - 1]) * nums[l] * (r + 1 > nums.length - 1 ? 1 : nums[r + 1]) + f(nums, l + 1, r);
+		int maxLeft = nums[l - 1] * nums[l] * nums[r + 1] + f(nums, l + 1, r);
 		max = Math.max(max, maxLeft);
 		
 		//右边界最后击破[00000[....r]0000] r右侧可能有值 最左边界l-1可能有值
-		int maxRight = f(nums, l, r - 1) + (l - 1 < 0 ? 1 : nums[l - 1]) * nums[r] * (r + 1 > nums.length - 1 ? 1 : nums[r + 1]);
+		int maxRight = f(nums, l, r - 1) + nums[l - 1] * nums[r] * nums[r + 1];
 		max = Math.max(max, maxRight);
 		
 		//边界之间的位置最后击破[00000[..i..]0000]  l到r范围内最后只剩i l-1或r+1可能有值
 		for (int i = l + 1; i <= r - 1; i++) {
-			int maxMiddle = f(nums, l, i - 1) + f(nums, i + 1, r) + (l - 1 < 0 ? 1 : nums[l - 1]) * nums[i] * (r + 1 > nums.length - 1 ? 1 : nums[r + 1]);
+			int maxMiddle = f(nums, l, i - 1) + f(nums, i + 1, r) + nums[l - 1] * nums[i] * nums[r + 1];
 			max = Math.max(max, maxMiddle);
 		}
 		
