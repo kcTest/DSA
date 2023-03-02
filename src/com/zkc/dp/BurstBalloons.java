@@ -137,15 +137,11 @@ public class BurstBalloons {
 		arr[n - 1] = 1;
 		System.arraycopy(nums, 0, arr, 1, n - 2);
 		int[][] ret = new int[n][n];
-		//设置对角线已  对角线往上开始  arr比原数组长度+2 形成的表格多包围一层  最外层的单元格不需要设置  
-		for (int i = 1; i <= n - 2; i++) {
-			ret[i][i] = arr[i - 1] * arr[i] * arr[i + 1];
-		}
-		//斜线方向需要设置的轮次 由原数组长度决定 n-2-1  
-		for (int loop = n - 3, dis = 0; loop >= 1; loop--, dis++) {
-			//外层不设置 起始单元格为倒数第三行n-1-1-1 倒数第二排n-1-1 
-			// i每轮初始减1,结束行为第一行; j与i的差=dis 每轮dis++ ;
-			for (int i = n - 3 - dis, j = i + (dis + 1); i >= 1; i--, j--) {
+		//从对角线开始 沿斜线方向需要设置的轮次 由原数组长度决定为n-2  
+		// dis为坐标i与j的差距 从0开始 每轮dis++
+		for (int loop = n - 2, dis = 0; loop >= 1; loop--, dis++) {
+			// 外层不设置 起始单元格为倒数第二行n-1-1  i每轮初始减1,结束行为第一行; 
+			for (int i = n - 2 - dis, j = i + dis; i >= 1; i--, j--) {
 				int maxLeft = arr[i - 1] * arr[i] * arr[j + 1] + ret[i + 1][j];
 				int maxRight = ret[i][j - 1] + arr[i - 1] * arr[j] * arr[j + 1];
 				int max = Math.max(maxLeft, maxRight);
